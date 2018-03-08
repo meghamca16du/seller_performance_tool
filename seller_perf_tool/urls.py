@@ -19,6 +19,9 @@ from dashboard import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',views.login,name='login'),
     path('home/',views.home,name='home'),
-    path('',views.login,name='login'), 
+    path('profile/',views.profile,name='profile'),
+    
+
 ]
