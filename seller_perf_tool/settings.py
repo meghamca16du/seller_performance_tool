@@ -38,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dashboard',
+    'performance_app',
+    'health_app',
+    'recommendations_app',
+    'feedbacks_app',
 ]
 
 MIDDLEWARE = [
