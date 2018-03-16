@@ -46,11 +46,8 @@ class OrderDetails(models.Model):
         (in_process,'in_process'),
         (dispatched,'dispatched'),
      )
-    tid = models.AutoField(
-        primary_key=True,
-        null = False,
-    )
-    oid = models.TextField()  # This field type is a guess.
+    
+    oid = models.TextField(primary_key=True)  # This field type is a guess.
     pid = models.ForeignKey('ProductDetails', models.DO_NOTHING, db_column='pid')
     sid = models.ForeignKey('SellerDetails', models.DO_NOTHING, db_column='sid')
     bid = models.ForeignKey(BuyerDetails, models.DO_NOTHING, db_column='bid')
