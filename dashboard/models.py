@@ -25,7 +25,7 @@ class SellerDetails(models.Model):
 class ProductDetails(models.Model):
     pid = models.TextField(primary_key=True)  # This field type is a guess.
     pname = models.TextField()
-    sid = models.TextField()  # This field type is a guess.
+    sid = models.ForeignKey('SellerDetails', models.DO_NOTHING, db_column='sid')
 
     class Meta:
         managed = True
@@ -50,7 +50,7 @@ class OrderDetails(models.Model):
         primary_key=True,
         null = False,
     )
-    oid = models.TextField()  # This field type is a guess.
+    oid = models.TextField() 
     pid = models.ForeignKey('ProductDetails', models.DO_NOTHING, db_column='pid')
     sid = models.ForeignKey('SellerDetails', models.DO_NOTHING, db_column='sid')
     bid = models.ForeignKey(BuyerDetails, models.DO_NOTHING, db_column='bid')
@@ -69,3 +69,14 @@ class OrderDetails(models.Model):
         db_table = 'order_details'
         unique_together = (('oid', 'pid', 'sid', 'bid'),)
 
+class TraitValueDetails(models.Model):
+    ttid = models.AutoField(primary_key=True,null = False)
+    sid = models.ForeignKey('SellerDetails', on_delete = models.CASCADE, db_column='sid',unique = True)
+    late_shipment_rate = models.DecimalField(max_digits=4,decimal_places=2,default=0)
+    on_time_delivery = models.DecimalField(max_digits=4,decimal_places=2,default=0)
+    hit_to_success_ratio = models.DecimalField(max_digits=4,decimal_places=2,default=0)
+    return_rate = models.DecimalField(max_digits=4,decimal_places=2,default=0)
+    
+    class Meta:
+        managed = True
+        db_table = 'traits_value_details'
