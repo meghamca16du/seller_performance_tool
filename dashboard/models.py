@@ -70,8 +70,9 @@ class OrderDetails(models.Model):
         unique_together = (('oid', 'pid', 'sid', 'bid'),)
 
 class TraitValueDetails(models.Model):
-    ttid = models.AutoField(primary_key=True,null = False)
-    sid = models.ForeignKey('SellerDetails', on_delete = models.CASCADE, db_column='sid',unique = True)
+   # ttid = models.AutoField(primary_key=True,null = False)
+    sid = models.OneToOneField('SellerDetails',primary_key=True, on_delete = models.CASCADE, db_column='sid')
+   # sid = models.ForeignKey('SellerDetails', on_delete = models.CASCADE, db_column='sid',unique = True)
     late_shipment_rate = models.DecimalField(max_digits=4,decimal_places=2,default=0)
     on_time_delivery = models.DecimalField(max_digits=4,decimal_places=2,default=0)
     hit_to_success_ratio = models.DecimalField(max_digits=4,decimal_places=2,default=0)
