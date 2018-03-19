@@ -8,14 +8,14 @@
 from django.db import models
 
 class BuyerDetails(models.Model):
-    bid = models.TextField(primary_key=True)  # This field type is a guess.
+    bid = models.TextField(primary_key=True)  
     bname = models.TextField()
 
     class Meta:
         db_table = 'buyer_details'
 
 class SellerDetails(models.Model):
-    sid = models.TextField(primary_key=True)  # This field type is a guess.
+    sid = models.TextField(primary_key=True) 
     sname = models.TextField()
 
     class Meta:
@@ -23,16 +23,16 @@ class SellerDetails(models.Model):
         db_table = 'seller_details'
 
 class ProductDetails(models.Model):
-    pid = models.TextField(primary_key=True)  # This field type is a guess.
+    pid = models.TextField(primary_key=True)  
     pname = models.TextField()
-    sid = models.ForeignKey('SellerDetails', models.DO_NOTHING, db_column='sid')
+    sid = models.ForeignKey('SellerDetails', on_delete = models.CASCADE, db_column='sid')
 
     class Meta:
         managed = True
         db_table = 'product_details'
 
 class OrderDetails(models.Model):
-    ontime_delivery='OD'   #creating data type enumeration for status
+    ontime_delivery='OD'   
     late_delivery='LD'
     returned='R'
     cancelled='C'
@@ -51,9 +51,9 @@ class OrderDetails(models.Model):
         null = False,
     )
     oid = models.TextField() 
-    pid = models.ForeignKey('ProductDetails', models.DO_NOTHING, db_column='pid')
-    sid = models.ForeignKey('SellerDetails', models.DO_NOTHING, db_column='sid')
-    bid = models.ForeignKey(BuyerDetails, models.DO_NOTHING, db_column='bid')
+    pid = models.ForeignKey('ProductDetails', on_delete = models.CASCADE, db_column='pid')
+    sid = models.ForeignKey('SellerDetails', on_delete = models.CASCADE, db_column='sid')
+    bid = models.ForeignKey(BuyerDetails, on_delete = models.CASCADE, db_column='bid')
     exp_shipment = models.DateField()
     exp_delivery = models.DateField()
     actual_shipment = models.DateField(blank=True,null=True)
