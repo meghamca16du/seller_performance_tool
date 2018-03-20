@@ -26,6 +26,7 @@ class ProductDetails(models.Model):
     pid = models.CharField(primary_key=True, max_length=7)  
     pname = models.CharField(max_length=25)
     sid = models.ForeignKey('SellerDetails', on_delete = models.CASCADE, db_column='sid')
+    no_of_hits = models.IntegerField(default=0)
 
     class Meta:
         managed = True
@@ -54,16 +55,16 @@ class OrderDetails(models.Model):
     pid = models.ForeignKey('ProductDetails', on_delete = models.CASCADE, db_column='pid')
     sid = models.ForeignKey('SellerDetails', on_delete = models.CASCADE, db_column='sid')
     bid = models.ForeignKey('BuyerDetails', on_delete = models.CASCADE, db_column='bid')
-    exp_shipment = models.DateField()
-    exp_delivery = models.DateField()
-    actual_shipment = models.DateField(blank=True,null=True)
-    actual_delivery = models.DateField(blank=True,null=True)
     status = models.CharField(
         max_length = 2,
         choices = status_types,
         default = in_process,
     )  # This field type is enumeration.
-
+    exp_shipment = models.DateField()
+    exp_delivery = models.DateField()
+    actual_shipment = models.DateField(blank=True,null=True)
+    actual_delivery = models.DateField(blank=True,null=True)
+    
     class Meta:
         managed = True
         db_table = 'order_details'

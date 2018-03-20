@@ -24,6 +24,4 @@ urlpatterns = [
     path('home/',views.home,name='home'),
     path('profile/',views.profile,name='profile'),
     path('home/performance/',perf_views.main,name='main'),
-    
-
 ]

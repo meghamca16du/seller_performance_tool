@@ -30,8 +30,9 @@ class Trait(ABC):
     def store_sid(self):    #not working
         check = TraitValueDetails.objects.filter(sid='ank202').exists()
         if check == False:
-            #s = SellerDetails.objects.filter(sid='adi201')
-            save_sid = TraitValueDetails(tid='1',sid='ank202',late_shipment_rate=0,on_time_delivery=0,hit_to_success_ratio=0,return_rate=0)
+            #s = SellerDetails.objects.filter(sid='ank202').only('sid').all()
+            s = SellerDetails.objects.get(sid='ank202')
+            save_sid = TraitValueDetails(sid=s)
             save_sid.save()
         else:
             pass
@@ -47,24 +48,62 @@ class Trait(ABC):
 class LateShipmentRate(Trait):
 
     def calc_value(self):
-        LateOrders=OrderDetails.objects.all().filter(actual_shipment__isnull=False).filter(actual_shipment__gt=F('exp_shipment')).count()
+        LateOrders = OrderDetails.objects.all().filter(
+                         actual_shipment__isnull=False
+                         ).filter(
+                         actual_shipment__gt=F('exp_shipment')
+                         ).count()
         Total=OrderDetails.objects.filter(sid='ank202').count()
         late_perc=(LateOrders/Total)*100
         return late_perc
 
     def store_value(self,value):
-        trait_obj=TraitValueDetails(late_shipment_rate=value)
+        s = SellerDetails.objects.get(sid='ank202')
+        trait_obj=TraitValueDetails(sid=s,late_shipment_rate=value)
         trait_obj.save()
         return value
 
-   
-    
+'''
+class HitToSuccessRatio(Trait):
+
+    def calc_value(self):
+        sid_pid_tuple = ProductDetails.objects.filter(
+                                sid='ank202'
+                                ).values_list(
+                                'sid','pid',flat=True
+                                )
+        
+
+        success_num = OrderDetails.objects.filter(
+                                sid__in=s,pid__in=p
+                                ).count()
+        
+        hit_num = ProductDetails.objects.all().filter(
+                       sid=ank202
+                        ).annotate(
+                        hit_num=Sum('no_of_hits')
+                        )
+        hit_to_success_ratio = (success_num/hit_num)*100
+        return hit_to_success_ratio
+
+    def store_value(self,value):
+        s = SellerDetails.objects.get(sid='ank202')
+        trait_obj=TraitValueDetails(sid=s,hit_to_success_ratio=value)
+        trait_obj.save()
+        return value
+'''
+
 def main(request):
     trait_value_dict={}
     l=LateShipmentRate()
     late_perc=l.template_method()
     trait_value_dict['late_perc']=late_perc
     return render(request,'performance.html',trait_value_dict)
+
+    #h = HitToSuccessRatio()
+    #hit_to_success_ratio = h.template_method()
+    #trait_value_dict['hit_to_success_ratio'] = hit_to_success_ratio
+    #return render(request,'performance.html',trait_value_dict)
 
 if __name__ == '__main__':
     main(request)
