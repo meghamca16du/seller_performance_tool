@@ -21,17 +21,17 @@ class Trait(ABC):
     def template_method(self):
         #self.get_parameters()
         self.store_sid()
-        value=self.calc_value()
+        value = self.calc_value()
         self.store_value(value)
 
     #def get_parameters(self,trait_components):
        # parameters=trait_components
 
     def store_sid(self):    #not working
-        check=TraitValueDetails.objects.filter(sid='ank202').exists()
-        if check==False:
-            s=SellerDetails.objects.filter(sid='ank202')
-            save_sid=TraitValueDetails(sid=s.first().sid)
+        check = TraitValueDetails.objects.filter(sid='ank202').exists()
+        if check == False:
+            #s = SellerDetails.objects.filter(sid='adi201')
+            save_sid = TraitValueDetails(tid='1',sid='ank202',late_shipment_rate=0,on_time_delivery=0,hit_to_success_ratio=0,return_rate=0)
             save_sid.save()
         else:
             pass

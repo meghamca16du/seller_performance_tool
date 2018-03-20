@@ -70,7 +70,10 @@ class OrderDetails(models.Model):
         unique_together = (('oid', 'pid', 'sid', 'bid'),)
 
 class Base_TraitValueDetails(models.Model):   #base abstract class
-    sid = models.OneToOneField('SellerDetails',primary_key=True, on_delete = models.CASCADE, db_column='sid')  
+    tid = models.TextField(primary_key = True, null=False)
+    sid = models.ForeignKey('SellerDetails', on_delete = models.CASCADE, db_column='sid')
+    overall_perf_val = models.DecimalField(max_digits=4,decimal_places=2,default=0)
+    #sid = models.OneToOneField('SellerDetails',primary_key=True, on_delete = models.CASCADE, db_column='sid')  
     class Meta:
         abstract = True  #so that new trait column can be added
 
