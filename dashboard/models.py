@@ -69,13 +69,25 @@ class OrderDetails(models.Model):
         db_table = 'order_details'
         unique_together = (('oid', 'pid', 'sid', 'bid'),)
 
-class TraitValueDetails(models.Model):
-    sid = models.OneToOneField('SellerDetails',primary_key=True, on_delete = models.CASCADE, db_column='sid')
+class Base_TraitValueDetails(models.Model):   #base abstract class
+    sid = models.OneToOneField('SellerDetails',primary_key=True, on_delete = models.CASCADE, db_column='sid')  
+    class Meta:
+        abstract = True  #so that new trait column can be added
+
+class TraitValueDetails(Base_TraitValueDetails):
     late_shipment_rate = models.DecimalField(max_digits=4,decimal_places=2,default=0)
     on_time_delivery = models.DecimalField(max_digits=4,decimal_places=2,default=0)
     hit_to_success_ratio = models.DecimalField(max_digits=4,decimal_places=2,default=0)
-    return_rate = models.DecimalField(max_digits=4,decimal_places=2,default=0)
-    
+    return_rate = models.DecimalField(max_digits=4,decimal_places=2,default=0) 
     class Meta:
         managed = True
         db_table = 'traits_value_details'
+
+"""
+class Cancellation(Base_TraitValueDetails):
+    cid = models.TextField()
+
+    class Meta:
+        managed = True
+        db_table = 'cancellation
+"""
