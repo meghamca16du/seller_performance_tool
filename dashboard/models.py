@@ -8,23 +8,23 @@
 from django.db import models
 
 class BuyerDetails(models.Model):
-    bid = models.TextField(primary_key=True)  
-    bname = models.TextField()
+    bid = models.CharField(primary_key=True, max_length=7)  
+    bname = models.CharField(max_length=25)
 
     class Meta:
         db_table = 'buyer_details'
 
 class SellerDetails(models.Model):
-    sid = models.TextField(primary_key=True) 
-    sname = models.TextField()
+    sid = models.CharField(primary_key=True, max_length=7) 
+    sname = models.CharField(max_length=25)
 
     class Meta:
         managed = True
         db_table = 'seller_details'
 
 class ProductDetails(models.Model):
-    pid = models.TextField(primary_key=True)  
-    pname = models.TextField()
+    pid = models.CharField(primary_key=True, max_length=7)  
+    pname = models.CharField(max_length=25)
     sid = models.ForeignKey('SellerDetails', on_delete = models.CASCADE, db_column='sid')
 
     class Meta:
@@ -50,7 +50,7 @@ class OrderDetails(models.Model):
         primary_key=True,
         null = False,
     )
-    oid = models.TextField() 
+    oid = models.CharField(max_length=7) 
     pid = models.ForeignKey('ProductDetails', on_delete = models.CASCADE, db_column='pid')
     sid = models.ForeignKey('SellerDetails', on_delete = models.CASCADE, db_column='sid')
     bid = models.ForeignKey('BuyerDetails', on_delete = models.CASCADE, db_column='bid')
@@ -70,9 +70,7 @@ class OrderDetails(models.Model):
         unique_together = (('oid', 'pid', 'sid', 'bid'),)
 
 class TraitValueDetails(models.Model):
-   # ttid = models.AutoField(primary_key=True,null = False)
     sid = models.OneToOneField('SellerDetails',primary_key=True, on_delete = models.CASCADE, db_column='sid')
-   # sid = models.ForeignKey('SellerDetails', on_delete = models.CASCADE, db_column='sid',unique = True)
     late_shipment_rate = models.DecimalField(max_digits=4,decimal_places=2,default=0)
     on_time_delivery = models.DecimalField(max_digits=4,decimal_places=2,default=0)
     hit_to_success_ratio = models.DecimalField(max_digits=4,decimal_places=2,default=0)
