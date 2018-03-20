@@ -53,7 +53,7 @@ class OrderDetails(models.Model):
     oid = models.TextField() 
     pid = models.ForeignKey('ProductDetails', on_delete = models.CASCADE, db_column='pid')
     sid = models.ForeignKey('SellerDetails', on_delete = models.CASCADE, db_column='sid')
-    bid = models.ForeignKey(BuyerDetails, on_delete = models.CASCADE, db_column='bid')
+    bid = models.ForeignKey('BuyerDetails', on_delete = models.CASCADE, db_column='bid')
     exp_shipment = models.DateField()
     exp_delivery = models.DateField()
     actual_shipment = models.DateField(blank=True,null=True)
