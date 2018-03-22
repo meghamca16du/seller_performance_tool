@@ -111,11 +111,11 @@
           </div>
 
           <ul>
-            {% for k,k2 in mylist %}
-                <li>{{ k }} - {{k2}} </li>
+             {% for trait_component ,trait_value in trait_list %}
+                <li>   <h3> {{ trait_component }} </h3>  {{trait_value}} </li>
             {%endfor%}
-        </ul>
-        
+          </ul>
+
         </main>
       </div>
     </div>

@@ -46,11 +46,11 @@ class OrderDetails(models.Model):
         (returned,'returned'),
         (in_process,'in_process'),
         (dispatched,'dispatched'),
-     )
+        )
     tid = models.AutoField(
         primary_key=True,
         null = False,
-    )
+        )
     oid = models.CharField(max_length=7) 
     pid = models.ForeignKey('ProductDetails', on_delete = models.CASCADE, db_column='pid')
     sid = models.ForeignKey('SellerDetails', on_delete = models.CASCADE, db_column='sid')
@@ -59,7 +59,7 @@ class OrderDetails(models.Model):
         max_length = 2,
         choices = status_types,
         default = in_process,
-    )  # This field type is enumeration.
+        )  # This field type is enumeration.
     exp_shipment = models.DateField()
     exp_delivery = models.DateField()
     actual_shipment = models.DateField(blank=True,null=True)
