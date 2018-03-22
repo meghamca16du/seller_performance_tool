@@ -110,8 +110,12 @@
             <h1 class="h2">All values</h1>
           </div>
 
-         <h1>{{perc}}</h1>
-         
+          <ul>
+            {% for k,k2 in mylist %}
+                <li>{{ k }} - {{k2}} </li>
+            {%endfor%}
+        </ul>
+               
         </main>
       </div>
     </div>
