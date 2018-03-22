@@ -14,7 +14,8 @@ class Trait(ABC):
         self.store_sid(table_name)
         value=self.calc_value()
         self.store_value(value,table_name,l1,l2)
-        #self.calc_overall_performance()
+        overall_perf_value = self.calc_overall_performance(l2)
+        self.store_overall_value(self,overall_perf_value)
 
     def find_table(self):
         for cls in Base_TraitValueDetails.__subclasses__():
@@ -38,17 +39,17 @@ class Trait(ABC):
         l1.append(self.trait_component)
         l2.append(value)
         return value
-'''
-    def calc_overall_performance():
-        #class_name = cls.__name__
-        #trait_component = re.sub( '(?<!^)(?=[A-Z])', '_', class_name ).lower()
-        #obj = cls(trait_component)
-        #obj.template_method(trait_value_dict)
-        for cls in Trait.__subclasses__
-            count = count + 1
-            class_name = cls.__name__
-'''
-           
+
+    def calc_overall_performance(self,l2):
+        overall_perf_val = sum(l2) / len(l2)
+        return overall_perf_val
+
+    def store_overall_value(self,overall_perf_value):
+        obj = TraitValueDetails.objects.filter(
+                    sid='ank202'
+                    ).update(
+                    overall_perf_val = overall_perf_value
+                    )
 
 class LateShipmentRate(Trait):
     def calc_value(self):
