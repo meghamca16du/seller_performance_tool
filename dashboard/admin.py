@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import BuyerDetails, OrderDetails, ProductDetails, SellerDetails, TraitValueDetails
+from .models import *
 # Register your models here.
 
 admin.site.register(BuyerDetails)
