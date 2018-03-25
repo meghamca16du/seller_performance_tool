@@ -158,6 +158,9 @@ class OnTimeDelivery(Trait):
     def returnTraitWeightage(self):
         return 2
 
+   # def recommendations(self, value):
+
+
 class HitToSuccessRatio(Trait):
     '''
     Objective: A derived class of Trait which calculates the value of 'Hit to Success Ratio' trait
