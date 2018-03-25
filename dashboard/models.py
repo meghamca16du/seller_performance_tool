@@ -80,13 +80,13 @@ class Base_TraitValueDetails(models.Model):   #base abstract class
 
 class TraitValueDetails(Base_TraitValueDetails):
     late_shipment_rate = models.DecimalField(max_digits=4,decimal_places=2,default=0)
-    #late_shipment_rate_recommendation = models.TextField(default = None, max_length = 100)
+    late_shipment_rate_recommendation = models.TextField(default = None, max_length = 100)
     on_time_delivery = models.DecimalField(max_digits=4,decimal_places=2,default=0)
-    #on_time_delivery_recommendation = models.TextField(default = None, max_length = 100)
+    on_time_delivery_recommendation = models.TextField(default = None, max_length = 100)
     hit_to_success_ratio = models.DecimalField(max_digits=4,decimal_places=2,default=0)
-    #hit_to_success_recommendation = models.TextField(default = None, max_length = 100)
+    hit_to_success_recommendation = models.TextField(default = None, max_length = 100)
     return_rate = models.DecimalField(max_digits=4,decimal_places=2,default=0) 
-    #return_rate_recommendation = models.TextField(default = None, max_length = 100)
+    return_rate_recommendation = models.TextField(default = None, max_length = 100)
     class Meta:
         managed = True
         db_table = 'traits_value_details'
