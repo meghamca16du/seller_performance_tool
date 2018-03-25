@@ -16,7 +16,7 @@ class Trait(ABC):
         '''
         self.trait_component = trait_cmp
 
-    def template_method(self, trait_name, trait_value):
+    def template_method(self, trait_name, trait_value, recommendation_list):
         '''
         Objective: Template method defines an algorithm's skeleton in the Trait base class 
                     and let subclasses redefine certain steps of the algorithm.
@@ -26,6 +26,7 @@ class Trait(ABC):
         table_name = self.find_table()
         self.store_sid(table_name)
         value = self.calc_value()
+        self.saveRecommendation(value, recommendation_list)
         self.store_value(value, table_name, trait_name, trait_value)
         overall_perf_value = self.calc_overall_performance(trait_value)
         self.store_overall_value(TraitValueDetails,overall_perf_value)
@@ -113,6 +114,29 @@ class LateShipmentRate(Trait):
         late_perc = (LateOrders/Total)*100
         return late_perc
 
+    def saveRecommendation(self, value, recommendation_list):
+        if value <= 30:
+            TraitValueDetails.objects.filter(
+                sid='ank202'
+                ).update(
+                recommendations_lateShipmentRate = "recommendation 1"
+                )
+            recommendation_list.append("recommendation 1")
+        elif value > 30 and value <= 70:
+            TraitValueDetails.objects.filter(
+                sid = 'ank202'
+                ).update(
+                recommendations_lateShipmentRate = "recommendation 2"   
+                )
+            recommendation_list.append("recommendation 2")
+        else:
+            TraitValueDetails.objects.filter(
+                sid = 'ank202'
+                ).update(
+                recommendations_lateShipmentRate = "recommendation 3"   
+                )
+            recommendation_list.append("recommendation 3")
+
 class OnTimeDelivery(Trait):
     '''
     Objective: A derived class of Trait which calculates the value of 'On time Delivery' trait
@@ -137,6 +161,29 @@ class OnTimeDelivery(Trait):
         Percentage = (onTimeDeliver/totalDeliver)*100
         return Percentage
 
+    def saveRecommendation(self, value,recommendation_list ):
+        if value <= 30:
+            TraitValueDetails.objects.filter(
+                sid='ank202'
+                ).update(
+                recommendations_onTimeDeliery = "recommendation 1"
+                )
+            recommendation_list.append("recommendation 1")
+        elif value > 30 and value <= 70:
+            TraitValueDetails.objects.filter(
+                sid = 'ank202'
+                ).update(
+                recommendations_onTimeDeliery = "recommendation 2"   
+                )
+            recommendation_list.append("recommendation 2")
+        else:
+            TraitValueDetails.objects.filter(
+                sid = 'ank202'
+                ).update(
+                recommendations_onTimeDeliery = "recommendation 3"   
+                )
+            recommendation_list.append("recommendation 3")
+
 class HitToSuccessRatio(Trait):
     '''
     Objective: A derived class of Trait which calculates the value of 'Hit to Success Ratio' trait
@@ -154,18 +201,42 @@ class HitToSuccessRatio(Trait):
         success_perc=(success/hits)*100
         return success_perc
 
+    def saveRecommendation(self, value, recommendation_list):
+        if value <= 30:
+            TraitValueDetails.objects.filter(
+                sid='ank202'
+                ).update(
+                recommendations_HitToSucessRatio = "recommendation 1"
+                )
+            recommendation_list.append("recommendation 1")
+        elif value > 30 and value <= 70:
+            TraitValueDetails.objects.filter(
+                sid = 'ank202'
+                ).update(
+                recommendations_HitToSucessRatio = "recommendation 2"   
+                )
+            recommendation_list.append("recommendation 2")
+        else:
+            TraitValueDetails.objects.filter(
+                sid = 'ank202'
+                ).update(
+                recommendations_HitToSucessRatio = "recommendation 3"   
+                )
+            recommendation_list.append("recommendation 3")
+
 def main(request):
     trait_name = []
     trait_value = []
+    recommendation_list = []
     for cls in Trait.__subclasses__():
 
         class_name = cls.__name__
         trait_component = re.sub( '(?<!^)(?=[A-Z])', '_', class_name ).lower()
         obj = cls(trait_component)
-        obj.template_method(trait_name, trait_value)
+        obj.template_method(trait_name, trait_value, recommendation_list)
     
-    trait_list = zip(trait_name, trait_value)
-    return render(request,'performance.html',{'trait_list':trait_list})
+    recommendation_trait_list = zip(trait_name, trait_value, recommendation_list)
+    return render(request,'performance.html',{'recommendation_trait_list':recommendation_trait_list})
 
 if __name__ == '__main__':
     main(request)

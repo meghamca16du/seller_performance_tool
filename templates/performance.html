@@ -99,8 +99,8 @@
           </div>
 
           <ul>
-             {% for trait_component ,trait_value in trait_list %}
-                <li>   <h3> {{ trait_component }} </h3>  {{trait_value}} </li>
+             {% for trait_component ,trait_value, recommendation in recommendation_trait_list %}
+                <li>   <h3> {{ trait_component }} </h3>  {{trait_value}} </br> {{recommendation}} </li>
             {%endfor%}
           </ul>
 
