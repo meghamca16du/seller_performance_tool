@@ -8,6 +8,7 @@ class Trait(ABC):
     '''
         Objective: An abstract class which calculates the value of the trait and stores it in the database.
     ''' 
+    traitWeightageList = []
     def __init__(self, trait_cmp):
         '''
         Objective: A constructor which initializes the trait component variable.
@@ -26,9 +27,11 @@ class Trait(ABC):
         table_name = self.find_table()
         self.store_sid(table_name)
         value = self.calc_value()
+        traitWeightage = self.returnTraitWeightage()
+        Trait.traitWeightageList.append(traitWeightage)
         self.saveRecommendation(value, recommendation_list)
         self.store_value(value, table_name, trait_name, trait_value)
-        overall_perf_value = self.calc_overall_performance(trait_value)
+        overall_perf_value = self.calc_overall_performance(trait_value,Trait.traitWeightageList)
         self.store_overall_value(TraitValueDetails,overall_perf_value)
 
     def find_table(self):
@@ -73,13 +76,14 @@ class Trait(ABC):
         trait_value.append(value)
         return value
 
-    def calc_overall_performance(self,trait_value):
+    def calc_overall_performance(self,trait_value, traitWeightageList):
         '''
         Objective: To calculate the overall performance of the seller.
         Input Parameter: value_list - A list of Values of the corresponding traits defined in the trait_list
         Return Value: overall_perf_val - Overall performance value of the seller
         '''
-        overall_perf_val = sum(trait_value) / len(trait_value)
+        numerator = [trait_value[i]*traitWeightageList[i] for i in range(len(trait_value))]
+        overall_perf_val = sum(numerator) / sum(traitWeightageList)
         return overall_perf_val
 
     def store_overall_value(self,TraitValueDetails ,overall_perf_value):
@@ -113,6 +117,9 @@ class LateShipmentRate(Trait):
         Total = OrderDetails.objects.filter(sid='ank202').count()
         late_perc = (LateOrders/Total)*100
         return late_perc
+    
+    def returnTraitWeightage(self):
+        return 2
 
     def saveRecommendation(self, value, recommendation_list):
         if value <= 30:
@@ -161,6 +168,9 @@ class OnTimeDelivery(Trait):
         Percentage = (onTimeDeliver/totalDeliver)*100
         return Percentage
 
+    def returnTraitWeightage(self):
+        return 2
+
     def saveRecommendation(self, value,recommendation_list ):
         if value <= 30:
             TraitValueDetails.objects.filter(
@@ -200,6 +210,9 @@ class HitToSuccessRatio(Trait):
         hits = ProductDetails.objects.filter(sid='ank202').aggregate(Sum('no_of_hits'))['no_of_hits__sum']
         success_perc=(success/hits)*100
         return success_perc
+
+    def returnTraitWeightage(self):
+        return 1
 
     def saveRecommendation(self, value, recommendation_list):
         if value <= 30:
