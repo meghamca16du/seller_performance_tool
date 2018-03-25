@@ -2,12 +2,14 @@ from django.shortcuts import render
 from dashboard.models import *
 from django.db.models import Count, F, Sum
 from abc import ABC, abstractmethod
+#import numpy as np
 import re
 
 class Trait(ABC):
     '''
         Objective: An abstract class which calculates the value of the trait and stores it in the database.
     ''' 
+    traitWeightageList = []
     def __init__(self, trait_cmp):
         '''
         Objective: A constructor which initializes the trait component variable.
@@ -22,12 +24,17 @@ class Trait(ABC):
                     and let subclasses redefine certain steps of the algorithm.
         Input Parameter: trait_list - A list of Traits
                          value_list - A list of Values of the corresponding traits defined in the trait_list
+
         '''
         table_name = self.find_table()
         self.store_sid(table_name)
         value = self.calc_value()
+        traitWeightage = self.returnTraitWeightage()
+        Trait.traitWeightageList.append(traitWeightage)
+        #self.appendTraitWeightageList(traitWeightageList)
+        #traitWeightageList.append( traitWeightage )
         self.store_value(value, table_name, trait_name, trait_value)
-        overall_perf_value = self.calc_overall_performance(trait_value)
+        overall_perf_value = self.calc_overall_performance(trait_value, Trait.traitWeightageList)
         self.store_overall_value(TraitValueDetails,overall_perf_value)
 
     def find_table(self):
@@ -72,13 +79,21 @@ class Trait(ABC):
         trait_value.append(value)
         return value
 
-    def calc_overall_performance(self,trait_value):
+    def calc_overall_performance(self,trait_value,traitWeightageList):
         '''
         Objective: To calculate the overall performance of the seller.
         Input Parameter: value_list - A list of Values of the corresponding traits defined in the trait_list
         Return Value: overall_perf_val - Overall performance value of the seller
         '''
-        overall_perf_val = sum(trait_value) / len(trait_value)
+        #numerator = (np.array(trait_value)) * (np.array(traitWeightageList))
+        #decimal_trait_value = [decimal.Decimal(val) for val in trait_value]
+        #lists = zip(decimal_trait_value, traitWeightageList)
+        #for val,weightage in lists:
+        #   overall_perf_val = overall_perf_val + (val*weightage)
+        numerator = [trait_value[i]*traitWeightageList[i] for i in range(len(trait_value))]
+        #print(numerator)
+        overall_perf_val = sum(numerator) / sum(traitWeightageList)
+        #print(overall_perf_val)
         return overall_perf_val
 
     def store_overall_value(self,TraitValueDetails ,overall_perf_value):
@@ -113,6 +128,9 @@ class LateShipmentRate(Trait):
         late_perc = (LateOrders/Total)*100
         return late_perc
 
+    def returnTraitWeightage(self):
+        return 2
+
 class OnTimeDelivery(Trait):
     '''
     Objective: A derived class of Trait which calculates the value of 'On time Delivery' trait
@@ -137,6 +155,9 @@ class OnTimeDelivery(Trait):
         Percentage = (onTimeDeliver/totalDeliver)*100
         return Percentage
 
+    def returnTraitWeightage(self):
+        return 2
+
 class HitToSuccessRatio(Trait):
     '''
     Objective: A derived class of Trait which calculates the value of 'Hit to Success Ratio' trait
@@ -153,6 +174,9 @@ class HitToSuccessRatio(Trait):
         hits = ProductDetails.objects.filter(sid='ank202').aggregate(Sum('no_of_hits'))['no_of_hits__sum']
         success_perc=(success/hits)*100
         return success_perc
+
+    def returnTraitWeightage(self):
+        return 1
 
 def main(request):
     trait_name = []
