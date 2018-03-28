@@ -3,16 +3,17 @@ from dashboard.models import *
 
 
 class FeedbackDetails(models.Model):
+    fid = models.AutoField(primary_key = True, null = False)
     bid = models.ForeignKey('dashboard.BuyerDetails', on_delete = models.CASCADE, db_column='bid')
     oid = models.ForeignKey('dashboard.OrderDetails', on_delete = models.CASCADE, db_column='oid')
     pid = models.ForeignKey('dashboard.ProductDetails', on_delete = models.CASCADE, db_column='pid')
     feedbackEntered = models.TextField(max_length = 300) 
-    default = 0
-    oneStar= 1   
-    twoStar= 2
-    threeStar= 3
-    fourStar = 4
-    fiveStar = 5
+    default = '0'
+    oneStar= '1'   
+    twoStar= '2'
+    threeStar= '3'
+    fourStar = '4'
+    fiveStar = '5'
     Rating_types=(
         (default, 'default'),
         (oneStar,'oneStar'),
@@ -21,7 +22,8 @@ class FeedbackDetails(models.Model):
         (fourStar,'fourStar'),
         (fiveStar,'fiveStar'),
         )
-    feedbackRating = models.IntegerField(
+    feedbackRating = models.CharField(
+        max_length = 1,
         choices = Rating_types,
         default = default,
         )
