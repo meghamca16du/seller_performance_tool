@@ -6,7 +6,25 @@ class FeedbackDetails(models.Model):
     bid = models.ForeignKey('dashboard.BuyerDetails', on_delete = models.CASCADE, db_column='bid')
     oid = models.ForeignKey('dashboard.OrderDetails', on_delete = models.CASCADE, db_column='oid')
     pid = models.ForeignKey('dashboard.ProductDetails', on_delete = models.CASCADE, db_column='pid')
-    feedbackEntered = models.TextField(max_length = 300)  
+    feedbackEntered = models.TextField(max_length = 300) 
+    default = '0'
+    oneStar='1'   
+    twoStar='2'
+    threeStar='3'
+    fourStar = '4'
+    fiveStar = '5'
+    Rating_types=(
+        (default, '0'),
+        (oneStar,'1'),
+        (twoStar,'2'),
+        (threeStar,'3'),
+        (fourStar,'4'),
+        (fiveStar,'5'),
+        )
+    feedbackRating = models.IntegerField(
+        choices = Rating_types,
+        default = default,
+        )
     dateFeedbackEntered = models.DateField()
 
     class Meta:
