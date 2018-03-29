@@ -60,6 +60,7 @@ class OrderDetails(models.Model):
         choices = status_types,
         default = in_process,
         )  # This field type is enumeration.
+    order_date = models.DateField(default = '2018-03-10')
     exp_shipment = models.DateField()
     exp_delivery = models.DateField()
     actual_shipment = models.DateField(blank=True,null=True)
