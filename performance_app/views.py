@@ -237,6 +237,54 @@ class HitToSuccessRatio(Trait):
                 )
             recommendation_list.append("recommendation 3")
 
+class ReturnRate(Trait):
+    '''
+    Objective: A derived class of Trait which calculates the value of 'ReturnRate' trait
+    '''
+    def calc_value(self):
+        '''
+        Objective: Calculates the values of return rate ratio.
+        '''
+        returnCount = OrderDetails.objects.filter(
+                            sid='ank202'
+                            ).filter(
+                            status = 'R'
+                            ).count(       
+                            )
+        totalOrders = OrderDetails.objects.filter(
+                            sid='ank202'
+                            ).count(       
+                            )
+        return_rate=(returnCount/totalOrders)*100
+        return return_rate
+
+    def returnTraitWeightage(self):
+        return 1
+
+    def saveRecommendation(self, value, recommendation_list):
+        if value <= 30:
+            TraitValueDetails.objects.filter(
+                sid='ank202'
+                ).update(
+                recommendations_returnRate = "recommendation 1"
+                )
+            recommendation_list.append("recommendation 1")
+        elif value > 30 and value <= 70:
+            TraitValueDetails.objects.filter(
+                sid = 'ank202'
+                ).update(
+                recommendations_returnRate = "recommendation 2"   
+                )
+            recommendation_list.append("recommendation 2")
+        else:
+            TraitValueDetails.objects.filter(
+                sid = 'ank202'
+                ).update(
+                recommendations_returnRate = "recommendation 3"   
+                )
+            recommendation_list.append("recommendation 3")
+
+
 def main(request):
     trait_name = []
     trait_value = []
