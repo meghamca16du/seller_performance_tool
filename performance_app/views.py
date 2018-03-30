@@ -115,7 +115,7 @@ class LateShipmentRate(Trait):
                          actual_shipment__gte=F('exp_shipment')
                          ).count()
         Total = OrderDetails.objects.filter(sid='ank202').count()
-        late_perc = (LateOrders/Total)*100
+        late_perc = round((LateOrders/Total)*100, 2)
         return late_perc
     
     def returnTraitWeightage(self):
@@ -165,7 +165,7 @@ class OnTimeDelivery(Trait):
                             ).filter(
                             actual_delivery__isnull=False
                             ).count()
-        Percentage = (onTimeDeliver/totalDeliver)*100
+        Percentage =round((onTimeDeliver/totalDeliver)*100, 2)
         return Percentage
 
     def returnTraitWeightage(self):
@@ -208,7 +208,7 @@ class HitToSuccessRatio(Trait):
                             ).count(       
                             )
         hits = ProductDetails.objects.filter(sid='ank202').aggregate(Sum('no_of_hits'))['no_of_hits__sum']
-        success_perc=(success/hits)*100
+        success_perc=round((success/hits)*100, 2)
         return success_perc
 
     def returnTraitWeightage(self):
@@ -255,7 +255,7 @@ class ReturnRate(Trait):
                             sid='ank202'
                             ).count(       
                             )
-        return_rate=(returnCount/totalOrders)*100
+        return_rate=round((returnCount/totalOrders)*100, 2)
         return return_rate
 
     def returnTraitWeightage(self):
