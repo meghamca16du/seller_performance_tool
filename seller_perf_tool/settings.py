@@ -42,7 +42,10 @@ INSTALLED_APPS = [
     'health_app',
     'recommendations_app',
     'feedbacks_app',
+    'import-export'
 ]
+
+IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
