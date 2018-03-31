@@ -100,3 +100,19 @@ class Cancellation(Base_TraitValueDetails):
         managed = True
         db_table = 'cancellation
 """
+class Category(models.Model):
+    id = models.CharField(primary_key=True, max_length=20)
+    cname = models.TextField(max_length=30)
+    subCategory = models.TextField(max_length=30)
+    subCategoryCount = models.IntegerField()
+
+class ProductMain(models.Model):
+    id = models.CharField(primary_key=True,max_length=20)
+    cid = models.ForeignKey('Category', on_delete = models.CASCADE)
+    #cid = models.CharField(max_length=20)
+    sid = models.CharField(max_length=10)
+    prod_count = models.IntegerField()
+    price = models.IntegerField()
+    launch_date = models.DateField()
+    score = models.IntegerField()
+    inventory = models.IntegerField()

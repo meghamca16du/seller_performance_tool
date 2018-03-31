@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'health_app',
     'recommendations_app',
     'feedbacks_app',
-    'import-export'
+    'import_export'
 ]
 
 IMPORT_EXPORT_USE_TRANSACTIONS = True
