@@ -1,6 +1,6 @@
 from django.db import models
 from dashboard.models import * 
-
+from dashboard.models import ProductMain
 
 class FeedbackDetails(models.Model):
     fid = models.AutoField(primary_key = True, null = False)
@@ -32,3 +32,10 @@ class FeedbackDetails(models.Model):
     class Meta:
         managed = True
         db_table = 'feedback_details'
+
+class Feedbacks(models.Model):
+    id = models.CharField(primary_key=True, max_length=20)
+    pid = models.ForeignKey('dashboard.ProductMain', on_delete = models.CASCADE)
+    feedback_date = models.DateField()
+    rating = models.IntegerField()
+    feedback = models.TextField(max_length=500)
