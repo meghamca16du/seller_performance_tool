@@ -98,6 +98,14 @@
             <h1 class="h2">All values</h1>
           </div>
 
+          
+            <form>
+              From:<input align="right" type="date" name="from_date"> To: <input type="date" name="to_date"> 
+              <input type="submit" name="Go">
+            </form>
+          
+
+
           <ul>
              {% for trait_component ,trait_value, recommendation in recommendation_trait_list %}
                 <li>   <h3> {{ trait_component }} </h3>  {{trait_value}} </br> {{recommendation}} </li>

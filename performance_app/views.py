@@ -3,19 +3,23 @@ from dashboard.models import *
 from django.db.models import Count, F, Sum
 from abc import ABC, abstractmethod
 import re
+from datetime import datetime
+from django.utils import formats
 
 class Trait(ABC):
     '''
         Objective: An abstract class which calculates the value of the trait and stores it in the database.
     ''' 
     traitWeightageList = []
-    def __init__(self, trait_cmp):
+    def __init__(self, trait_cmp,from_date,to_date):
         '''
         Objective: A constructor which initializes the trait component variable.
         Input Parameter: trait_cmp - Trait Component
         Return Value: Returns an object of the called class
         '''
         self.trait_component = trait_cmp
+        self.from_date=from_date
+        self.to_date=to_date
 
     def template_method(self, trait_name, trait_value, recommendation_list):
         '''
@@ -113,8 +117,19 @@ class LateShipmentRate(Trait):
                          actual_shipment__isnull=False
                          ).filter(
                          actual_shipment__gte=F('exp_shipment')
+                         ).filter(
+                         order_date__gte=self.from_date
+                         ).filter(
+                         order_date__lte=self.to_date
                          ).count()
-        Total = OrderDetails.objects.filter(sid='ank202').count()
+        Total = OrderDetails.objects.filter(
+                    sid='ank202'
+                    ).filter(
+                    order_date__gte=self.from_date
+                    ).filter(
+                    order_date__lte=self.to_date
+                    ).count(
+                    )
         late_perc = round((LateOrders/Total)*100, 2)
         return late_perc
     
@@ -159,11 +174,20 @@ class OnTimeDelivery(Trait):
                             actual_delivery__isnull=False
                             ).filter(
                             exp_delivery__gte = F('actual_delivery')
-                            ).count()
+                            ).filter(
+                            order_date__gte=self.from_date
+                            ).filter(
+                            order_date__lte=self.to_date
+                            ).count(
+                            )
         totalDeliver = OrderDetails.objects.filter(
                             sid='ank202'
                             ).filter(
                             actual_delivery__isnull=False
+                            ).filter(
+                            order_date__gte=self.from_date
+                            ).filter(
+                            order_date__lte=self.to_date
                             ).count()
         Percentage =round((onTimeDeliver/totalDeliver)*100, 2)
         return Percentage
@@ -249,10 +273,18 @@ class ReturnRate(Trait):
                             sid='ank202'
                             ).filter(
                             status = 'R'
+                            ).filter(
+                            order_date__gte=self.from_date
+                            ).filter(
+                            order_date__lte=self.to_date
                             ).count(       
                             )
         totalOrders = OrderDetails.objects.filter(
                             sid='ank202'
+                            ).filter(
+                            order_date__gte=self.from_date
+                            ).filter(
+                            order_date__lte=self.to_date
                             ).count(       
                             )
         return_rate=round((returnCount/totalOrders)*100, 2)
@@ -284,8 +316,22 @@ class ReturnRate(Trait):
                 )
             recommendation_list.append("recommendation 3")
 
-
 def main(request):
+    if 'Go' in request.POST:
+        print('holaaaaaaaaaaaaa')
+        if 'from_date' in request.GET and 'to_date' in request.GET:
+            from_date = formats.date_format(request.GET['from_date'],"SHORT_DATE_FORMAT")
+            to_date = formats.date_format(request.GET['to_date'],"SHORT_DATE_FORMAT")
+        elif 'from_date' not in request.GET and 'to_date' not in request.GET:
+            to_date = datetime.now()
+            formats.date_format(to_date,"SHORT_DATE_FORMAT")
+            from_date='1980-01-01'
+            #from_date = '2018-10-10'
+    else:
+        to_date = datetime.now()
+        formats.date_format(to_date,"SHORT_DATE_FORMAT")
+        from_date='1980-01-01'
+    print(from_date)
     trait_name = []
     trait_value = []
     recommendation_list = []
@@ -293,11 +339,37 @@ def main(request):
 
         class_name = cls.__name__
         trait_component = re.sub( '(?<!^)(?=[A-Z])', '_', class_name ).lower()
-        obj = cls(trait_component)
+        obj = cls(trait_component,from_date,to_date)
         obj.template_method(trait_name, trait_value, recommendation_list)
     
     recommendation_trait_list = zip(trait_name, trait_value, recommendation_list)
     return render(request,'performance.html',{'recommendation_trait_list':recommendation_trait_list})
+
+
+'''def main(request):
+    if 'Go' in request.POST:
+        return HttpRespnseRedirect('home/performance/')
+    else:
+        trait_name = []
+        trait_value = []
+        recommendation_list = []
+        for cls in Trait.__subclasses__():
+
+            class_name = cls.__name__
+            trait_component = re.sub( '(?<!^)(?=[A-Z])', '_', class_name ).lower()
+            if 'from_date' in request.GET and 'to_date' in request.GET:
+                from_date = formats.date_format(request.GET['from_date'],"SHORT_DATE_FORMAT")
+                to_date = formats.date_format(request.GET['to_date'],"SHORT_DATE_FORMAT")
+            elif 'from_date' not in request.GET and 'to_date' not in request.GET:
+                to_date = datetime.now()
+                formats.date_format(to_date,"SHORT_DATE_FORMAT")
+                from_date='1980-01-01'
+
+            obj = cls(trait_component,from_date,to_date)
+            obj.template_method(trait_name, trait_value, recommendation_list)
+    
+        recommendation_trait_list = zip(trait_name, trait_value, recommendation_list)
+        return render(request,'performance.html',{'recommendation_trait_list':recommendation_trait_list})'''
 
 if __name__ == '__main__':
     main(request)
