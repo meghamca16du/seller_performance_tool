@@ -1,10 +1,16 @@
 from django.shortcuts import render
 from dashboard.models import *
+#from .feedbacks import *
 from django.db.models import Count, F, Sum
 from abc import ABC, abstractmethod
 import re
 from datetime import datetime
 from django.utils import formats
+from .feedbacks import polarity
+from nltk.tokenize import sent_tokenize,word_tokenize
+from nltk.corpus import stopwords
+from nltk import pos_tag
+from feedbacks_app.models import *
 
 class Trait(ABC):
     '''
@@ -37,6 +43,7 @@ class Trait(ABC):
         self.store_value(value, table_name, trait_name, trait_value)
         overall_perf_value = self.calc_overall_performance(trait_value,Trait.traitWeightageList)
         self.store_overall_value(TraitValueDetails,overall_perf_value)
+        #self.calc_feedbacks(trait_name, trait_value)
 
     def find_table(self):
         '''
@@ -101,6 +108,16 @@ class Trait(ABC):
                     ).update(
                     overall_perf_val = overall_perf_value
                     )
+            
+    def calc_feedbacks(self,trait_name,trait_value):
+        polar=polarity()
+        score=polar.call_functions()
+        trait_value.append(score[0])
+        trait_name.append('positive_feedbacks')
+        trait_value.append(score[1])
+        trait_name.append('negative_feedbacks')
+        TraitValueDetails.objects.filter(sid='ank202').update(positive_feedbacks=score[0])
+        TraitValueDetails.objects.filter(sid='ank202').update(negative_feedbacks=score[1])
 
 class LateShipmentRate(Trait):
     '''
@@ -342,6 +359,7 @@ def main(request):
         obj = cls(trait_component,from_date,to_date)
         obj.template_method(trait_name, trait_value, recommendation_list)
     
+    #Trait.calc_feedbacks(trait_name,trait_value)
     recommendation_trait_list = zip(trait_name, trait_value, recommendation_list)
     return render(request,'performance.html',{'recommendation_trait_list':recommendation_trait_list})
 

@@ -88,6 +88,9 @@ class TraitValueDetails(Base_TraitValueDetails):
     recommendations_HitToSucessRatio = models.TextField(max_length = 100, default="abc")
     return_rate = models.DecimalField(max_digits=4,decimal_places=2,default=0) 
     recommendations_returnRate = models.TextField(max_length = 100, default="abc")
+
+    positive_feedbacks = models.TextField(max_length = 500, default="abc")
+    negative_feedbacks = models.TextField(max_length = 500, default="abc")
     class Meta:
         managed = True
         db_table = 'traits_value_details'
