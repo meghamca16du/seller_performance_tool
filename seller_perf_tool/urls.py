@@ -17,6 +17,7 @@ from django.urls import path
 from dashboard import views
 from performance_app import views as perf_views
 from feedbacks_app import views as feed_views
+from recommendations_app import views as rec_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +26,5 @@ urlpatterns = [
     path('profile/',views.profile,name='profile'),
     path('home/performance/',perf_views.main,name='main'),
     path('home/feedback/',feed_views.feedback,name='feedback'),
+    path('home/recommendations/',rec_views.main,name='main'),
 ]

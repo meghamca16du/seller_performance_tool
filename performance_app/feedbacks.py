@@ -7,7 +7,7 @@ from nltk.corpus import sentiwordnet as swn
 
 class polarity:
     def find_feedbacks(self):
-        feedbacks_obj=FeedbackDetails.objects.all().filter(oid__sid='ank202').values('feedbackEntered')
+        feedbacks_obj = FeedbackDetails.objects.all().filter(oid__sid='ank202').values('feedbackEntered')
         return feedbacks_obj
 
     def clean(self,feedback):

@@ -88,7 +88,6 @@ class TraitValueDetails(Base_TraitValueDetails):
     recommendations_HitToSucessRatio = models.TextField(max_length = 100, default="abc")
     return_rate = models.DecimalField(max_digits=4,decimal_places=2,default=0) 
     recommendations_returnRate = models.TextField(max_length = 100, default="abc")
-
     positive_feedbacks = models.TextField(max_length = 500, default="abc")
     negative_feedbacks = models.TextField(max_length = 500, default="abc")
     class Meta:
@@ -111,9 +110,8 @@ class Category(models.Model):
 
 class ProductMain(models.Model):
     id = models.CharField(primary_key=True,max_length=20)
-    cid = models.ForeignKey('Category', on_delete = models.CASCADE)
-    #cid = models.CharField(max_length=20)
-    sid = models.CharField(max_length=10)
+    sub_cid = models.ForeignKey('Category', on_delete = models.CASCADE)
+    sid = models.ForeignKey('SellerDetails', on_delete = models.CASCADE)
     prod_count = models.IntegerField()
     price = models.IntegerField()
     launch_date = models.DateField()
