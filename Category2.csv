@@ -1,4 +1,4 @@
-id,cname,subCategory,subCategoryCount
+id,cname,product_name,subCategoryCount
 cr501,Certified Refurbished,Amazon Fire TV,10
 cr502,Certified Refurbished,Kindle E-Reader,20
 cr503,Certified Refurbished,Fire HD Tablet,30

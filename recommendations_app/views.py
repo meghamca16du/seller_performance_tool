@@ -2,7 +2,7 @@ from django.shortcuts import render
 from math import ceil
 from heapq import heappush, heappop, heapify
 from django.db.models import Count
-from datetime import datetime
+from datetime import datetime, date
 from django.utils import formats
 from dashboard.models import *
 
@@ -48,16 +48,17 @@ class Recommendations:
         self.productset = []
         self.final_score={}
         self.recommendationList = []
+        self.sellerSubCategoryList = []
 
     def template(self):
         self.search_category()
+        self.search_sellerSubCategory()
         self.search_subcategory()
         self.search_products()
         self.calculate_score()
         heapobj = self.initialize_heap()
         self.maintain_heap(heapobj)
         self.checkIfSellerProductIsTrending(heapobj)
-        #self.sellerProductIsNotTrending(productid_score)
 
     def search_category(self):
         self.category_set = ProductMain.objects.all().filter(
@@ -68,6 +69,17 @@ class Recommendations:
         for category in self.category_set:
             for key,category_name in category.items():
                 self.categoryList.append(category_name)
+
+    def search_sellerSubCategory(self):
+        Subcategory = ProductMain.objects.all().filter(
+                         sid='ank202'
+                         ).values(
+                         'sub_cid'
+                         ).distinct()
+        
+        for sub_cat in Subcategory:
+            for key,sub_cid in sub_cat.items():
+                self.sellerSubCategoryList.append(sub_cid)
 
     def search_subcategory(self):
         for subcategory in self.categoryList:
@@ -102,6 +114,24 @@ class Recommendations:
         return score
 
     def calcDateScore(self,products):
+        '''launch_date=products['launch_date']
+        present_date=datetime.now()
+        present_date=formats.date_format(present_date,"SHORT_DATE_FORMAT")
+        launch_date=launch_date.split('-')
+        present_date=present_date.split('/')
+        d1=date(launch_date[2],launch_date[1],launch_date[0])
+        d2=date(present_date[2],present_date[0],present_date[1])
+        days_difference=d1-d2
+        days=days_difference.days
+        if days>=0 and days<5:
+            score=0.2*30
+        elif days>=5 and days<10:
+            score=0.2*20
+        elif days>=10 and days<15:
+            score=0.2*10
+        else:
+            score=0
+        return score'''
         return 20
 
     def initialize_heap(self):
@@ -136,6 +166,8 @@ class Recommendations:
                     break
 
     def sellerProductIsTrending(self,productid_score):
+        '''recommendationString = 'Keep ',trending_subcat_name, 'sub category also for increasing sales.','\n'
+        self.recommendationList.append(recommendationString)'''
         pass
 
     def sellerProductIsNotTrending(self,productid_score):
@@ -143,26 +175,35 @@ class Recommendations:
         category = trendingProductObj.values('sub_cid__cname')
         subcategory = trendingProductObj.values('sub_cid')
         trendingProductPrice = trendingProductObj.values('price')
-        #print (subcategory)
-        #print (self.subCategoryList)
         for cat in category:
             for key,value in cat.items():
                 trending_category_name = value   
         for subcat in subcategory:
             for key,value in subcat.items():
                 trending_subcat_id = value 
-        if trending_category_name in self.categoryList:
-            if trending_subcat_id in self.subCategoryList:
-                print ('compare prizes')
-            else:
-                recommendationString = 'Keep ',trending_subcat_name, 'sub category also for increasing sales. \n'
+        for trendProductPrice in trendingProductPrice :
+            for product,price in trendProductPrice.items() : 
+                trend_product_price=price
+        if trending_subcat_id in self.sellerSubCategoryList :
+            seller_price = ProductMain.objects.filter(
+                                sid='ank202'
+                                ).filter(
+                                sub_cid=trending_subcat_id
+                                ).values(
+                                'price')
+            for sellerprice in seller_price :
+                for key,price in sellerprice.items() :
+                    sellerPrice=price
+
+            if trend_product_price < sellerPrice:
+                recommendationString = 'Decrease your price. Or you can add a deal on this product.'
                 self.recommendationList.append(recommendationString)
         else:
-            recommendationString = 'Keep ',value, 'category also for increasing sales. \n'
+            recommendationString = 'Keep ',value, 'category also for increasing sales.'
             self.recommendationList.append(recommendationString)
-    
 
 def main(request):
+    #recommendationList = []
     obj = Recommendations()
     obj.template()
     return render(request,'recommendation.html',{})
