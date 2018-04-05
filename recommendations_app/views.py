@@ -114,15 +114,24 @@ class Recommendations:
         return score
 
     def calcDateScore(self,products):
-        '''launch_date=products['launch_date']
-        present_date=datetime.now()
-        present_date=formats.date_format(present_date,"SHORT_DATE_FORMAT")
-        launch_date=launch_date.split('-')
-        present_date=present_date.split('/')
-        d1=date(launch_date[2],launch_date[1],launch_date[0])
-        d2=date(present_date[2],present_date[0],present_date[1])
-        days_difference=d1-d2
-        days=days_difference.days
+        '''launchdate = products['launch_date']
+        launch_date = formats.date_format(launchdate,"SHORT_DATE_FORMAT")
+        launch_Date=launch_date.split('/')
+        l_date=[]
+        for date in launch_Date:
+            l_date.append(int(date))
+
+        presentdate = datetime.now()
+        present_date = formats.date_format(presentdate,"SHORT_DATE_FORMAT")
+        present_Date = present_date.split('/')
+        p_date=[]
+        for date in present_Date:
+            p_date.append(int(date))
+
+        d1 = date(l_date[0], l_date[1], l_date[2])
+        d2 = date(p_date[0], p_date[1], p_date[2])
+        days_difference = d1-d2
+        days = days_difference.days
         if days>=0 and days<5:
             score=0.2*30
         elif days>=5 and days<10:
