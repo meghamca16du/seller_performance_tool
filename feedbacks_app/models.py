@@ -1,6 +1,7 @@
 from django.db import models
 from dashboard.models import * 
 from dashboard.models import ProductMain
+from .search import Feedbacks_Index
 
 class FeedbackDetails(models.Model):
     fid = models.AutoField(primary_key = True, null = False)
@@ -33,9 +34,21 @@ class FeedbackDetails(models.Model):
         managed = True
         db_table = 'feedback_details'
 
-class Feedbacks(models.Model):
+class Feedbacks_table(models.Model):
     id = models.CharField(primary_key=True, max_length=20)
-    pid = models.ForeignKey('dashboard.ProductMain', on_delete = models.CASCADE)
-    feedback_date = models.DateField()
-    rating = models.IntegerField()
-    feedback = models.TextField(max_length=500)
+    pid_seller = models.ForeignKey('dashboard.ProductMain', on_delete = models.CASCADE)
+    feedbackdate = models.DateField()
+    rating_points = models.IntegerField()
+    feedback_entered = models.TextField(max_length=500)
+
+    def indexing(self):
+        obj = Feedbacks_Index(
+                meta={'id' : self.id},
+                id = self.id,
+                pid_seller = self.pid_seller.id,
+                feedbackdate=self.feedbackdate,
+                rating_points = self.rating_points,
+                feedback_entered= self.feedback_entered
+                )
+        obj.save()
+        return obj.to_dict(include_meta=True)

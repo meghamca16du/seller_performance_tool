@@ -3,4 +3,4 @@ from .models import *
 
 class FeedbacksResource(resources.ModelResource):
     class meta:
-        model = Feedbacks
+        model = Feedbacks_table

@@ -1,0 +1,1 @@
+default_app_config = 'feedbacks_app.apps.FeedbacksAppConfig'
