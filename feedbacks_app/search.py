@@ -3,6 +3,7 @@ from elasticsearch_dsl import DocType,Integer, Text, Date,Search
 from elasticsearch.helpers import bulk
 from elasticsearch import Elasticsearch,helpers
 from . import models
+from datetime import datetime
 from dashboard.models import ProductMain
 connections.create_connection()
 
@@ -29,10 +30,23 @@ def bulk_indexing():
 def search_pid(pid_seller):
     p = Search().filter('match',pid_seller=pid_seller)
     response = p.execute()
-    return response
+    response_dict = {}
+    for h in s.scan():
+        response_dict[h.id] = h.feedback_entered
+    return response_dict
 
 def search_rating(rating_points):
     s = Search().filter('term',rating_points=rating_points)
     response = s.execute()
-    return response
+    response_dict = {}
+    for h in s.scan():
+        response_dict[h.id] = h.feedback_entered
+    return response_dict
 
+def search_date(startdate,enddate):
+    s = Search().filter('range',feedbackdate = {'gte': startdate , 'lte': enddate})
+    response = s.execute()
+    response_dict = {}
+    for h in s.scan():
+        response_dict[h.id] = [h.feedbackdate, h.feedback_entered]
+    return response_dict
