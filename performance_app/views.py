@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from dashboard.models import *
-#from .feedbacks import *
 from django.db.models import Count, F, Sum
 from abc import ABC, abstractmethod
 import re
@@ -43,7 +42,6 @@ class Trait(ABC):
         self.store_value(value, table_name, trait_name, trait_value)
         overall_perf_value = self.calc_overall_performance(trait_value,Trait.traitWeightageList)
         self.store_overall_value(TraitValueDetails,overall_perf_value)
-        #self.calc_feedbacks(trait_name, trait_value)
 
     def find_table(self):
         '''
@@ -359,32 +357,6 @@ def main(request):
     Trait.calc_feedbacks(trait_name,trait_value, recommendation_list)
     recommendation_trait_list = zip(trait_name, trait_value, recommendation_list)
     return render(request,'performance.html',{'recommendation_trait_list':recommendation_trait_list})
-
-
-'''def main(request):
-    if 'Go' in request.POST:
-        return HttpRespnseRedirect('home/performance/')
-    else:
-        trait_name = []
-        trait_value = []
-        recommendation_list = []
-        for cls in Trait.__subclasses__():
-
-            class_name = cls.__name__
-            trait_component = re.sub( '(?<!^)(?=[A-Z])', '_', class_name ).lower()
-            if 'from_date' in request.GET and 'to_date' in request.GET:
-                from_date = formats.date_format(request.GET['from_date'],"SHORT_DATE_FORMAT")
-                to_date = formats.date_format(request.GET['to_date'],"SHORT_DATE_FORMAT")
-            elif 'from_date' not in request.GET and 'to_date' not in request.GET:
-                to_date = datetime.now()
-                formats.date_format(to_date,"SHORT_DATE_FORMAT")
-                from_date='1980-01-01'
-
-            obj = cls(trait_component,from_date,to_date)
-            obj.template_method(trait_name, trait_value, recommendation_list)
-    
-        recommendation_trait_list = zip(trait_name, trait_value, recommendation_list)
-        return render(request,'performance.html',{'recommendation_trait_list':recommendation_trait_list})'''
 
 if __name__ == '__main__':
     main(request)

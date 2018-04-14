@@ -34,53 +34,62 @@
             <ul class="nav flex-column">
               <li class="nav-item">
                 <a class="nav-link active" href="#">
-                  <span data-feather="home"></span>
-                  Filter <span class="sr-only">(current)</span>
+                  <span data-feather="layers"></span>
+                 Apply Filters <span class="sr-only">(current)</span>
                 </a>
               </li>
               <form method="get"> {% csrf_token %}
               <li class="nav-item">
                 <a class="nav-link" href="#">
-                <span data-feather="file"></span>
                   Date
                     From:<input type="date" name="from_date"> To: <input type="date" name="to_date"> 
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">
-                  <span data-feather="shopping-cart"></span>
                   Rating
-                    <input type="text" name="rating">
+                  <select name="rating">
+                    <option value="" selected disabled hidden>Choose here</option>
+                    <option value="1" >1</option>
+                    <option value="2" >2</option>
+                    <option value="3" >3</option>
+                    <option value="4" >4</option>
+                    <option value="5" >5</option>
+                  </select>
 
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">
-                  <span data-feather="shopping-cart"></span>
-                  Product
-                    <input type="text" name="product">
+                  Product </br>
+                  <select name="product">
+                      <option value="" selected disabled hidden>Choose here</option>
+                      {% for key,pid in seller_products.items %}
+                    <option value={{pid}}>{{pid}}</option>
+                   {%endfor%}
+                  </select>
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">
-                  <span data-feather="shopping-cart"></span>
                   Keyword
                     <input type="text" name="keyword">
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">
-                  <span data-feather="bar-chart-2"></span>
+                    <input type="checkbox" name = "Positive Feedbacks">
                   Positive Feedbacks
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">
-                  <span data-feather="layers"></span>
+                    <input type="checkbox" name = "Negative Feedbacks">
                   Negative Feedbacks
+                  
                 </a>
               </li>
-              <input type="submit" name="Apply Filter" >
+              <input type="submit" name="Apply" value = "Apply Filter" >
               </form>
             </ul>
           </div>
@@ -91,11 +100,14 @@
                 <h1 class="h2">Feedbacks</h1>
             </div>
             {% for key, value in filtered_result.items %}
+            <div>
            {% for details in value %}
                 {{details}} </br>
            {%endfor%}
             {%endfor%}
+          </div>
 
+          
         </main>
       </div>
     </div>
