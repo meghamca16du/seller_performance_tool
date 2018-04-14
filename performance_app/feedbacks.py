@@ -20,7 +20,7 @@ class polarity:
         for neg_word in negation_words:
             if neg_word in stop_words:
                 stop_words.remove(neg_word)
-        tokenize_text=word_tokenize(feedback)
+        tokenize_text = word_tokenize(feedback)
         for token in tokenize_text:
             token=token.lower()
             if token not in stop_words:
@@ -35,7 +35,7 @@ class polarity:
     def calc_senti_score(self,tagged_text):
         score_list=[]
         #score_list_neg=[]
-        wnl = WordNetLemmatizer()
+        wnl = WordNetLemmatizer()  #plural-to-singular
         #positive_score=0
         #negative_score=0
         count=0
@@ -44,13 +44,13 @@ class polarity:
         for word,tag in tagged_text:
             lemmatized=wnl.lemmatize(word)
             syn_score=0
-            if tag.startswith('NN'):
+            if tag.startswith('NN'):  #noun
                     newtag='n'
-            elif tag.startswith('JJ'):
+            elif tag.startswith('JJ'):  #adjective
                 newtag='a'
-            elif tag.startswith('V'):
+            elif tag.startswith('V'):  #verb
                 newtag='v'
-            elif tag.startswith('R'):
+            elif tag.startswith('R'):  #adverb
                 newtag='r'
             else:
                 newtag=''
@@ -60,15 +60,15 @@ class polarity:
                     syn_pos=0
                     syn_neg=0
                     for syn in synsets:
-                        syn_score=syn_score+syn.pos_score()-syn.neg_score()
-                    syn_score=syn_score/len(synsets)
+                        syn_score = syn_score + syn.pos_score() - syn.neg_score()
+                    syn_score = syn_score/len(synsets)  #taking average
                     #print(lemmatized)
                     #print(syn_score)
                     count+=1
             score_list.append(syn_score)
-        total_score=sum(score_list)/count
+        total_score = sum(score_list) / count
         #print("total score of ", tagged_text," " ,total_score)
-        if(total_score>=0):
+        if(total_score >= 0):
             return True
         else:
             return False
@@ -93,3 +93,23 @@ class polarity:
         score.append((pos/count)*100)
         score.append((neg/count)*100)
         return score
+
+    def negative_feedbacks(self,feedback_entered):
+        negative_feedbacks = {}
+        clean_text=self.clean(feedback_entered)
+        tagged_text=self.tagging(clean_text)
+        polarity=self.calc_senti_score(tagged_text)
+        if not polarity:
+            return True
+        else:
+            return False
+
+    def positive_feedbacks(self,feedback_entered):
+        positive_feedbacks = {}
+        clean_text=self.clean(feedback_entered)
+        tagged_text=self.tagging(clean_text)
+        polarity=self.calc_senti_score(tagged_text)
+        if polarity:
+            return True
+        else:
+            return False

@@ -8,6 +8,7 @@ from datetime import datetime
 from dashboard.models import ProductMain
 from django.shortcuts import render
 from tablib import Dataset
+from performance_app.feedbacks import *
 from .models import *
 from .search import *
 from .resources import *
@@ -47,10 +48,24 @@ class SearchFeedbacks:
         pass
 
     def filterAccordingToNegativeFeedbacks(self,documents,request):
-        pass
+        PolarityObj = polarity()
+        feedbacks_id = []
+        for doc in documents.scan():
+            IsNegative = PolarityObj.negative_feedbacks(doc.feedback_entered)
+            if IsNegative==True:
+                feedbacks_id.append(doc.id)
+        filteredDocuments = documents.filter({"terms": {"id":feedbacks_id} })
+        return filteredDocuments
 
     def filterAccordingToPositiveFeedbacks(self,documents,request):
-        pass
+        PolarityObj = polarity()
+        feedbacks_id = []
+        for doc in documents.scan():
+            IsPositive = PolarityObj.positive_feedbacks(doc.feedback_entered)
+            if IsPositive == True:
+                feedbacks_id.append(doc.id)
+        filteredDocuments = documents.filter({"terms": {"id":feedbacks_id} })
+        return filteredDocuments
 
     def create_filtered_result_dictionary(self,documents,filtered_result):
         result = documents.execute()
@@ -63,7 +78,6 @@ def main(request):
     feedback_load_data()
     seller_products = {}
     all_seller_products(seller_products)
-    print (seller_products)
     SearchObj = SearchFeedbacks()
     filtered_result = {}
     checkFilterToApply = { SearchObj.filterAccordingToDate : 0,
@@ -86,13 +100,18 @@ def main(request):
         if 'keyword' in request.GET:
             if request.GET['keyword']:
                 checkFilterToApply[SearchObj.filterAccordingToKeywords] = 1
+        if 'Positive Feedbacks' in request.GET:
+            if request.GET['Positive Feedbacks']:
+                checkFilterToApply[SearchObj.filterAccordingToPositiveFeedbacks] = 1
+        if 'Negative Feedbacks' in request.GET:
+            if request.GET['Negative Feedbacks']:
+                checkFilterToApply[SearchObj.filterAccordingToNegativeFeedbacks] = 1  
         
         documents = Search()
 
         for filter,value in checkFilterToApply.items():
             if value == 1 :
                 documents = filter(documents,request)
-
         filtered_result = SearchObj.create_filtered_result_dictionary(documents,filtered_result)
     else:
         documents = Search()
