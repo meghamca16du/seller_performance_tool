@@ -334,19 +334,18 @@ class ReturnRate(Trait):
             recommendation_list.append("recommendation 3")
 
 def main(request):
-    if 'Go' in request.POST:
+    if request.method == "GET":
         print('holaaaaaaaaaaaaa')
         if 'from_date' in request.GET and 'to_date' in request.GET:
-            from_date = formats.date_format(request.GET['from_date'],"SHORT_DATE_FORMAT")
-            to_date = formats.date_format(request.GET['to_date'],"SHORT_DATE_FORMAT")
+            from_date = request.GET['from_date']
+            to_date = request.GET['to_date']
         elif 'from_date' not in request.GET and 'to_date' not in request.GET:
             to_date = datetime.now()
-            formats.date_format(to_date,"SHORT_DATE_FORMAT")
+            #formats.date_format(to_date,"SHORT_DATE_FORMAT")
             from_date='1980-01-01'
-            #from_date = '2018-10-10'
     else:
         to_date = datetime.now()
-        formats.date_format(to_date,"SHORT_DATE_FORMAT")
+        #formats.date_format(to_date,"SHORT_DATE_FORMAT")
         from_date='1980-01-01'
     print(from_date)
     trait_name = []

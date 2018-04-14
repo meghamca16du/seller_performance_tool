@@ -25,6 +25,6 @@ urlpatterns = [
     path('home/',views.home,name='home'),
     path('profile/',views.profile,name='profile'),
     path('home/performance/',perf_views.main,name='main'),
-    path('home/feedback/',feed_views.feedback,name='feedback'),
+    path('home/feedback/',feed_views.main,name='main'),
     path('home/recommendations/',rec_views.main,name='main'),
 ]

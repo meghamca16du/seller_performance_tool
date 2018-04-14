@@ -35,74 +35,66 @@
               <li class="nav-item">
                 <a class="nav-link active" href="#">
                   <span data-feather="home"></span>
-                  All Values <span class="sr-only">(current)</span>
+                  Filter <span class="sr-only">(current)</span>
                 </a>
               </li>
+              <form method="get"> {% csrf_token %}
               <li class="nav-item">
                 <a class="nav-link" href="#">
-                  <span data-feather="file"></span>
-                  Late Shipment Rate
+                <span data-feather="file"></span>
+                  Date
+                    From:<input type="date" name="from_date"> To: <input type="date" name="to_date"> 
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">
                   <span data-feather="shopping-cart"></span>
-                  On Time Delivery Rate
+                  Rating
+                    <input type="text" name="rating">
+
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">
-                  <span data-feather="users"></span>
-                  Hit To Success Ratio
+                  <span data-feather="shopping-cart"></span>
+                  Product
+                    <input type="text" name="product">
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="shopping-cart"></span>
+                  Keyword
+                    <input type="text" name="keyword">
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">
                   <span data-feather="bar-chart-2"></span>
-                  Parameter
+                  Positive Feedbacks
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">
                   <span data-feather="layers"></span>
-                  Parameter
+                  Negative Feedbacks
                 </a>
               </li>
-            </ul>
-
-            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-              
-              <a class="d-flex align-items-center text-muted" href="#">
-                <span data-feather="plus-circle"></span>
-              </a>
-            </h6>
-            <ul class="nav flex-column mb-2">
-              <li class="nav-item">
-                
-              </li>
-              <li class="nav-item">
-                
-              </li>
-              <li class="nav-item">
-                
-              </li>
-              <li class="nav-item">
-                
-              </li>
+              <input type="submit" name="Apply Filter" >
+              </form>
             </ul>
           </div>
         </nav>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-            <h1 class="h2">All values</h1>
-          </div>
-
-          <ul>
-             {% for trait_component ,trait_value, recommendation in recommendation_trait_list %}
-                <li>   <h3> {{ trait_component }} </h3>  {{trait_value}} </br> {{recommendation}} </li>
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                <h1 class="h2">Feedbacks</h1>
+            </div>
+            {% for key, value in filtered_result.items %}
+           {% for details in value %}
+                {{details}} </br>
+           {%endfor%}
             {%endfor%}
-          </ul>
 
         </main>
       </div>

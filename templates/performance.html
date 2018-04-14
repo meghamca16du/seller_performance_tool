@@ -99,8 +99,9 @@
           </div>
 
           
-            <form>
-              From:<input align="right" type="date" name="from_date"> To: <input type="date" name="to_date"> 
+          <form method="get"> {% csrf_token %}
+              From:<input align="right" type="date" name="from_date"> </br></br>
+              To  : <input type="date" name="to_date"> 
               <input type="submit" name="Go">
             </form>
           
