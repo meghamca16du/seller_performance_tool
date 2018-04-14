@@ -24,8 +24,8 @@ class Trait(ABC):
         Return Value: Returns an object of the called class
         '''
         self.trait_component = trait_cmp
-        self.from_date=from_date
-        self.to_date=to_date
+        self.from_date = from_date
+        self.to_date = to_date
 
     def template_method(self, trait_name, trait_value, recommendation_list):
         '''
@@ -109,13 +109,15 @@ class Trait(ABC):
                     overall_perf_val = overall_perf_value
                     )
             
-    def calc_feedbacks(self,trait_name,trait_value):
+    def calc_feedbacks(trait_name,trait_value, recommendation_list):
         polar=polarity()
         score=polar.call_functions()
         trait_value.append(score[0])
         trait_name.append('positive_feedbacks')
+        recommendation_list.append("good feeds")
         trait_value.append(score[1])
         trait_name.append('negative_feedbacks')
+        recommendation_list.append("bad feeds")
         TraitValueDetails.objects.filter(sid='ank202').update(positive_feedbacks=score[0])
         TraitValueDetails.objects.filter(sid='ank202').update(negative_feedbacks=score[1])
 
@@ -335,19 +337,15 @@ class ReturnRate(Trait):
 
 def main(request):
     if request.method == "GET":
-        print('holaaaaaaaaaaaaa')
         if 'from_date' in request.GET and 'to_date' in request.GET:
             from_date = request.GET['from_date']
             to_date = request.GET['to_date']
         elif 'from_date' not in request.GET and 'to_date' not in request.GET:
             to_date = datetime.now()
-            #formats.date_format(to_date,"SHORT_DATE_FORMAT")
             from_date='1980-01-01'
     else:
         to_date = datetime.now()
-        #formats.date_format(to_date,"SHORT_DATE_FORMAT")
         from_date='1980-01-01'
-    print(from_date)
     trait_name = []
     trait_value = []
     recommendation_list = []
@@ -358,7 +356,7 @@ def main(request):
         obj = cls(trait_component,from_date,to_date)
         obj.template_method(trait_name, trait_value, recommendation_list)
     
-    #Trait.calc_feedbacks(trait_name,trait_value)
+    Trait.calc_feedbacks(trait_name,trait_value, recommendation_list)
     recommendation_trait_list = zip(trait_name, trait_value, recommendation_list)
     return render(request,'performance.html',{'recommendation_trait_list':recommendation_trait_list})
 
