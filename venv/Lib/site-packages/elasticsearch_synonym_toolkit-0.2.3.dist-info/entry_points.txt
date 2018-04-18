@@ -1,0 +1,3 @@
+[console_scripts]
+es-synlint = es_synonyms.synlint:cli
+

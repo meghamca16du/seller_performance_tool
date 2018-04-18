@@ -117,5 +117,4 @@ def main(request):
         documents = Search()
         filtered_result = {}
         filtered_result = SearchObj.create_filtered_result_dictionary(documents,filtered_result)
-
     return render(request,'feedback.html',{'filtered_result':filtered_result, 'seller_products':seller_products})

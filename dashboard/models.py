@@ -74,22 +74,25 @@ class OrderDetails(models.Model):
 class Base_TraitValueDetails(models.Model):   #base abstract class
     tid = models.TextField(primary_key = True, null=False)
     sid = models.ForeignKey('SellerDetails', on_delete = models.CASCADE, db_column='sid')
-    overall_perf_val = models.DecimalField(max_digits=4,decimal_places=2,default=0)
-    #sid = models.OneToOneField('SellerDetails',primary_key=True, on_delete = models.CASCADE, db_column='sid')  
+    overall_perf_val = models.DecimalField(max_digits=4,decimal_places=2,default=0)  
     class Meta:
         abstract = True  #so that new trait column can be added
 
 class TraitValueDetails(Base_TraitValueDetails):
     late_shipment_rate = models.DecimalField(max_digits=4,decimal_places=2,default=0)
-    recommendations_lateShipmentRate = models.TextField(max_length = 100, default="abc")
+    recommendations_lateShipmentRate = models.TextField(max_length = 100)
+
     on_time_delivery = models.DecimalField(max_digits=4,decimal_places=2,default=0)
-    recommendations_onTimeDeliery = models.TextField(max_length = 100, default="abc")
+    recommendations_onTimeDeliery = models.TextField(max_length = 100)
+
     hit_to_success_ratio = models.DecimalField(max_digits=4,decimal_places=2,default=0)
-    recommendations_HitToSucessRatio = models.TextField(max_length = 100, default="abc")
+    recommendations_HitToSucessRatio = models.TextField(max_length = 100)
+
     return_rate = models.DecimalField(max_digits=4,decimal_places=2,default=0) 
-    recommendations_returnRate = models.TextField(max_length = 100, default="abc")
-    positive_feedbacks = models.TextField(max_length = 500, default="abc")
-    negative_feedbacks = models.TextField(max_length = 500, default="abc")
+    recommendations_returnRate = models.TextField(max_length = 100)
+
+    positive_feedbacks = models.TextField(max_length = 500)
+    negative_feedbacks = models.TextField(max_length = 500)
     class Meta:
         managed = True
         db_table = 'traits_value_details'

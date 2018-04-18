@@ -40,7 +40,7 @@ class Trait(ABC):
         Trait.traitWeightageList.append(traitWeightage)
         self.saveRecommendation(value, recommendation_list)
         self.store_value(value, table_name, trait_name, trait_value)
-        overall_perf_value = self.calc_overall_performance(trait_value,Trait.traitWeightageList)
+        overall_perf_value = self.calc_overall_performance(trait_value,self.traitWeightageList)
         self.store_overall_value(TraitValueDetails,overall_perf_value)
 
     def find_table(self):
@@ -304,7 +304,7 @@ class ReturnRate(Trait):
                             order_date__lte=self.to_date
                             ).count(       
                             )
-        return_rate=round((returnCount/totalOrders)*100, 2)
+        return_rate = round((returnCount/totalOrders)*100, 2)
         return return_rate
 
     def returnTraitWeightage(self):
