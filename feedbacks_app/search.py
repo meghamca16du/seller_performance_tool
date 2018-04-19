@@ -5,17 +5,33 @@ from elasticsearch import Elasticsearch,helpers
 from . import models
 from datetime import datetime
 from dashboard.models import ProductMain
+from es_synonyms import load_synonyms
+from elasticsearch_dsl import analyzer,token_filter
 connections.create_connection()
 
+
 class Feedbacks_Index(DocType):
+   
     id = Text()
     pid_seller = Text()
     feedbackdate = Date()
     rating_points = Integer()
-    feedback_entered = Text()
+    feedback_entered = Text(analyzer="standard")
+                    
+    '''feedback_entered = Text(analyzer=analyzer('wordnet_synonym_analyzer',
+                                        tokenizer="standard",
+                                        filter=["lowercase",
+                                                token_filter('synonym',
+                                                            type='synonym',
+                                                            synonyms_path="analysis/synonym.txt"
+                                                            )
+                                                ]
+                                    )
+                    )
+                      '''      
 
     class Meta:
-        index = 'feedbacks-index'
+        index = 'feedback-index'
 
 def bulk_indexing():
     Feedbacks_Index.init()
@@ -26,6 +42,24 @@ def bulk_indexing():
         for key,productid in sellerpid.items():
             productidlist.append(productid)
     bulk(client=es, actions=(b.indexing() for b in models.Feedbacks_table.objects.filter(pid_seller__in = productidlist).iterator()))
+    
+
+'''def search_keyword(keyword):
+    synonym_tokenfilter = token_filter('my_tokenfilter', type = 'synonym',synonyms_path="analysis/wn_s.pl")
+    synonym_analyzer = analyzer('wordnet_synonym_analyzer', tokenfilter='standard',filter=['lowercase',synonym_tokenfilter])
+    s=Search().filter({
+                        "match" : {
+                                    "feedback_entered" : {
+                                            "query" : keyword,
+                                            "analyzer" : "wordnet_synonym_analyzer"
+                                                }
+                                        }
+                    })
+    response=s.execute()
+    #for h in s.scan():
+        #print(h.id ,": " ,h.feedback)
+    return response
+    print('Total %d hits found.' % response.hits.total)'''
 
 '''def search_pid(pid_seller):
     p = h.filter('match',pid_seller=pid_seller)

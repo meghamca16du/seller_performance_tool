@@ -13,6 +13,8 @@ from .models import *
 from .search import *
 from .resources import *
 import re
+import nltk
+from nltk.corpus import wordnet
 connections.create_connection()
 
 def feedback_load_data():
@@ -45,6 +47,14 @@ class SearchFeedbacks:
         return filteredDocuments
 
     def filterAccordingToKeywords(self,documents,request):
+        keyword = request.GET['keyword']
+        synonyms = []
+        for syn in wordnet.synsets(keyword):
+            for l in syn.lemmas():
+                synonyms.append(l.name())
+        print(synonyms)
+        filteredDocuments = documents.filter({"terms": {"feedback_entered":synonyms} })
+        return filteredDocuments        
         pass
 
     def filterAccordingToNegativeFeedbacks(self,documents,request):
@@ -66,6 +76,10 @@ class SearchFeedbacks:
                 feedbacks_id.append(doc.id)
         filteredDocuments = documents.filter({"terms": {"id":feedbacks_id} })
         return filteredDocuments
+
+    '''def filterAccordingToKeywords(self,documents,request):
+        filteredDocuments = documents.filter('match',feedback_entered=request.GET['keyword'])
+        return filteredDocuments'''
 
     def create_filtered_result_dictionary(self,documents,filtered_result):
         result = documents.execute()

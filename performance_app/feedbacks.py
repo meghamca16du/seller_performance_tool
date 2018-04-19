@@ -1,5 +1,6 @@
 from feedbacks_app.models import *
 from nltk.tokenize import sent_tokenize,word_tokenize
+from textblob import TextBlob
 from nltk.corpus import stopwords
 from nltk import pos_tag
 from nltk import WordNetLemmatizer
@@ -93,6 +94,39 @@ class polarity:
         score.append((pos/count)*100)
         score.append((neg/count)*100)
         return score
+
+    '''def negative_feedbacks(self,feedback_entered):
+        negative_feedbacks = {}
+        stop_words = set(stopwords.words('english'))
+        wordtokens = word_tokenize(feedback_entered)
+        filtered = [w for w in wordtokens if not w in stop_words]
+        filtered = []
+        for w in wordtokens:
+            if w not in stop_words:filtered.append(w)
+        #clean_text=self.clean(feedback_entered)
+        sentence = ' '.join(filtered)
+        analysis = TextBlob(sentence)
+        if analysis.sentiment.polarity >= 0 :
+            return False
+        elif analysis.sentiment.polarity < 0 :
+            return True
+        
+
+    def positive_feedbacks(self,feedback_entered):
+        positive_feedbacks = {}
+        stop_words = set(stopwords.words('english'))
+        wordtokens = word_tokenize(feedback_entered)
+        filtered = [w for w in wordtokens if not w in stop_words]
+        filtered = []
+        for w in wordtokens:
+            if w not in stop_words:filtered.append(w)
+        #clean_text=self.clean(feedback_entered)
+        sentence = ' '.join(filtered)
+        analysis = TextBlob(sentence)
+        if analysis.sentiment.polarity >= 0 :
+            return True
+        elif analysis.sentiment.polarity < 0 :
+            return False'''
 
     def negative_feedbacks(self,feedback_entered):
         negative_feedbacks = {}
