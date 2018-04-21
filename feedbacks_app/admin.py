@@ -6,5 +6,9 @@ from import_export.admin import ImportExportModelAdmin
 class FeedbackAdmin(ImportExportModelAdmin):
     pass
 
+@admin.register(Feedbacks)
+class FeedbackAdmin(ImportExportModelAdmin):
+    pass
+
 admin.site.register(FeedbackDetails)
 

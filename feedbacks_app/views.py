@@ -21,6 +21,10 @@ def feedback_load_data():
     feedback_resource = FeedbacksResource()
     dataset = Dataset()
     feedback_resource.import_data(dataset, data = open("Feedbacks.csv"), encoding = 'utf-8')
+    #new data
+    feedbacks_resource = FeedbackResource()
+    dataset = Dataset()
+    feedbacks_resource.import_data(dataset, data = open("Feedback.csv"), encoding = 'utf-8')
 
 def all_seller_products(seller_products):
     seller_pid = ProductMain.objects.all().filter(sid='ank202').values('id')

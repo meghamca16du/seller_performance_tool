@@ -10,3 +10,24 @@ class ProductMainResource(resources.ModelResource):
 class CategoryResource(resources.ModelResource):
     class meta:
         model = Category
+
+class SellerResource(resources.ModelResource):
+    class meta:
+        model = Seller
+
+class BuyerResource(resources.ModelResource):
+    class meta:
+        model = Buyer
+
+class CategoriesResource(resources.ModelResource):
+    class meta:
+        model = Categories
+
+class SubcategoriesResource(resources.ModelResource):
+    class meta:
+        model = Subcategories
+
+class ProductsResource(resources.ModelResource):
+    class meta:
+        model = Products
+

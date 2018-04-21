@@ -8,7 +8,7 @@ from nltk.corpus import sentiwordnet as swn
 
 class polarity:
     def find_feedbacks(self):
-        feedbacks_obj = FeedbackDetails.objects.all().filter(oid__sid='ank202').values('feedbackEntered')
+        feedbacks_obj = Feedbacks.objects.all().filter(product_id__sid='S01REY').values('feedback')
         return feedbacks_obj
 
     def clean(self,feedback):
@@ -82,7 +82,7 @@ class polarity:
         score=[]
         count=0
         for feedback_dict in feedbacks_list:
-            clean_text=self.clean(feedback_dict['feedbackEntered'])
+            clean_text=self.clean(feedback_dict['feedback'])
             tagged_text=self.tagging(clean_text)
             polarity=self.calc_senti_score(tagged_text)
             if polarity:
@@ -95,18 +95,11 @@ class polarity:
         score.append((neg/count)*100)
         return score
 
-    '''def negative_feedbacks(self,feedback_entered):
+    def negative_feedbacks(self,feedback_entered):
         negative_feedbacks = {}
-        stop_words = set(stopwords.words('english'))
-        wordtokens = word_tokenize(feedback_entered)
-        filtered = [w for w in wordtokens if not w in stop_words]
-        filtered = []
-        for w in wordtokens:
-            if w not in stop_words:filtered.append(w)
-        #clean_text=self.clean(feedback_entered)
-        sentence = ' '.join(filtered)
+        sentence = feedback_entered
         analysis = TextBlob(sentence)
-        if analysis.sentiment.polarity >= 0 :
+        if analysis.sentiment.polarity > 0 :
             return False
         elif analysis.sentiment.polarity < 0 :
             return True
@@ -114,21 +107,21 @@ class polarity:
 
     def positive_feedbacks(self,feedback_entered):
         positive_feedbacks = {}
-        stop_words = set(stopwords.words('english'))
+        '''stop_words = set(stopwords.words('english'))
         wordtokens = word_tokenize(feedback_entered)
         filtered = [w for w in wordtokens if not w in stop_words]
         filtered = []
         for w in wordtokens:
             if w not in stop_words:filtered.append(w)
-        #clean_text=self.clean(feedback_entered)
-        sentence = ' '.join(filtered)
+        sentence = ' '.join(filtered)'''
+        sentence = feedback_entered
         analysis = TextBlob(sentence)
         if analysis.sentiment.polarity >= 0 :
             return True
         elif analysis.sentiment.polarity < 0 :
-            return False'''
+            return False
 
-    def negative_feedbacks(self,feedback_entered):
+    def negative_feedbacks2(self,feedback_entered):
         negative_feedbacks = {}
         clean_text=self.clean(feedback_entered)
         tagged_text=self.tagging(clean_text)
@@ -138,7 +131,7 @@ class polarity:
         else:
             return False
 
-    def positive_feedbacks(self,feedback_entered):
+    def positive_feedbacks2(self,feedback_entered):
         positive_feedbacks = {}
         clean_text=self.clean(feedback_entered)
         tagged_text=self.tagging(clean_text)

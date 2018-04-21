@@ -27,11 +27,11 @@ class Feedbacks_Index(DocType):
                                                             )
                                                 ]
                                     )
-                    )
-                      '''      
+                    )'''
+                          
 
     class Meta:
-        index = 'feedback-index'
+        index = 'feedbacks-index'
 
 def bulk_indexing():
     Feedbacks_Index.init()

@@ -1,6 +1,7 @@
 from django.db import models
 from dashboard.models import * 
 from dashboard.models import ProductMain
+from dashboard.models import Products
 from .search import Feedbacks_Index
 
 class FeedbackDetails(models.Model):
@@ -52,3 +53,10 @@ class Feedbacks_table(models.Model):
                 )
         obj.save()
         return obj.to_dict(include_meta=True)
+
+class Feedbacks(models.Model):
+    id = models.CharField(primary_key=True, max_length=20)
+    product_id = models.ForeignKey('dashboard.Products', on_delete = models.CASCADE)
+    feedback_date = models.DateField()
+    rating = models.IntegerField()
+    feedback = models.TextField(max_length=500)

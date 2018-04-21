@@ -16,3 +16,23 @@ admin.site.register(ProductDetails)
 admin.site.register(SellerDetails)
 admin.site.register(TraitValueDetails)
 
+#new code
+@admin.register(Seller)
+class SellerAdmin(ImportExportModelAdmin):
+    pass
+
+@admin.register(Buyer)
+class BuyerAdmin(ImportExportModelAdmin):
+    pass
+
+@admin.register(Categories)
+class CategoriesAdmin(ImportExportModelAdmin):
+    pass
+
+@admin.register(Subcategories)
+class SubcategoriesAdmin(ImportExportModelAdmin):
+    pass
+
+@admin.register(Products)
+class ProductsAdmin(ImportExportModelAdmin):
+    pass

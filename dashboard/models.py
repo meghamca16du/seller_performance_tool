@@ -120,3 +120,38 @@ class ProductMain(models.Model):
     launch_date = models.DateField()
     score = models.IntegerField()
     inventory = models.IntegerField()
+
+class Seller(models.Model):
+    id = models.CharField(primary_key=True, max_length=7) #sid
+    sname = models.CharField(max_length=25)
+
+    class Meta:
+        managed = True
+        db_table = 'Seller'
+
+class Buyer(models.Model):
+    id = models.CharField(primary_key=True, max_length=7)  #bid
+    bname = models.CharField(max_length=25)
+
+    class Meta:
+        db_table = 'Buyer'
+
+class Categories(models.Model):
+    id = models.CharField(primary_key=True, max_length=20) #cid
+    category_name = models.TextField(max_length=30)
+
+class Subcategories(models.Model):        
+    id = models.CharField(primary_key=True, max_length=50)
+    category_id = models.ForeignKey('Categories', on_delete = models.CASCADE)
+    subcategory_name= models.TextField(max_length=30)
+    subcategory_sale_count = models.IntegerField()
+
+class Products(models.Model):
+    id = models.CharField(primary_key=True,max_length=50)
+    sid = models.ForeignKey('Seller', on_delete = models.CASCADE)
+    product_name = models.TextField(max_length=50)
+    subcategory_id = models.TextField(max_length=50)
+    product_sale_count = models.IntegerField()
+    launch_date = models.DateField()
+    score = models.IntegerField()
+    inventory = models.IntegerField()
