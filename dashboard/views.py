@@ -33,8 +33,10 @@ def login(request):
     products_resource = ProductsResource()
     dataset = Dataset()
     products_resource.import_data(dataset, data = open("Products.csv"), encoding = 'utf-8')
+    return render(request,'login.html',{})
 
 def home(request):
+    print(request.user)
     print(ReturnValueForDashboard())
     return render(request,'home.html',{})
 

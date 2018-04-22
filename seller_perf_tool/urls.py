@@ -15,16 +15,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from dashboard import views
+from django.contrib.auth import views as auth_views
 from performance_app import views as perf_views
 from feedbacks_app import views as feed_views
 from recommendations_app import views as rec_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.login,name='login'),
+    #path('',views.login,name='login'),
     path('home/',views.home,name='home'),
     path('profile/',views.profile,name='profile'),
     path('home/performance/',perf_views.main,name='main'),
     path('home/feedback/',feed_views.main,name='main'),
     path('home/recommendations/',rec_views.main,name='main'),
+
+    path('', auth_views.login,{'template_name':'login.html'},name='login'),
+    path('logout/',auth_views.logout,{'next_page':'/login'},name='logout'),
 ]

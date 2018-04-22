@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'import_export'
 ]
 
+LOGIN_REDIRECT_URL = 'home'
+
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 MIDDLEWARE = [

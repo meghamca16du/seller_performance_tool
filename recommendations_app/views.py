@@ -118,14 +118,14 @@ class Recommendations:
         present_date = present_datetime.date()
         days_difference = present_date - launch_date
         days = days_difference.days
-        if days>=0 and days<5:
-            score=0.2*30
-        elif days>=5 and days<10:
-            score=0.2*20
-        elif days>=10 and days<15:
-            score=0.2*10
+        if days >= 0 and days < 5:
+            score = 0.2*30
+        elif days >= 5 and days < 10:
+            score = 0.2*20
+        elif days >= 10 and days < 15:
+            score = 0.2*10
         else:
-            score=0
+            score = 0
         return score
 
     def initialize_heap(self):
