@@ -10,14 +10,13 @@ from nltk.tokenize import sent_tokenize,word_tokenize
 from nltk.corpus import stopwords
 from nltk import pos_tag
 from feedbacks_app.models import *
-from django.contrib.auth.models import User
 
 class Trait(ABC):
     '''
         Objective: An abstract class which calculates the value of the trait and stores it in the database.
     ''' 
     traitWeightageList = []
-    def __init__(self, trait_cmp,from_date,to_date,current_sellerid):
+    def __init__(self, trait_cmp,from_date,to_date):
         '''
         Objective: A constructor which initializes the trait component variable.
         Input Parameter: trait_cmp - Trait Component
@@ -26,7 +25,6 @@ class Trait(ABC):
         self.trait_component = trait_cmp
         self.from_date = from_date
         self.to_date = to_date
-        self.current_sellerid = current_sellerid
 
     def template_method(self, trait_name, trait_value, recommendation_list):
         '''
@@ -60,9 +58,9 @@ class Trait(ABC):
         Objective: To check and then store the sid of seller in the table_name which contains trait_component.
         Input Parameter: table_name - Table which contains trait_component
         ''' 
-        check=table_name.objects.filter(sid=self.current_sellerid).exists()
+        check=table_name.objects.filter(sid=current_sellerid).exists()
         if check==False:
-            s=Seller.objects.get(id=self.current_sellerid)
+            s=SellerDetails.objects.get(sid=current_sellerid)
             save_sid=table_name(sid=s)
             save_sid.save()
 
@@ -82,7 +80,7 @@ class Trait(ABC):
                          trait_list - A list of Traits
                          value_list - A list of Values of the corresponding traits defined in the trait_list
         '''
-        trait_obj=table_name.objects.filter(sid=self.current_sellerid).update(**{self.trait_component:value})
+        trait_obj=table_name.objects.filter(sid=current_sellerid).update(**{self.trait_component:value})
         trait_name.append(self.trait_component)
         trait_value.append(value)
         return value
@@ -104,12 +102,12 @@ class Trait(ABC):
                         overall_performance - Overall performance value of the seller
         '''
         TraitValueDetails.objects.filter(
-                    sid=self.current_sellerid
+                    sid=current_sellerid
                     ).update(
                     overall_perf_val = overall_perf_value
                     )
             
-    def calc_feedbacks(self,trait_name,trait_value, recommendation_list):
+    def calc_feedbacks(trait_name,trait_value, recommendation_list):
         polar=polarity()
         score=polar.call_functions()
         trait_value.append(score[0])
@@ -118,8 +116,8 @@ class Trait(ABC):
         trait_value.append(score[1])
         trait_name.append('negative_feedbacks')
         recommendation_list.append("bad feeds")
-        TraitValueDetails.objects.filter(sid=self.current_sellerid).update(positive_feedbacks=score[0])
-        TraitValueDetails.objects.filter(sid=self.current_sellerid).update(negative_feedbacks=score[1])
+        TraitValueDetails.objects.filter(sid=current_sellerid).update(positive_feedbacks=score[0])
+        TraitValueDetails.objects.filter(sid=current_sellerid).update(negative_feedbacks=score[1])
 
 class LateShipmentRate(Trait):
     '''
@@ -131,18 +129,18 @@ class LateShipmentRate(Trait):
         Return Value: late_perc - Percentage of the late shipment done by the seller.
         '''
         LateOrders = Orders.objects.all().filter(
-                         seller_id=self.current_sellerid
+                         seller_id=current_sellerid
                          ).filter(
                          actual_shipment__isnull=False
                          ).filter(
-                         actual_shipment__gt = F('exp_shipment')
+                         actual_shipment__gte=F('exp_shipment')
                          ).filter(
-                         order_date__gte = self.from_date
+                         order_date__gte=self.from_date
                          ).filter(
-                         order_date__lte = self.to_date
+                         order_date__lte=self.to_date
                          ).count()
         Total = Orders.objects.filter(
-                    seller_id=self.current_sellerid
+                    seller_id=current_sellerid
                     ).filter(
                     order_date__gte=self.from_date
                     ).filter(
@@ -158,21 +156,21 @@ class LateShipmentRate(Trait):
     def saveRecommendation(self, value, recommendation_list):
         if value <= 30:
             TraitValueDetails.objects.filter(
-                sid=self.current_sellerid
+                sid=current_sellerid
                 ).update(
                 recommendations_lateShipmentRate = "recommendation 1"
                 )
             recommendation_list.append("recommendation 1")
         elif value > 30 and value <= 70:
             TraitValueDetails.objects.filter(
-                sid = self.current_sellerid
+                sid = current_sellerid
                 ).update(
                 recommendations_lateShipmentRate = "recommendation 2"   
                 )
             recommendation_list.append("recommendation 2")
         else:
             TraitValueDetails.objects.filter(
-                sid = self.current_sellerid
+                sid = current_sellerid
                 ).update(
                 recommendations_lateShipmentRate = "recommendation 3"   
                 )
@@ -188,7 +186,7 @@ class OnTimeDelivery(Trait):
         Return Value: late_perc - Percentage of the on time delivery done by the seller.
         '''
         onTimeDeliver = Orders.objects.all().filter(
-                            seller_id=self.current_sellerid
+                            seller_id=current_sellerid
                             ).filter(
                             actual_delivery__isnull=False
                             ).filter(
@@ -200,7 +198,7 @@ class OnTimeDelivery(Trait):
                             ).count(
                             )
         totalDeliver = Orders.objects.filter(
-                            seller_id=self.current_sellerid
+                            seller_id=current_sellerid
                             ).filter(
                             actual_delivery__isnull=False
                             ).filter(
@@ -217,32 +215,40 @@ class OnTimeDelivery(Trait):
     def saveRecommendation(self, value,recommendation_list ):
         if value <= 30:
             TraitValueDetails.objects.filter(
-                sid=self.current_sellerid
+                sid=current_sellerid
                 ).update(
                 recommendations_onTimeDeliery = "recommendation 1"
                 )
             recommendation_list.append("recommendation 1")
         elif value > 30 and value <= 70:
             TraitValueDetails.objects.filter(
-                sid = self.current_sellerid
+                sid = current_sellerid
                 ).update(
                 recommendations_onTimeDeliery = "recommendation 2"   
                 )
             recommendation_list.append("recommendation 2")
         else:
             TraitValueDetails.objects.filter(
-                sid = self.current_sellerid
+                sid = current_sellerid
                 ).update(
                 recommendations_onTimeDeliery = "recommendation 3"   
                 )
             recommendation_list.append("recommendation 3")
 
 '''class HitToSuccessRatio(Trait):
+    '''
+    Objective: A derived class of Trait which calculates the value of 'Hit to Success Ratio' trait
+    '''
+    def calc_value(self):
+        '''
+        Objective: Calculates the values of hit_to_success_ratio.
+        Return Value: late_perc - Percentage of the successes.
+        '''
         success = Orders.objects.filter(
-                            sid=self.current_sellerid
+                            sid=current_sellerid
                             ).count(       
                             )
-        hits = ProductDetails.objects.filter(sid=self.current_sellerid).aggregate(Sum('no_of_hits'))['no_of_hits__sum']
+        hits = ProductDetails.objects.filter(sid=current_sellerid).aggregate(Sum('no_of_hits'))['no_of_hits__sum']
         success_perc=round((success/hits)*100, 2)
         return success_perc
 
@@ -252,21 +258,21 @@ class OnTimeDelivery(Trait):
     def saveRecommendation(self, value, recommendation_list):
         if value <= 30:
             TraitValueDetails.objects.filter(
-                sid=self.current_sellerid
+                sid=current_sellerid
                 ).update(
                 recommendations_HitToSucessRatio = "recommendation 1"
                 )
             recommendation_list.append("recommendation 1")
         elif value > 30 and value <= 70:
             TraitValueDetails.objects.filter(
-                sid = self.current_sellerid
+                sid = current_sellerid
                 ).update(
                 recommendations_HitToSucessRatio = "recommendation 2"   
                 )
             recommendation_list.append("recommendation 2")
         else:
             TraitValueDetails.objects.filter(
-                sid = self.current_sellerid
+                sid = current_sellerid
                 ).update(
                 recommendations_HitToSucessRatio = "recommendation 3"   
                 )
@@ -281,7 +287,7 @@ class ReturnRate(Trait):
         Objective: Calculates the values of return rate ratio.
         '''
         returnCount = Orders.objects.filter(
-                            seller_id=self.current_sellerid
+                            seller_id=current_sellerid
                             ).filter(
                             status = 'R'
                             ).filter(
@@ -291,7 +297,7 @@ class ReturnRate(Trait):
                             ).count(       
                             )
         totalOrders = Orders.objects.filter(
-                            seller_id=self.current_sellerid
+                            seller_id=current_sellerid
                             ).filter(
                             order_date__gte=self.from_date
                             ).filter(
@@ -307,21 +313,21 @@ class ReturnRate(Trait):
     def saveRecommendation(self, value, recommendation_list):
         if value <= 30:
             TraitValueDetails.objects.filter(
-                sid=self.current_sellerid
+                sid=current_sellerid
                 ).update(
                 recommendations_returnRate = "recommendation 1"
                 )
             recommendation_list.append("recommendation 1")
         elif value > 30 and value <= 70:
             TraitValueDetails.objects.filter(
-                sid = self.current_sellerid
+                sid = current_sellerid
                 ).update(
                 recommendations_returnRate = "recommendation 2"   
                 )
             recommendation_list.append("recommendation 2")
         else:
             TraitValueDetails.objects.filter(
-                sid = self.current_sellerid
+                sid = current_sellerid
                 ).update(
                 recommendations_returnRate = "recommendation 3"   
                 )
@@ -332,7 +338,7 @@ class ReturnRate(Trait):
 '''class CancellationRate(Trait):
     def calc_value(self):
         cancelCount = Orders.objects.filter(
-                            seller_id=self.current_sellerid
+                            seller_id=current_sellerid
                             ).filter(
                             status = 'C'
                             ).filter(
@@ -342,7 +348,7 @@ class ReturnRate(Trait):
                             ).count(       
                             )
         totalOrders = Orders.objects.filter(
-                            seller_id=self.current_sellerid
+                            seller_id=current_sellerid
                             ).filter(
                             order_date__gte=self.from_date
                             ).filter(
@@ -358,28 +364,30 @@ class ReturnRate(Trait):
     def saveRecommendation(self, value, recommendation_list):
         if value <= 30:
             TraitValueDetails.objects.filter(
-                sid=self.current_sellerid
+                sid=current_sellerid
                 ).update(
                 recommendations_CancellationRate = "recommendation 1"
                 )
             recommendation_list.append("recommendation 1")
         elif value > 30 and value <= 70:
             TraitValueDetails.objects.filter(
-                sid = self.current_sellerid
+                sid = current_sellerid
                 ).update(
                 recommendations_CancellationRate = "recommendation 2"   
                 )
             recommendation_list.append("recommendation 2")
         else:
             TraitValueDetails.objects.filter(
-                sid = self.current_sellerid
+                sid = current_sellerid
                 ).update(
                 recommendations_CancellationRate = "recommendation 3"   
                 )
             recommendation_list.append("recommendation 3")'''
 
 def main(request):
-    current_sellerid = request.user.username
+    current_sellerid = request.user
+    print(current_sellerid)
+
     if request.method == "GET":
         if 'from_date' in request.GET and 'to_date' in request.GET:
             from_date = request.GET['from_date']
@@ -397,10 +405,10 @@ def main(request):
 
         class_name = cls.__name__
         trait_component = re.sub( '(?<!^)(?=[A-Z])', '_', class_name ).lower()
-        obj = cls(trait_component,from_date,to_date,current_sellerid)
+        obj = cls(trait_component,from_date,to_date)
         obj.template_method(trait_name, trait_value, recommendation_list)
     
-    obj.calc_feedbacks(trait_name,trait_value, recommendation_list)
+    Trait.calc_feedbacks(trait_name,trait_value, recommendation_list)
     recommendation_trait_list = zip(trait_name, trait_value, recommendation_list)
     return render(request,'performance.html',{'recommendation_trait_list':recommendation_trait_list})
 

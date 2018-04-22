@@ -14,7 +14,7 @@ admin.site.register(BuyerDetails)
 admin.site.register(OrderDetails)
 admin.site.register(ProductDetails)
 admin.site.register(SellerDetails)
-admin.site.register(TraitValueDetails)
+#admin.site.register(TraitValueDetails)
 
 #new code
 @admin.register(Seller)

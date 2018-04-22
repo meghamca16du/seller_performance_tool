@@ -71,12 +71,19 @@ class OrderDetails(models.Model):
         db_table = 'order_details'
         unique_together = (('oid', 'pid', 'sid', 'bid'),)
 
-class Base_TraitValueDetails(models.Model):   #base abstract class
+'''class Base_TraitValueDetails(models.Model):   #base abstract class
     tid = models.TextField(primary_key = True, null=False)
     sid = models.ForeignKey('SellerDetails', on_delete = models.CASCADE, db_column='sid')
     overall_perf_val = models.DecimalField(max_digits=4,decimal_places=2,default=0)  
     class Meta:
-        abstract = True  #so that new trait column can be added
+        abstract = True  #so that new trait column can be added'''
+
+class Base_TraitValueDetails(models.Model):   #base abstract class              #new_code
+    tid = models.TextField(primary_key = True, null=False)
+    sid = models.ForeignKey('Seller', on_delete = models.CASCADE)
+    overall_perf_val = models.DecimalField(max_digits=4,decimal_places=2,default=0)  
+    class Meta:
+        abstract = True
 
 class TraitValueDetails(Base_TraitValueDetails):
     late_shipment_rate = models.DecimalField(max_digits=4,decimal_places=2,default=0)
@@ -123,6 +130,7 @@ class ProductMain(models.Model):
     score = models.IntegerField()
     inventory = models.IntegerField()
 
+#new_code
 class Seller(models.Model):
     id = models.CharField(primary_key=True, max_length=7) #sid
     sname = models.CharField(max_length=25)
