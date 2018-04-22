@@ -28,7 +28,6 @@ class Feedbacks_Index(DocType):
                                                 ]
                                     )
                     )'''
-                          
 
     class Meta:
         index = 'feedbacks-index'

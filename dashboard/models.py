@@ -153,6 +153,7 @@ class Products(models.Model):
     sid = models.ForeignKey('Seller', on_delete = models.CASCADE)
     product_name = models.TextField(max_length=50)
     subcategory_id = models.TextField(max_length=50)
+    #subcategory_id = models.ForeignKey('Subcategories', on_delete = models.CASCADE)
     product_sale_count = models.IntegerField()
     launch_date = models.DateField()
     score = models.IntegerField()

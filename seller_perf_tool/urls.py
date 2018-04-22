@@ -22,13 +22,12 @@ from recommendations_app import views as rec_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path('',views.login,name='login'),
+    path('', auth_views.login,{'template_name':'login.html'},name='login'),
     path('home/',views.home,name='home'),
     path('profile/',views.profile,name='profile'),
     path('home/performance/',perf_views.main,name='main'),
     path('home/feedback/',feed_views.main,name='main'),
     path('home/recommendations/',rec_views.main,name='main'),
 
-    path('', auth_views.login,{'template_name':'login.html'},name='login'),
     path('logout/',auth_views.logout,{'next_page':'/login'},name='logout'),
 ]
