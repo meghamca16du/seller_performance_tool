@@ -158,3 +158,42 @@ class Products(models.Model):
     launch_date = models.DateField()
     score = models.IntegerField()
     inventory = models.IntegerField()
+
+class Orders(models.Model):
+    ontime_delivery='OD'   
+    late_delivery='LD'
+    returned='R'
+    cancelled='C'
+    #in_process='IP'
+    #dispatched='D'
+    status_types=(
+        (ontime_delivery,'ontime_delivery'),
+        (late_delivery,'late_delivery'),
+        (cancelled,'cancelled'),
+        (returned,'returned'),
+        #(in_process,'in_process'),
+        #(dispatched,'dispatched'),
+        )
+    id = models.AutoField(
+        primary_key=True,
+        null = False,
+        )
+    oid = models.CharField(max_length=7) 
+    product_id = models.ForeignKey('Products', on_delete = models.CASCADE)
+    seller_id = models.ForeignKey('Seller', on_delete = models.CASCADE)
+    buyer_id = models.ForeignKey('Buyer', on_delete = models.CASCADE)
+    status = models.CharField(
+        max_length = 2,
+        choices = status_types,
+        #default = in_process,
+        )  # This field type is enumeration.
+    order_date = models.DateField()
+    exp_shipment = models.DateField()
+    exp_delivery = models.DateField()
+    actual_shipment = models.DateField(blank=True,null=True)
+    actual_delivery = models.DateField(blank=True,null=True)
+    
+    class Meta:
+        managed = True
+        db_table = 'details_of_orders'
+        unique_together = (('oid', 'product_id', 'seller_id', 'buyer_id'),)

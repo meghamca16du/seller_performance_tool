@@ -387,8 +387,6 @@ class ReturnRate(Trait):
 def main(request):
     if request.method == "GET":
         if 'from_date' in request.GET and 'to_date' in request.GET:
-            '''from_date = formats.date_format(request.GET['from_date'],"SHORT_DATE_FORMAT")
-            to_date = formats.date_format(request.GET['to_date'],"SHORT_DATE_FORMAT")'''
             from_date = request.GET['from_date']
             to_date = request.GET['to_date']
         elif 'from_date' not in request.GET and 'to_date' not in request.GET:

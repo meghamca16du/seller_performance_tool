@@ -36,3 +36,7 @@ class SubcategoriesAdmin(ImportExportModelAdmin):
 @admin.register(Products)
 class ProductsAdmin(ImportExportModelAdmin):
     pass
+
+@admin.register(Orders)
+class OrdersAdmin(ImportExportModelAdmin):
+    pass

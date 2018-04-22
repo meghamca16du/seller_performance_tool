@@ -31,3 +31,7 @@ class ProductsResource(resources.ModelResource):
     class meta:
         model = Products
 
+class OrdersResource(resources.ModelResource):
+    class meta:
+        model = Orders
+

@@ -60,47 +60,34 @@ class Recommendations:
         self.checkIfSellerProductIsTrending(heapobj)
 
     def search_category(self):
-        self.category_set = ProductMain.objects.all().filter(
-                         sid='ank202'
-                         ).values(
-                         'sub_cid__cname'
-                         ).distinct()
+        #new_code --> searching seller's categories -->return ids
+        self.category_set = Products.objects.all().filter(sid='S01REY').values('subcategory_id__category_id').distinct()
         for category in self.category_set:
             for key,category_name in category.items():
                 self.categoryList.append(category_name)
-        #new_code --> searching seller's categories -->return ids
-        '''self.category_set = Products.objects.all().filter(sid='S01REY').values('subcategory_id__category_id').distinct()
-        for category in self.category_set:
-            for key,category_name in category.items():
-                self.categoryList.append(category_name)'''
 
     def search_sellerSubCategory(self):
-        Subcategory = ProductMain.objects.all().filter(
-                         sid='ank202'
-                         ).values(
-                         'sub_cid'
-                         ).distinct()
-        
+        #new_code --> searching seller's subcategory -->return ids
+        Subcategory = Products.objects.all().filter(sid='S01REY').values('subcategory_id').distinct()
         for sub_cat in Subcategory:
             for key,sub_cid in sub_cat.items():
                 self.sellerSubCategoryList.append(sub_cid)
-        #new_code --> searching seller's subcategory -->return ids
-        '''Subcategory = Products.objects.all().filter(sid='S01REY').values('subcategory_id').distinct()
-        for sub_cat in Subcategory:
-            for key,sub_cid in sub_cat.items():
-                self.sellerSubCategoryList.append(sub_cid)'''
 
     def search_subcategory(self):
+        #new_code -->gives all subcategories of the categories that seller have
         for subcategory in self.categoryList:
-            q = Category.objects.all().filter(cname=subcategory)
+            q = Categories.objects.all().filter(category_id=subcategory)
             for value in q:
                 self.subCategoryList.append(value.id)
 
     def search_products(self):
-        self.productset = ProductMain.objects.all(
+        #new
+        self.productset = Products.objects.all(
                                 ).filter(
-                                sub_cid__in = self.subCategoryList).values(
-                                'id','sub_cid','prod_count' ,'sub_cid__subCategoryCount','launch_date')
+                                subcategory_id__in = self.subCategoryList).values(
+                                'id','product_name','subcategory_id','product_sale_count','subcategory_id__subcategory_sale_count',
+                                'price','launch_date','score','inventory')
+                                
         
         
 
@@ -110,7 +97,7 @@ class Recommendations:
             category_score = self.calcCategoryScore(products)
             date_score = self.calcDateScore(products)
             total_Score = prod_score + category_score + date_score
-            ProductMain.objects.all().filter(id=products['id']).update(score=total_Score)
+            Products.objects.all().filter(id=products['id']).update(score=total_Score)
             self.final_score[products['id']] = total_Score
     
     def calcProductScore(self,products):
