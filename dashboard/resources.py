@@ -35,3 +35,8 @@ class OrdersResource(resources.ModelResource):
     class meta:
         model = Orders
 
+class HitsResource(resources.ModelResource):
+    class meta:
+        model = Hits
+
+

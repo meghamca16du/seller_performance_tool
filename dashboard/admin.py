@@ -40,3 +40,7 @@ class ProductsAdmin(ImportExportModelAdmin):
 @admin.register(Orders)
 class OrdersAdmin(ImportExportModelAdmin):
     pass
+
+@admin.register(Hits)
+class HitsAdmin(ImportExportModelAdmin):
+    pass

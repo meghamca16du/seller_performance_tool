@@ -197,3 +197,9 @@ class Orders(models.Model):
         managed = True
         db_table = 'details_of_orders'
         unique_together = (('oid', 'product_id', 'seller_id', 'buyer_id'),)
+
+class Hits(models.Model):
+    id = models.IntegerField(primary_key=True)
+    pid =  models.ForeignKey('Products', on_delete = models.CASCADE)
+    hit_date = models.DateField()
+    hits = models.IntegerField()
