@@ -5,7 +5,6 @@ from django.db.models import Count
 from datetime import datetime, date
 from django.utils import formats
 from dashboard.models import *
-
 class MinHeap:
 
     def __init__(self, listOf5products):
@@ -114,23 +113,10 @@ class Recommendations:
         return score
 
     def calcDateScore(self,products):
-        '''launchdate = products['launch_date']
-        launch_date = formats.date_format(launchdate,"SHORT_DATE_FORMAT")
-        launch_Date=launch_date.split('/')
-        l_date=[]
-        for date in launch_Date:
-            l_date.append(int(date))
-
-        presentdate = datetime.now()
-        present_date = formats.date_format(presentdate,"SHORT_DATE_FORMAT")
-        present_Date = present_date.split('/')
-        p_date=[]
-        for date in present_Date:
-            p_date.append(int(date))
-
-        d1 = date(l_date[0], l_date[1], l_date[2])
-        d2 = date(p_date[0], p_date[1], p_date[2])
-        days_difference = d1-d2
+        launch_date = products['launch_date']
+        present_datetime = datetime.now()
+        present_date = present_datetime.date()
+        days_difference = present_date - launch_date
         days = days_difference.days
         if days>=0 and days<5:
             score=0.2*30
@@ -140,8 +126,7 @@ class Recommendations:
             score=0.2*10
         else:
             score=0
-        return score'''
-        return 20
+        return score
 
     def initialize_heap(self):
         count = 0

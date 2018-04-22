@@ -98,13 +98,15 @@ class TraitValueDetails(Base_TraitValueDetails):
         db_table = 'traits_value_details'
 
 """
-class Cancellation(Base_TraitValueDetails):
-    cid = models.TextField()
+class Cancellation(Base_TraitValueDetails):    #for runtime
+    cancellation_rate = models.DecimalField(max_digits=4,decimal_places=2,default=0)
+    recommendations_Cancellationrate = models.TextField(max_length = 100)
 
     class Meta:
         managed = True
         db_table = 'cancellation
 """
+
 class Category(models.Model):
     id = models.CharField(primary_key=True, max_length=20)
     cname = models.TextField(max_length=30)

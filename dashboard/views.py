@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from tablib import Dataset
 from .resources import *
+from performance_app.views import *
 
 def login(request):
     #loading data
@@ -33,15 +34,8 @@ def login(request):
     dataset = Dataset()
     products_resource.import_data(dataset, data = open("Products.csv"), encoding = 'utf-8')
 
-    '''productMain_resource = ProductMainResource()
-    dataset = Dataset()
-    productMain_resource.import_data(dataset, data = open("Products.csv"), encoding = 'utf-8')
-
-    productMain_resource = ProductMainResource()
-    dataset = Dataset()
-    productMain_resource.import_data(dataset, data = open("Products.csv"), encoding = 'utf-8')
-'''
 def home(request):
+    print(ReturnValueForDashboard())
     return render(request,'home.html',{})
 
 def profile(request):

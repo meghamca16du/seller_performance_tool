@@ -333,9 +333,62 @@ class ReturnRate(Trait):
                 )
             recommendation_list.append("recommendation 3")
 
+
+#for runtime
+'''class CancellationRate(Trait):
+    def calc_value(self):
+        cancelCount = OrderDetails.objects.filter(
+                            sid='ank202'
+                            ).filter(
+                            status = 'C'
+                            ).filter(
+                            order_date__gte=self.from_date
+                            ).filter(
+                            order_date__lte=self.to_date
+                            ).count(       
+                            )
+        totalOrders = OrderDetails.objects.filter(
+                            sid='ank202'
+                            ).filter(
+                            order_date__gte=self.from_date
+                            ).filter(
+                            order_date__lte=self.to_date
+                            ).count(       
+                            )
+        cancellation_rate = round((cancelCount/totalOrders)*100, 2)
+        return cancellation_rate
+
+    def returnTraitWeightage(self):
+        return 1
+
+    def saveRecommendation(self, value, recommendation_list):
+        if value <= 30:
+            TraitValueDetails.objects.filter(
+                sid='ank202'
+                ).update(
+                recommendations_CancellationRate = "recommendation 1"
+                )
+            recommendation_list.append("recommendation 1")
+        elif value > 30 and value <= 70:
+            TraitValueDetails.objects.filter(
+                sid = 'ank202'
+                ).update(
+                recommendations_CancellationRate = "recommendation 2"   
+                )
+            recommendation_list.append("recommendation 2")
+        else:
+            TraitValueDetails.objects.filter(
+                sid = 'ank202'
+                ).update(
+                recommendations_CancellationRate = "recommendation 3"   
+                )
+            recommendation_list.append("recommendation 3")'''
+
 def main(request):
     if request.method == "GET":
         if 'from_date' in request.GET and 'to_date' in request.GET:
+            '''from_date = formats.date_format(request.GET['from_date'],"SHORT_DATE_FORMAT")
+            to_date = formats.date_format(request.GET['to_date'],"SHORT_DATE_FORMAT")'''
             from_date = request.GET['from_date']
             to_date = request.GET['to_date']
         elif 'from_date' not in request.GET and 'to_date' not in request.GET:
@@ -357,6 +410,30 @@ def main(request):
     Trait.calc_feedbacks(trait_name,trait_value, recommendation_list)
     recommendation_trait_list = zip(trait_name, trait_value, recommendation_list)
     return render(request,'performance.html',{'recommendation_trait_list':recommendation_trait_list})
+
+def ReturnValueForDashboard():
+    to_date = datetime.now()
+    from_date='1980-01-01'
+    trait_name = []
+    trait_value = []
+    recommendation_list = []
+    for cls in Trait.__subclasses__():
+
+        class_name = cls.__name__
+        trait_component = re.sub( '(?<!^)(?=[A-Z])', '_', class_name ).lower()
+        obj = cls(trait_component,from_date,to_date)
+        obj.template_method(trait_name, trait_value, recommendation_list)
+
+    overall_value = TraitValueDetails.objects.all().filter(
+                    sid='ank202'
+                    ).values(
+                    'overall_perf_val'
+                    )
+    for value in overall_value:
+        for key,val in value.items():
+            performance_percentage = val
+
+    return performance_percentage
 
 if __name__ == '__main__':
     main(request)
