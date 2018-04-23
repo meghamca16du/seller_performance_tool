@@ -83,7 +83,33 @@ class polarity:
         else:
             return False
 
-    def call_functions(self,from_date,to_date,current_sellerid):
+    def calc_positive_feedbacks(self,current_sellerid,from_date,to_date):
+        feedbacks_list=self.find_feedbacks(current_sellerid,from_date,to_date)
+        pos=0
+        count=0
+        for feedback_dict in feedbacks_list:
+            clean_text=self.clean(feedback_dict['feedback'])
+            tagged_text=self.tagging(clean_text)
+            polarity=self.calc_senti_score(tagged_text)
+            if polarity:
+                pos+=1
+            count+=1
+        return round((pos/count)*100,2)
+
+    def calc_negative_feedbacks(self,current_sellerid,from_date,to_date):
+        feedbacks_list=self.find_feedbacks(current_sellerid,from_date,to_date)
+        neg=0
+        count=0
+        for feedback_dict in feedbacks_list:
+            clean_text=self.clean(feedback_dict['feedback'])
+            tagged_text=self.tagging(clean_text)
+            polarity=self.calc_senti_score(tagged_text)
+            if not polarity:
+                neg+=1
+            count+=1
+        return round((neg/count)*100,2)
+
+    '''def call_functions(self,from_date,to_date,current_sellerid):
         feedbacks_list=self.find_feedbacks(from_date,to_date,current_sellerid)
         pos=0
         neg=0
@@ -101,7 +127,7 @@ class polarity:
         print(count)
         score.append((pos/count)*100)
         score.append((neg/count)*100)
-        return score
+        return score'''
 
     def negative_feedbacks(self,feedback_entered):
         negative_feedbacks = {}
