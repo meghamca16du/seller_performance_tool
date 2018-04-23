@@ -111,19 +111,6 @@ class Trait(ABC):
                     overall_perf_val = overall_perf_value
                     )
             
-    def calc_feedbacks(self,trait_name,trait_value,traitWeightageList, recommendation_list,IsDateEnteredByUser,current_sellerid):
-        #traitWeightageList.append(weightageOf)
-        polar=polarity()
-        score=polar.call_functions(self.from_date,self.to_date,current_sellerid)
-        trait_value.append(score[0])
-        trait_name.append('positive_feedbacks')
-        recommendation_list.append("good feeds")
-        trait_value.append(score[1])
-        trait_name.append('negative_feedbacks')
-        recommendation_list.append("bad feeds")
-        if (IsDateEnteredByUser == False):
-            TraitValueDetails.objects.filter(sid=self.current_sellerid).update(positive_feedbacks=score[0])
-            TraitValueDetails.objects.filter(sid=self.current_sellerid).update(negative_feedbacks=score[1])
 
 class LateShipmentRate(Trait):
     '''
@@ -364,6 +351,78 @@ class ReturnRate(Trait):
                     )
             recommendation_list.append("recommendation 3")
 
+class PositiveFeedbacks(Trait):
+
+    def calc_value(self):
+        polar=polarity()
+        positive_score=polar.calc_positive_feedbacks(self.from_date,self.to_date,self.current_sellerid)
+        return positive_score
+
+    def returnTraitWeightage(self):
+        return 2
+
+    def saveRecommendation(self,value,recommendation_list,IsDateEnteredByUser):
+        if value <= 30:
+            if IsDateEnteredByUser == False:
+                TraitValueDetails.objects.filter(
+                    sid=self.current_sellerid
+                    ).update(
+                    recommendations_positive_feedbacks = "recommendation 1"
+                    )
+            recommendation_list.append("recommendation 1")
+        elif value > 30 and value <= 70:
+            if IsDateEnteredByUser == False:
+                TraitValueDetails.objects.filter(
+                    sid =self.current_sellerid
+                    ).update(
+                    recommendations_positive_feedbacks = "recommendation 2"   
+                    )
+            recommendation_list.append("recommendation 2")
+        else:
+            if IsDateEnteredByUser == False:
+                TraitValueDetails.objects.filter(
+                    sid = self.current_sellerid
+                    ).update(
+                    recommendations_positive_feedbacks = "recommendation 3"   
+                    )
+            recommendation_list.append("recommendation 3")
+
+class NegativeFeedbacks(Trait):
+
+    def calc_value(self):
+        polar=polarity()
+        negative_score=polar.calc_negative_feedbacks(self.from_date,self.to_date,self.current_sellerid)
+        return negative_score
+
+    def returnTraitWeightage(self):
+        return -1
+
+    def saveRecommendation(self,value,recommendation_list,IsDateEnteredByUser):
+        if value <= 30:
+            if IsDateEnteredByUser == False:
+                TraitValueDetails.objects.filter(
+                    sid=self.current_sellerid
+                    ).update(
+                    recommendations_negative_feedbacks = "recommendation 1"
+                    )
+            recommendation_list.append("recommendation 1")
+        elif value > 30 and value <= 70:
+            if IsDateEnteredByUser == False:
+                TraitValueDetails.objects.filter(
+                    sid =self.current_sellerid
+                    ).update(
+                    recommendations_negative_feedbacks = "recommendation 2"   
+                    )
+            recommendation_list.append("recommendation 2")
+        else:
+            if IsDateEnteredByUser == False:
+                TraitValueDetails.objects.filter(
+                    sid = self.current_sellerid
+                    ).update(
+                    recommendations_negative_feedbacks = "recommendation 3"   
+                    )
+            recommendation_list.append("recommendation 3")
+
 
 #for runtime
 '''class CancellationRate(Trait):
@@ -446,8 +505,7 @@ def main(request):
         trait_component = re.sub( '(?<!^)(?=[A-Z])', '_', class_name ).lower()
         obj = cls(trait_component,from_date,to_date,current_sellerid)
         obj.template_method(trait_name, trait_value, recommendation_list,traitWeightageList,IsDateEnteredByUser)
-    
-    obj.calc_feedbacks(trait_name,trait_value, recommendation_list,traitWeightageList, IsDateEnteredByUser,current_sellerid)
+
     obj.calc_overall_performance(trait_value,traitWeightageList,IsDateEnteredByUser)
     
     recommendation_trait_list = zip(trait_name, trait_value, recommendation_list)
@@ -469,7 +527,6 @@ def ReturnValueForDashboard(request):
         obj = cls(trait_component,from_date,to_date,current_sellerid)
         obj.template_method(trait_name, trait_value, recommendation_list,traitWeightageList, IsDateEnteredByUser)
 
-    obj.calc_feedbacks(trait_name,trait_value, recommendation_list,traitWeightageList, IsDateEnteredByUser)
     obj.calc_overall_performance(trait_value,traitWeightageList,IsDateEnteredByUser)
     
     overall_value = TraitValueDetails.objects.all().filter(
