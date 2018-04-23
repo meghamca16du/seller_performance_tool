@@ -7,7 +7,16 @@ from nltk import WordNetLemmatizer
 from nltk.corpus import sentiwordnet as swn
 
 class polarity:
-    def find_feedbacks(self):
+    def find_feedbacks(self,from_date,to_date,current_sellerid):
+        feedbacks_obj=Feedbacks.objects.all().filter(
+                        product_id__sid=current_sellerid
+                        ).filter(
+                        feedback_date__gte=from_date
+                        ).filter(
+                        feedback_date__lte=to_date
+                        ).values('feedback')
+        return feedbacks_obj
+
         feedbacks_obj = Feedbacks.objects.all().filter(product_id__sid='S01REY').values('feedback')
         return feedbacks_obj
 
@@ -74,9 +83,8 @@ class polarity:
         else:
             return False
 
-
-    def call_functions(self):
-        feedbacks_list=self.find_feedbacks()
+    def call_functions(self,from_date,to_date,current_sellerid):
+        feedbacks_list=self.find_feedbacks(from_date,to_date,current_sellerid)
         pos=0
         neg=0
         score=[]
@@ -97,32 +105,6 @@ class polarity:
 
     def negative_feedbacks(self,feedback_entered):
         negative_feedbacks = {}
-        sentence = feedback_entered
-        analysis = TextBlob(sentence)
-        if analysis.sentiment.polarity > 0 :
-            return False
-        elif analysis.sentiment.polarity < 0 :
-            return True
-        
-
-    def positive_feedbacks(self,feedback_entered):
-        positive_feedbacks = {}
-        '''stop_words = set(stopwords.words('english'))
-        wordtokens = word_tokenize(feedback_entered)
-        filtered = [w for w in wordtokens if not w in stop_words]
-        filtered = []
-        for w in wordtokens:
-            if w not in stop_words:filtered.append(w)
-        sentence = ' '.join(filtered)'''
-        sentence = feedback_entered
-        analysis = TextBlob(sentence)
-        if analysis.sentiment.polarity >= 0 :
-            return True
-        elif analysis.sentiment.polarity < 0 :
-            return False
-
-    def negative_feedbacks2(self,feedback_entered):
-        negative_feedbacks = {}
         clean_text=self.clean(feedback_entered)
         tagged_text=self.tagging(clean_text)
         polarity=self.calc_senti_score(tagged_text)
@@ -131,7 +113,7 @@ class polarity:
         else:
             return False
 
-    def positive_feedbacks2(self,feedback_entered):
+    def positive_feedbacks(self,feedback_entered):
         positive_feedbacks = {}
         clean_text=self.clean(feedback_entered)
         tagged_text=self.tagging(clean_text)

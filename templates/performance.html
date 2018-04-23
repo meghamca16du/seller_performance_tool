@@ -103,10 +103,14 @@
               <input type="submit" name="Go">
             </form>
           </div>
+          
 
           <ul>
              {% for trait_component ,trait_value, recommendation in recommendation_trait_list %}
-                <li>   <h3> {{ trait_component }} </h3>  {{trait_value}} </br> {{recommendation}} </li>
+             <div>
+                <li>   <h3> {{ trait_component }} </h3>  {{trait_value}} %</br> {{recommendation}} </li>
+              </div>
+            </br></br>
             {%endfor%}
           </ul>
 

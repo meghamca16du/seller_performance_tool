@@ -37,7 +37,8 @@ def login(request):
 
 def home(request):
     print(request.user)
-    print(ReturnValueForDashboard())
+    val = ReturnValueForDashboard(request)
+    print(val)
     return render(request,'home.html',{})
 
 def profile(request):
