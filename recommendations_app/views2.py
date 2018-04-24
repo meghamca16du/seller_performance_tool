@@ -38,42 +38,76 @@ class MinHeap:
         for h in self.heap:
             print (h[0] , " " , h[1])
 
-class Recommendations:
+class ProvideTrendRecommendations:
 
-    def __init__(self):
-        self.category_set =[]
+    def __init__(self,current_sellerid):
+        self.current_sellerid = current_sellerid
+        self.seller_category = []
+        self.seller_subcategory = []
+        self.seller_products = []
+        self.seller_category_related_subcategory = []
+        self.seller_category_related_products = []
+        self.final_score = {}
+        self.recommendation_list =[]
+
+
+        '''self.category_set =[]
         self.categoryList = []
         self.subCategoryList = []
         self.productset = []
         self.final_score={}
         self.recommendationList = []
-        self.sellerSubCategoryList = []
+        self.sellerSubCategoryList = []'''
 
     def template(self):
-        self.search_category()
+        self.search_seller_products()
+        self.search_seller_subcategory()
+        self.search_seller_category()
+        self.search_seller_category_related_subcategory()
+        self.search_seller_category_related_products()
+        self.calculate_score()
+        heapobj = self.initialize_heap()
+        self.maintain_heap(heapobj)
+        self.checkIfSellerProductIsTrending(heapobj)
+        '''self.search_category()
         self.search_sellerSubCategory()
         self.search_subcategory()
         self.search_products()
         self.calculate_score()
         heapobj = self.initialize_heap()
         self.maintain_heap(heapobj)
-        self.checkIfSellerProductIsTrending(heapobj)
+        self.checkIfSellerProductIsTrending(heapobj)'''
 
-    def search_category(self):
-        #new_code --> searching seller's categories -->return ids
-        self.category_set = Products.objects.all().filter(sid='S01REY').values('subcategory_id__category_id').distinct()
-        for category in self.category_set:
-            for key,category_name in category.items():
-                self.categoryList.append(category_name)
+    def search_seller_products(self):
+        self.seller_products = Products.objects.all().filter(sid=self.current_sellerid).values('id')
 
-    def search_sellerSubCategory(self):
+    def search_seller_subcategory(self):
+        subcategory = Products.objects.all().filter(id__in=self.seller_product).distinct().values('subcategory_id')
+        for sub_cat in subcategory:
+            for key,subcategory_id in sub_cat.items():
+                self.seller_subcategory.append(subcategory_id)
+
+    def search_seller_category(self):
+        category_set = Products.objects.all().filter(sid=self.current_sellerid).values('subcategory_id__category_id').distinct()
+        for category in category_set:
+            for key,category_id in category.items():
+                self.seller_category.append(category_id)
+            
+    def search_seller_category_related_subcategory(self):
+        q = Subcategories.objects.all().filter(category_id__in = category)
+        for subcategory in q:
+            seller_category_related_subcategory.append(subcategory.id)
+
+            
+    #old_code
+    def search_seller_subCategory(self):
         #new_code --> searching seller's subcategory -->return ids
-        Subcategory = Products.objects.all().filter(sid='S01REY').values('subcategory_id').distinct()
+        Subcategory = Products.objects.all().filter(sid=self.current_sellerid).values('subcategory_id').distinct()
         for sub_cat in Subcategory:
             for key,sub_cid in sub_cat.items():
                 self.sellerSubCategoryList.append(sub_cid)
 
-    def search_subcategory(self):
+    def search_subcategory(self,current_sellerid):
         #new_code -->gives all subcategories of the categories that seller have
         for subcategory in self.categoryList:
             q = Categories.objects.all().filter(category_id=subcategory)
@@ -200,6 +234,7 @@ class Recommendations:
 
 def main(request):
     #recommendationList = []
-    obj = Recommendations()
+    current_sellerid = request.user.username
+    obj = ProvideTrendRecommendations(current_sellerid)
     obj.template()
     return render(request,'recommendation.html',{})
