@@ -159,6 +159,7 @@ class Products(models.Model):
     product_name = models.TextField(max_length=50)
     subcategory_id = models.ForeignKey('Subcategories', on_delete = models.CASCADE)
     product_sale_count = models.IntegerField()
+    price = models.IntegerField(default=0)
     launch_date = models.DateField()
     score = models.IntegerField()
     inventory = models.IntegerField()
