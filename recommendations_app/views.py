@@ -24,7 +24,7 @@ class MinHeap:
     def minHeapify(self,i):
         l = self.left(i)
         r = self.right(i)
-        if l<self.heapsize and self.heap[i][1]>self.heap[l][1]:
+        if l < self.heapsize and self.heap[i][1] > self.heap[l][1]:
             smallest = l
         else:
             smallest = i
@@ -38,88 +38,77 @@ class MinHeap:
         for h in self.heap:
             print (h[0] , " " , h[1])
 
-class Recommendations:
+class ProvideTrendRecommendations:
 
-    def __init__(self):
-        self.category_set =[]
-        self.categoryList = []
-        self.subCategoryList = []
-        self.productset = []
-        self.final_score={}
-        self.recommendationList = []
-        self.sellerSubCategoryList = []
+    def __init__(self,current_sellerid):
+        self.current_sellerid = current_sellerid
+        self.seller_category = []
+        self.seller_subcategory = []
+        self.seller_products = []
+        self.seller_products_name=[]
+        self.seller_category_related_subcategory = []
+        self.seller_category_related_products = []
+        self.final_score = {}
+        self.recommendation_list = []
 
     def template(self):
-        self.search_category()
-        self.search_sellerSubCategory()
-        self.search_subcategory()
-        self.search_products()
+        self.search_seller_products()
+        self.search_seller_subcategory()
+        self.search_seller_category()
+        self.search_seller_category_related_subcategory()
+        self.search_seller_category_related_products()
         self.calculate_score()
+        self.check_inventory()
         heapobj = self.initialize_heap()
         self.maintain_heap(heapobj)
         self.checkIfSellerProductIsTrending(heapobj)
 
-    def search_category(self):
-        self.category_set = ProductMain.objects.all().filter(
-                         sid='ank202'
-                         ).values(
-                         'sub_cid__cname'
-                         ).distinct()
-        for category in self.category_set:
-            for key,category_name in category.items():
-                self.categoryList.append(category_name)
-        #new_code --> searching seller's categories -->return ids
-        '''self.category_set = Products.objects.all().filter(sid='S01REY').values('subcategory_id__category_id').distinct()
-        for category in self.category_set:
-            for key,category_name in category.items():
-                self.categoryList.append(category_name)'''
+    def search_seller_products(self):
+        sellerproducts = Products.objects.all().filter(sid=self.current_sellerid)
+        for products in sellerproducts:
+            self.seller_products.append(products.id)
+            self.seller_products_name.append(products.product_name)
 
-    def search_sellerSubCategory(self):
-        Subcategory = ProductMain.objects.all().filter(
-                         sid='ank202'
-                         ).values(
-                         'sub_cid'
-                         ).distinct()
-        
-        for sub_cat in Subcategory:
-            for key,sub_cid in sub_cat.items():
-                self.sellerSubCategoryList.append(sub_cid)
-        #new_code --> searching seller's subcategory -->return ids
-        '''Subcategory = Products.objects.all().filter(sid='S01REY').values('subcategory_id').distinct()
-        for sub_cat in Subcategory:
-            for key,sub_cid in sub_cat.items():
-                self.sellerSubCategoryList.append(sub_cid)'''
+    def search_seller_subcategory(self):
+        subcategory = Products.objects.all().filter(id__in=self.seller_products).distinct().values('subcategory_id')
+        for sub_cat in subcategory:
+            for key,subcategory_id in sub_cat.items():
+                self.seller_subcategory.append(subcategory_id)
 
-    def search_subcategory(self):
-        for subcategory in self.categoryList:
-            q = Category.objects.all().filter(cname=subcategory)
-            for value in q:
-                self.subCategoryList.append(value.id)
+    def search_seller_category(self):
+        category_set = Products.objects.all().filter(sid=self.current_sellerid).values('subcategory_id__category_id').distinct()
+        for category in category_set:
+            for key,category_id in category.items():
+                self.seller_category.append(category_id)
+            
+    def search_seller_category_related_subcategory(self):
+        q = Subcategories.objects.all().filter(category_id__in = self.seller_category)
+        for subcategory in q:
+            self.seller_category_related_subcategory.append(subcategory.id)
 
-    def search_products(self):
-        self.productset = ProductMain.objects.all(
-                                ).filter(
-                                sub_cid__in = self.subCategoryList).values(
-                                'id','sub_cid','prod_count' ,'sub_cid__subCategoryCount','launch_date')
-        
-        
+    def search_seller_category_related_products(self):
+        self.seller_category_related_products = Products.objects.all().filter(
+            subcategory_id__in = self.seller_category_related_subcategory
+            ).values('id', 'product_name', 'product_sale_count' , 'subcategory_id__category_id','subcategory_id',
+                'subcategory_id__subcategory_name',
+             'subcategory_id__subcategory_sale_count', 'price', 'launch_date' , 'score' , 'inventory')       
 
     def calculate_score(self):
-        for products in self.productset:
+        for products in self.seller_category_related_products:
             prod_score = self.calcProductScore(products)
             category_score = self.calcCategoryScore(products)
             date_score = self.calcDateScore(products)
             total_Score = prod_score + category_score + date_score
-            ProductMain.objects.all().filter(id=products['id']).update(score=total_Score)
+            Products.objects.all().filter(id=products['id']).update(score=total_Score)
             self.final_score[products['id']] = total_Score
     
     def calcProductScore(self,products):
-        count = products['prod_count']
+        count = products['product_sale_count']
         score = 0.5 * count
         return score
 
     def calcCategoryScore(self,products):
-        count = products['sub_cid__subCategoryCount']
+        count = products['subcategory_id__subcategory_sale_count']
         score = 0.3 * count
         return score
 
@@ -138,6 +127,16 @@ class Recommendations:
         else:
             score = 0
         return score
+
+    def check_inventory(self):
+        low_inventory_products = Products.objects.all().filter(
+                                    sid=self.current_sellerid).filter(
+                                    inventory__lt=10)
+        recommendation = "Inventory level is very low for : \n                  "
+        for products in low_inventory_products:
+            recommendation = recommendation + products.product_name + " \n "
+        recommendation  = recommendation + "   to cater Market Demand. Restock "    
+        self.recommendation_list.append(recommendation)
 
     def initialize_heap(self):
         count = 0
@@ -158,61 +157,52 @@ class Recommendations:
             if minTrendingProductInHeap[1] < productid_score[1] :
                 heapObj.heap[0] = productid_score
                 heapObj.minHeapify(0)
+        heapObj.printHeap()
 
-    def checkIfSellerProductIsTrending(self,heapObj):
-        seller_product_list = ProductMain.objects.all().filter(sid = 'ank202').values('id')
-
-        #new_code -->give all products of seller -->return ids
-        '''self.productset = Products.objects.all().filter(sid='S01REY').values('id')'''
-        
+    def checkIfSellerProductIsTrending(self,heapObj):  
         for productid_score in heapObj.heap:
-            for seller_product in seller_product_list:
+            not_seller_product = True
+            for seller_product in self.seller_products:
                 if productid_score[0] == seller_product :
-                    self.sellerProductIsTrending(productid_score)
-                    print ('his product','\n')
-                else:
-                    self.sellerProductIsNotTrending(productid_score)    
+                    not_seller_product = False
                     break
-
-    def sellerProductIsTrending(self,productid_score):
-        '''recommendationString = 'Keep ',trending_subcat_name, 'sub category also for increasing sales.','\n'
-        self.recommendationList.append(recommendationString)'''
-        pass
+            if  not_seller_product:
+                self.sellerProductIsNotTrending(productid_score)
 
     def sellerProductIsNotTrending(self,productid_score):
-        trendingProductObj = ProductMain.objects.all().filter(id = productid_score[0])
-        category = trendingProductObj.values('sub_cid__cname')
-        subcategory = trendingProductObj.values('sub_cid')
-        trendingProductPrice = trendingProductObj.values('price')
-        for cat in category:
-            for key,value in cat.items():
-                trending_category_name = value   
-        for subcat in subcategory:
-            for key,value in subcat.items():
-                trending_subcat_id = value 
-        for trendProductPrice in trendingProductPrice :
-            for product,price in trendProductPrice.items() : 
-                trend_product_price=price
-        if trending_subcat_id in self.sellerSubCategoryList :
-            seller_price = ProductMain.objects.filter(
-                                sid='ank202'
-                                ).filter(
-                                sub_cid=trending_subcat_id
-                                ).values(
-                                'price')
-            for sellerprice in seller_price :
-                for key,price in sellerprice.items() :
-                    sellerPrice=price
+        trendingProductObj = self.seller_category_related_products.filter(id=productid_score[0])
 
-            if trend_product_price < sellerPrice:
-                recommendationString = 'Decrease your price. Or you can add a deal on this product.'
-                self.recommendationList.append(recommendationString)
-        else:
-            recommendationString = 'Keep ',value, 'category also for increasing sales.'
-            self.recommendationList.append(recommendationString)
+        for value in trendingProductObj:
+            trending_product_name = value['product_name']
+            trending_product_price = value['price']
+            trending_product_subcategory = value['subcategory_id']
+            trending_product_subcategory_name = value['subcategory_id__subcategory_name']
+            trending_product_category = value['subcategory_id__category_id']
+
+        if trending_product_name in self.seller_products_name:
+            seller_product = Products.objects.all().filter(sid=self.current_sellerid).filter(product_name=trending_product_name)
+            for product in seller_product:
+                seller_product_price = product.price
+            if seller_product_price > trend_product_price:
+                recommendation = "As per analysis, your competitors are selling " + trending_product_name + " at a cheaper price than you and have better sales. You may reduce your price or add deals" +" for improved sales."
+                                          
+            else:
+                recommendation = "As per analysis, your competitors are selling " + trending_product_name + "and having better sales. Take necessary actions to improve sales of your product."
+                                    
+        else: 
+            if trending_product_subcategory in self.seller_subcategory:
+                recommendation = trending_product_name + " is Trending. Add this product to your Product Range in order to"+"boost your sales and earn profit."
+                                    
+            else:
+                recommendation = trending_product_subcategory_name + " is Trending. Add this category to your category Range in order to"+"boost your sales and earn profit."
+                                    
+        self.recommendation_list.append(recommendation)
 
 def main(request):
-    #recommendationList = []
-    obj = Recommendations()
+    current_sellerid = request.user.username
+    print(current_sellerid)
+    obj = ProvideTrendRecommendations(current_sellerid)
     obj.template()
-    return render(request,'recommendation.html',{})
+    recommendations = obj.recommendation_list
+    print(recommendations)
+    return render(request,'recommendation.html',{'recommendations':recommendations})

@@ -41,9 +41,6 @@ class Trait(ABC):
         traitWeightageList.append(traitWeightage)
         self.saveRecommendation(value, recommendation_list,IsDateEnteredByUser)
         self.store_value(value, table_name, trait_name, trait_value,IsDateEnteredByUser)
-        #overall_perf_value = self.calc_overall_performance(trait_value,self.traitWeightageList)
-        #if (IsDateEnteredByUser == False):
-        #    self.store_overall_value(TraitValueDetails,overall_perf_value)
 
     def find_table(self):
         '''
