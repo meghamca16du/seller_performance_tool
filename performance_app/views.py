@@ -504,10 +504,8 @@ def main(request):
         obj.template_method(trait_name, trait_value, recommendation_list,traitWeightageList,IsDateEnteredByUser)
 
     obj.calc_overall_performance(trait_value,traitWeightageList,IsDateEnteredByUser)
-    
     recommendation_trait_list = zip(trait_name, trait_value, recommendation_list)
-    #return render(request,'performance.html',{'recommendation_trait_list':recommendation_trait_list})
-    return render(request,'performance.html',{'trait_name':trait_name,'trait_value':trait_value,'recommendation_list':recommendation_list})
+    return render(request,'performance.html',{'recommendation_trait_list':recommendation_trait_list})
 
 def ReturnValueForDashboard(request):
     current_sellerid = request.user.username

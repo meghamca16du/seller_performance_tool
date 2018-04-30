@@ -90,9 +90,9 @@ DATABASES ={
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'seller_perf_tool',
         'USER': 'postgres',
-        'PASSWORD': 'megha123',
+        'PASSWORD': 'postgres123',
         'HOST': '127.0.0.1',
-        'PORT': '5433',
+        'PORT': '5432',
     }
 }
 

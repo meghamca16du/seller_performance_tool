@@ -28,6 +28,5 @@ urlpatterns = [
     path('home/performance/',perf_views.main,name='main'),
     path('home/feedback/',feed_views.main,name='main'),
     path('home/recommendations/',rec_views.main,name='main'),
-
     path('logout/',auth_views.logout,{'next_page':'/login'},name='logout'),
 ]

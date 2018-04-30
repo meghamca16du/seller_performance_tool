@@ -5,7 +5,7 @@ from elasticsearch import Elasticsearch,helpers
 from . import models
 from django.utils import formats
 from datetime import datetime
-from dashboard.models import ProductMain
+from dashboard.models import Products
 from django.shortcuts import render
 from tablib import Dataset
 from performance_app.feedbacks import *
@@ -27,7 +27,7 @@ def feedback_load_data():
     feedbacks_resource.import_data(dataset, data = open("Feedback.csv"), encoding = 'utf-8')
 
 def all_seller_products(seller_products):
-    seller_pid = ProductMain.objects.all().filter(sid='ank202').values('id')
+    seller_pid = Products.objects.all().filter(sid='ank202').values('id')
     for sellerpid in seller_pid:
         for key,productid in sellerpid.items():
             seller_products[productid] = productid

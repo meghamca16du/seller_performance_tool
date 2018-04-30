@@ -5,7 +5,7 @@ from performance_app.views import *
 
 def login(request):
     #loading data
-    productMain_resource = ProductMainResource()
+    '''productMain_resource = ProductMainResource()
     dataset = Dataset()
     productMain_resource.import_data(dataset, data = open("Products.csv"), encoding = 'utf-8')
 
@@ -32,11 +32,11 @@ def login(request):
 
     products_resource = ProductsResource()
     dataset = Dataset()
-    products_resource.import_data(dataset, data = open("Products.csv"), encoding = 'utf-8')
+    products_resource.import_data(dataset, data = open("Products.csv"), encoding = 'utf-8')'''
     return render(request,'login.html',{})
 
 def home(request):
-    print(request.user)
+    print('holaaaaa  ',request.user.username)
     val = ReturnValueForDashboard(request)
     print(val)
     return render(request,'home.html',{})

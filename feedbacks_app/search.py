@@ -4,7 +4,7 @@ from elasticsearch.helpers import bulk
 from elasticsearch import Elasticsearch,helpers
 from . import models
 from datetime import datetime
-from dashboard.models import ProductMain
+from dashboard.models import Products
 from es_synonyms import load_synonyms
 from elasticsearch_dsl import analyzer,token_filter
 connections.create_connection()
@@ -36,7 +36,7 @@ def bulk_indexing():
     Feedbacks_Index.init()
     es = Elasticsearch()
     productidlist = []
-    sellerPid = ProductMain.objects.all().filter(sid='ank202').values('id')
+    sellerPid = Products.objects.all().filter(sid='ank202').values('id')
     for sellerpid in sellerPid:
         for key,productid in sellerpid.items():
             productidlist.append(productid)

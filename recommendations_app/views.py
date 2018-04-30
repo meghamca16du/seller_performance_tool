@@ -140,21 +140,21 @@ class ProvideTrendRecommendations:
 
     def initialize_heap(self):
         count = 0
-        listOf5products = []
-        for productid_score in self.final_score.items():
+        product_list=[]
+        for final_score in self.final_score.items():
             if (count != 5):
-                listOf5products.append(productid_score)
+                product_list.append(final_score)
                 count+= 1
             else:
                 break
-        heapObj = MinHeap(listOf5products)
+        heapObj=MinHeap(product_list)
         heapObj.buildHeap()
         return heapObj
       
     def maintain_heap(self,heapObj):
-        for productid_score in self.final_score.items():
-            minTrendingProductInHeap = heapObj.heap[0]
-            if minTrendingProductInHeap[1] < productid_score[1] :
+        for productid_score in self.final_score.items():   
+            min_trending_product=heapObj.heap[0]
+            if min_trending_product[1] < productid_score[1]:
                 heapObj.heap[0] = productid_score
                 heapObj.minHeapify(0)
         heapObj.printHeap()
@@ -200,9 +200,9 @@ class ProvideTrendRecommendations:
 
 def main(request):
     current_sellerid = request.user.username
-    print(current_sellerid)
+    #print(current_sellerid)
     obj = ProvideTrendRecommendations(current_sellerid)
     obj.template()
     recommendations = obj.recommendation_list
-    print(recommendations)
+    #print(recommendations)
     return render(request,'recommendation.html',{'recommendations':recommendations})
