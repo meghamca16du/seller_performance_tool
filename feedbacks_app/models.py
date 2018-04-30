@@ -4,7 +4,7 @@ from dashboard.models import ProductMain
 from dashboard.models import Products
 from .search import Feedbacks_Index
 
-class FeedbackDetails(models.Model):
+'''class FeedbackDetails(models.Model):
     fid = models.AutoField(primary_key = True, null = False)
     bid = models.ForeignKey('dashboard.BuyerDetails', on_delete = models.CASCADE, db_column='bid')
     oid = models.ForeignKey('dashboard.OrderDetails', on_delete = models.CASCADE, db_column='oid')
@@ -52,7 +52,7 @@ class Feedbacks_table(models.Model):
                 feedback_entered= self.feedback_entered
                 )
         obj.save()
-        return obj.to_dict(include_meta=True)
+        return obj.to_dict(include_meta=True)'''
 
 class Feedbacks(models.Model):
     id = models.CharField(primary_key=True, max_length=20)
@@ -60,3 +60,15 @@ class Feedbacks(models.Model):
     feedback_date = models.DateField()
     rating = models.IntegerField()
     feedback = models.TextField(max_length=500)
+
+    def indexing(self):
+        obj = Feedbacks_Index(
+                meta={'id' : self.id},
+                id = self.id,
+                pid_seller = self.product_id.id,
+                feedbackdate=self.feedback_date,
+                rating_points = self.rating,
+                feedback_entered= self.feedback
+                )
+        obj.save()
+        return obj.to_dict(include_meta=True)

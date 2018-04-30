@@ -18,16 +18,12 @@ from nltk.corpus import wordnet
 connections.create_connection()
 
 def feedback_load_data():
-    feedback_resource = FeedbacksResource()
-    dataset = Dataset()
-    feedback_resource.import_data(dataset, data = open("Feedbacks.csv"), encoding = 'utf-8')
-    #new data
     feedbacks_resource = FeedbackResource()
     dataset = Dataset()
     feedbacks_resource.import_data(dataset, data = open("Feedback.csv"), encoding = 'utf-8')
 
-def all_seller_products(seller_products):
-    seller_pid = Products.objects.all().filter(sid='ank202').values('id')
+def all_seller_products(seller_products,current_sellerid):
+    seller_pid = Products.objects.all().filter(sid=current_sellerid).values('id')
     for sellerpid in seller_pid:
         for key,productid in sellerpid.items():
             seller_products[productid] = productid
@@ -42,12 +38,12 @@ class SearchFeedbacks:
 
     def filterAccordingToRating(self,documents,request):
         rating_points = request.GET['rating']
-        filteredDocuments = documents.filter('term',rating_points=rating_points)
+        filteredDocuments = documents.filter('term',rating_points = rating_points)
         return filteredDocuments
 
     def filterAccordingToProduct(self,documents,request):
         product_id = request.GET['product']
-        filteredDocuments = documents.filter('match',pid_seller=product_id )
+        filteredDocuments = documents.filter('match',pid_seller = product_id )
         return filteredDocuments
 
     def filterAccordingToKeywords(self,documents,request):
@@ -81,10 +77,6 @@ class SearchFeedbacks:
         filteredDocuments = documents.filter({"terms": {"id":feedbacks_id} })
         return filteredDocuments
 
-    '''def filterAccordingToKeywords(self,documents,request):
-        filteredDocuments = documents.filter('match',feedback_entered=request.GET['keyword'])
-        return filteredDocuments'''
-
     def create_filtered_result_dictionary(self,documents,filtered_result):
         result = documents.execute()
         for res in documents.scan():
@@ -93,9 +85,11 @@ class SearchFeedbacks:
 
 
 def main(request):
+    current_sellerid = request.user.username
+    bulk_indexing(current_sellerid)
     feedback_load_data()
     seller_products = {}
-    all_seller_products(seller_products)
+    all_seller_products(seller_products,current_sellerid)
     SearchObj = SearchFeedbacks()
     filtered_result = {}
     checkFilterToApply = { SearchObj.filterAccordingToDate : 0,

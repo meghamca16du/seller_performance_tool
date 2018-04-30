@@ -30,17 +30,17 @@ class Feedbacks_Index(DocType):
                     )'''
 
     class Meta:
-        index = 'feedbacks-index'
+        index = 'feedback-index'
 
-def bulk_indexing():
+def bulk_indexing(current_sellerid):
     Feedbacks_Index.init()
     es = Elasticsearch()
     productidlist = []
-    sellerPid = Products.objects.all().filter(sid='ank202').values('id')
+    sellerPid = Products.objects.all().filter(sid=current_sellerid).values('id')
     for sellerpid in sellerPid:
         for key,productid in sellerpid.items():
             productidlist.append(productid)
-    bulk(client=es, actions=(b.indexing() for b in models.Feedbacks_table.objects.filter(pid_seller__in = productidlist).iterator()))
+    bulk(client=es, actions=(b.indexing() for b in models.Feedbacks.objects.filter(product_id__in = productidlist).iterator()))
     
 
 '''def search_keyword(keyword):
