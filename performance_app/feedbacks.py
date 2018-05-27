@@ -8,7 +8,7 @@ from nltk.corpus import sentiwordnet as swn
 
 class polarity:
     def find_feedbacks(self,from_date,to_date,current_sellerid):
-        feedbacks_obj=Feedbacks.objects.all().filter(
+        feedbacks_obj = Feedbacks.objects.all().filter(
                         product_id__sid=current_sellerid
                         ).filter(
                         feedback_date__gte=from_date
@@ -17,8 +17,8 @@ class polarity:
                         ).values('feedback')
         return feedbacks_obj
 
-        feedbacks_obj = Feedbacks.objects.all().filter(product_id__sid='S01REY').values('feedback')
-        return feedbacks_obj
+        '''feedbacks_obj = Feedbacks.objects.all().filter(product_id__sid='S01REY').values('feedback')
+        return feedbacks_obj'''
 
     def clean(self,feedback):
         clean_text=[]
@@ -44,10 +44,7 @@ class polarity:
 
     def calc_senti_score(self,tagged_text):
         score_list=[]
-        #score_list_neg=[]
         wnl = WordNetLemmatizer()  #plural-to-singular
-        #positive_score=0
-        #negative_score=0
         count=0
 
 
@@ -72,12 +69,9 @@ class polarity:
                     for syn in synsets:
                         syn_score = syn_score + syn.pos_score() - syn.neg_score()
                     syn_score = syn_score/len(synsets)  #taking average
-                    #print(lemmatized)
-                    #print(syn_score)
                     count+=1
             score_list.append(syn_score)
         total_score = sum(score_list) / count
-        #print("total score of ", tagged_text," " ,total_score)
         if(total_score >= 0):
             return True
         else:

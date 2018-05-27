@@ -54,17 +54,16 @@ class SearchFeedbacks:
                 synonyms.append(l.name())
         print(synonyms)
         filteredDocuments = documents.filter({"terms": {"feedback_entered":synonyms} })
-        return filteredDocuments        
-        pass
+        return filteredDocuments
 
     def filterAccordingToNegativeFeedbacks(self,documents,request):
         PolarityObj = polarity()
         feedbacks_id = []
         for doc in documents.scan():
             IsNegative = PolarityObj.negative_feedbacks(doc.feedback_entered)
-            if IsNegative==True:
+            if IsNegative == True:
                 feedbacks_id.append(doc.id)
-        filteredDocuments = documents.filter({"terms": {"id":feedbacks_id} })
+        filteredDocuments = documents.filter('terms',id__in = feedbacks_id)
         return filteredDocuments
 
     def filterAccordingToPositiveFeedbacks(self,documents,request):
@@ -81,8 +80,7 @@ class SearchFeedbacks:
         result = documents.execute()
         for res in documents.scan():
             filtered_result[res.id] = (res.id,res.feedbackdate,res.feedback_entered)
-        return filtered_result 
-
+        return filtered_result
 
 def main(request):
     current_sellerid = request.user.username
