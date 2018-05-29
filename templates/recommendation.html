@@ -11,11 +11,15 @@
 
     <title>Performance</title>
 
+    <LINK rel="stylesheet" type="text/css" href="style.css">
+
     <!-- Bootstrap core CSS -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="performance.css" rel="stylesheet">
+
+    <LINK rel="stylesheet" type="text/css" href="style.css">
 
     <script src="{% static '/assets/js/vendor/popper.min.js' %}"></script> 
     <script src="{% static '/dist/js/bootstrap.min.js' %}"></script> 
@@ -35,7 +39,7 @@
               <li class="nav-item">
                 <a class="nav-link active" href="#">
                   <span data-feather="home"></span>
-                  All Values <span class="sr-only">(current)</span>
+                  Recommendations <span class="sr-only">(current)</span>
                 </a>
               </li>
               <li class="nav-item">
@@ -95,19 +99,106 @@
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-            <h1 class="h2">All values</h1>
+            <h1 class="h2">Recommendations</h1>
           </div>
 
           <div>
 
-            
-              {% for recommend in recommendations %}
-                <div>{{recommend}}</div>
-                <br>
-              {%endfor%}
-          </div>
-        
+<style>
+.part2
+{
+	display : flex;
+	flex-flow : row wrap;
+}
 
+div.innersection {
+  margin: 10px;
+  background-color: white;
+  box-shadow: 2px 3px 3px 2px rgba(3, 46, 92, 0.2);
+  border-color: lightgrey;
+  border-width: 1px;
+  border-style: solid;
+  transition-duration: 2s;
+  -webkit-transition-duration: 2s;
+}
+
+div.innersection:hover {
+  box-shadow: 2px 3px 3px 2px rgba(3, 46, 92, 0.7);
+  border-color: grey;
+}
+
+#block1
+{
+	
+	flex-basis : 60%;
+}
+
+#block2
+{
+	
+	flex-basis : 40%;
+}
+
+#block3
+{
+	
+	flex-basis : 33.33%;
+}
+
+#block4
+{
+	
+	flex-basis : 33.33%;
+}
+
+#block5
+{
+	
+	flex-basis : 33.33%;
+}
+
+@media (max-width : 800px)
+{
+	#block1{
+		flex-basis : 100%;
+	}
+	#block2, #block3, #block4, #block5{
+		flex-basis : 50%;
+	}
+}
+
+@media (max-width : 600px)
+{
+	#block1,#block2,#block3,#block4,#block5
+	{
+		flex-basis : 100%;
+	}
+}
+</style>
+            
+            <MAIN id="part2">
+                {% for recommend in recommendations %}
+                <SECTION style="min-height : 80px;
+                                min-width : 50%; 
+                                padding-top: 20px;
+                                padding-right: 20px;
+                                padding-bottom: 10px;
+                                padding-left: 20px;
+                                display: inline-block;
+                                flex-basis : 33.33%;" id="block1">
+                  <DIV style="  min-height : 80px;
+                                min-width : 50%;
+                                padding-top: 20px;
+                                padding-right: 20px;
+                                padding-bottom: 20px;
+                                padding-left: 20px;
+                                font-weight: 500;" class="innersection">
+                     {{recommend}}
+                  </DIV>
+                </SECTION>
+                {%endfor%}
+            </MAIN>
+  
         </main>
       </div>
     </div>
