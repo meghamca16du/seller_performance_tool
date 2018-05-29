@@ -141,7 +141,7 @@ class LateShipmentRate(Trait):
         return late_perc
     
     def returnTraitWeightage(self):
-        return 2
+        return -1
 
     def saveRecommendation(self, value, recommendation_list, IsDateEnteredByUser):
         if value <= 30:
@@ -262,7 +262,7 @@ class HitToSuccessRatio(Trait):
         return success_perc
 
     def returnTraitWeightage(self):
-        return 1
+        return 1.5
 
     def saveRecommendation(self, value, recommendation_list, IsDateEnteredByUser):
         if value <= 30:
@@ -320,7 +320,7 @@ class ReturnRate(Trait):
         return return_rate
 
     def returnTraitWeightage(self):
-        return 1
+        return -1.25
 
     def saveRecommendation(self, value, recommendation_list, IsDateEnteredByUser):
         if value <= 30:
