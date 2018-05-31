@@ -11,6 +11,8 @@ from nltk.corpus import stopwords
 from nltk import pos_tag
 from feedbacks_app.models import *
 from django.contrib.auth.models import User
+import json
+import pickle
 
 class Trait(ABC):
     '''
@@ -504,8 +506,14 @@ def main(request):
         obj.template_method(trait_name, trait_value, recommendation_list,traitWeightageList,IsDateEnteredByUser)
 
     obj.calc_overall_performance(trait_value,traitWeightageList,IsDateEnteredByUser)
-    recommendation_trait_list = zip(trait_name, trait_value, recommendation_list)
-    return render(request,'performance2.html',{'recommendation_trait_list':recommendation_trait_list})
+    #recommendation_trait_list = zip(trait_name, trait_value, recommendation_list)
+
+    trait_percentage_dictionary = {}
+    trait_recommendation_dictionary = {}
+    for name,percentage,recommendation in zip(trait_name,trait_value,recommendation_list):
+        trait_percentage_dictionary[name]=percentage
+        trait_recommendation_dictionary[name]=recommendation
+    return render(request,'performance2.html',{'trait_percentage_dictionary':trait_percentage_dictionary,'trait_recommendation_dictionary':trait_recommendation_dictionary})
 
 def ReturnValueForDashboard(request):
     current_sellerid = request.user.username

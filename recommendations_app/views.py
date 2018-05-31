@@ -4,6 +4,8 @@ from heapq import heappush, heappop, heapify
 from django.db.models import Count
 from datetime import datetime, date
 from django.utils import formats
+import operator
+
 from dashboard.models import *
 class MinHeap:
 
@@ -50,6 +52,7 @@ class ProvideTrendRecommendations:
         self.seller_category_related_products = []
         self.final_score = {}
         self.recommendation_list = []
+        self.new_final={}
 
     def template(self):
         self.search_seller_products()
@@ -93,7 +96,7 @@ class ProvideTrendRecommendations:
                 'subcategory_id__subcategory_name',
              'subcategory_id__subcategory_sale_count', 'price', 'launch_date' , 'score' , 'inventory')       
 
-    def calculate_score(self):
+    def calculate_score(self):  
         for products in self.seller_category_related_products:
             prod_score = self.calcProductScore(products)
             category_score = self.calcCategoryScore(products)
@@ -101,6 +104,8 @@ class ProvideTrendRecommendations:
             total_Score = prod_score + category_score + date_score
             Products.objects.all().filter(id=products['id']).update(score=total_Score)
             self.final_score[products['id']] = total_Score
+        final_score2 = sorted(self.final_score.items(), key=operator.itemgetter(1))
+        self.final_score = dict((x,y) for x,y in final_score2)
     
     def calcProductScore(self,products):
         count = products['product_sale_count']
@@ -149,6 +154,7 @@ class ProvideTrendRecommendations:
                 break
         heapObj=MinHeap(product_list)
         heapObj.buildHeap()
+        heapObj.printHeap()
         return heapObj
       
     def maintain_heap(self,heapObj):
@@ -200,9 +206,7 @@ class ProvideTrendRecommendations:
 
 def main(request):
     current_sellerid = request.user.username
-    #print(current_sellerid)
     obj = ProvideTrendRecommendations(current_sellerid)
     obj.template()
     recommendations = obj.recommendation_list
-    #print(recommendations)
     return render(request,'recommendation.html',{'recommendations':recommendations})

@@ -85,23 +85,19 @@
               <input type="submit" name="Go" value="Apply" >
             </form>
           </div>
+          
 
-          <ul>
-            {% for trait_component ,trait_value, recommendation in recommendation_trait_list %}
-            <div>
-               <li>  <h3> {{ trait_component }} </h3>  {{trait_value}} %</br> {{recommendation}} </li>
-             </div>
-           </br></br>
-           {%endfor%}
-         </ul> 
-
+        
           <p>
             <div id="late_shipment">
               <h3>Late Shipment</h3>
-                {{ trait_value.late_shipment }}
+             
+              {{trait_percentage_dictionary.late_shipment_rate}}
+
                 This is the number of seller-fulfilled orders with shipments done after the 
-                expected shipment date divided by the total number of seller-fulfilled orders
-                in the relevant time period.
+                expected shipment date divided by the total number of seller-fulfilled orders in the relevant 
+                time period.
+
                 Orders that are shipped late may lead to a negative impact on customer experience.
                 
               <br/>
@@ -111,46 +107,50 @@
             <div id="ontime_delivery">
               <h3>On Time Delivery</h3>
 
-              This is the number of seller-fulfilled orders that are delivered earlier than or
-              on the expected delivery date divided by the total number of seller-fulfilled orders 
-              in the relevant time period. <br>
-              A high percentage of On Time Delivery results in a good customer experience. <br>
+              This is the number of seller-fulfilled orders with shipments done after the expected
+              shipment date divided by the total number of seller-fulfilled orders in the relevant time period.
+
+              Orders that are shipped late may lead to a negative impact on customer experience.
 
             </div>
           </p>
           <p>
             <div id="hit_to_success">
-              <h3>Hit To Success Ratio</h3>
+              <h3>Hit To Success Ratio<var id="hit_to_success_ratio">percentage</var></h3>
 
-              It is defined as the number of sales of a product divided by the number of customers 
-              who visited the site to find out about the product  in the relevant time period. <br>
-              Greater the hit to success ratio, better the performance. <br>
+              It is defined as the number of sales of a product divided by the number of customers who 
+              visited the site to find out about the product  in the relevant time period.
+              
+              Greater the hit to success ratio, better the performance.
 
             </div>
           </p>
           <p>
             <div id="return">
-              <h3>Return Rate</h3>
-              
-              It is calculated as the number of returned orders or products as a percentage of 
-              the number that has been sold.<br>
-              A high return rate is not a good score as it reflects consumer unhappiness. <br>
+              <h3>Return Rate <var id="return_rate">percentage</var></h3>
+ 
+              It is calculated as the number of returned orders or products as a percentage of the number 
+              that has been sold.
+
+              A high return rate is not a good score as it reflects consumer unhappiness.
+
             </div>
           </p>
           <p>
             <div id="positive_feedbacks">
-                <h3>Positive Feedbacks</h3>
+                <h3>Positive Feedbacks <var id="positive_feedbacks">percentage</var></h3>
+                It the percentage of positive feedbacks, calculated as number of positive feedbacks
+                divided by total number of feedbacks in the relevant time period.
 
-                It the percentage of positive feedbacks, calculated as number of positive 
-                feedbacks divided by total number of feedbacks in the relevant time period.
             </div>
           </p>
           <p>
             <div id="negative_feedbacks">
-                <h3>Negative Feedbacks</h3>
+                <h3>Negative Feedbacks<var id="negative_feedbacks">percentage</var></h3>
 
-                It the percentage of negative feedbacks, calculated as number of negative 
-                feedbacks divided by total number of feedbacks in the relevant time period. 
+                It the percentage of negative feedbacks, calculated as number of negative feedbacks
+                divided by total number of feedbacks in the relevant time period.
+
                 Performance is negatively affected when you receive 1-star or 2-star feedback comments. 
 
             </div>
@@ -158,6 +158,7 @@
         </main>
       </div>
     </div>
+    
 
 
     <!-- Bootstrap core JavaScript
