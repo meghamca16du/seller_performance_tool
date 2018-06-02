@@ -16,7 +16,7 @@ class Feedbacks_Index(DocType):
     pid_seller = Text()
     feedbackdate = Date()
     rating_points = Integer()
-    feedback_entered = Text(analyzer="standard")
+    feedback_entered = Text()
                     
     '''feedback_entered = Text(analyzer=analyzer('wordnet_synonym_analyzer',
                                         tokenizer="standard",
@@ -91,3 +91,28 @@ def search_date(startdate,enddate):
     for h in p.scan():
         response_dict[h.id] = h.feedback_entered
     return response_dict'''
+
+'''def f():
+    s = Search()
+    PolarityObj = polarity()
+    feedbacks_id = []
+    count = 0
+    for doc in s.scan():
+        IsNegative = PolarityObj.negative_feedbacks(doc.feedback)
+        if IsNegative == True:
+            feedbacks_id.append(doc.feedback_date)
+            print(doc.feedback_date,'    ')
+            count+=1
+    print(count,'\n')
+    #print(feedbacks_id)
+    filteredDocuments = s.filter('terms',feedback_date=feedbacks_id)
+    #filteredDocuments = s.query({"match_phrase": {"feedback":feedbacks_id} })
+    r = filteredDocuments.execute()
+    d={}
+    m=0
+    for h in filteredDocuments.scan():
+        d[h.id] = h.feedback
+        print(h.feedback_date,'  ')
+        m+=1
+    print(m)
+    return d'''

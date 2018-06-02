@@ -65,10 +65,10 @@ class Feedbacks(models.Model):
         obj = Feedbacks_Index(
                 meta={'id' : self.id},
                 id = self.id,
-                pid_seller = self.product_id.id,
-                feedbackdate=self.feedback_date,
-                rating_points = self.rating,
-                feedback_entered= self.feedback
+                product_id = self.product_id.id,
+                feedback_date=self.feedback_date,
+                rating = self.rating,
+                feedback= self.feedback
                 )
         obj.save()
         return obj.to_dict(include_meta=True)

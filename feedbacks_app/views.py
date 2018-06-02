@@ -33,17 +33,17 @@ class SearchFeedbacks:
     def filterAccordingToDate(self,documents,request):
         fromDate = (request.GET['from_date'])
         toDate = (request.GET['to_date'])
-        filteredDocuments = documents.filter('range',feedbackdate = {'gte': fromDate , 'lte': toDate})
+        filteredDocuments = documents.filter('range',feedback_date = {'gte': fromDate , 'lte': toDate})
         return filteredDocuments
 
     def filterAccordingToRating(self,documents,request):
         rating_points = request.GET['rating']
-        filteredDocuments = documents.filter('term',rating_points = rating_points)
+        filteredDocuments = documents.filter('term',rating = rating_points)
         return filteredDocuments
 
     def filterAccordingToProduct(self,documents,request):
         product_id = request.GET['product']
-        filteredDocuments = documents.filter('match',pid_seller = product_id )
+        filteredDocuments = documents.filter('match',product_id = product_id )
         return filteredDocuments
 
     def filterAccordingToKeywords(self,documents,request):
@@ -52,34 +52,34 @@ class SearchFeedbacks:
         for syn in wordnet.synsets(keyword):
             for l in syn.lemmas():
                 synonyms.append(l.name())
-        print(synonyms)
-        filteredDocuments = documents.filter({"terms": {"feedback_entered":synonyms} })
+        #print(synonyms)
+        filteredDocuments = documents.filter({"terms": {"feedback":synonyms} })
         return filteredDocuments
 
     def filterAccordingToNegativeFeedbacks(self,documents,request):
         PolarityObj = polarity()
-        feedbacks_id = []
+        feedbacks_date = []
         for doc in documents.scan():
-            IsNegative = PolarityObj.negative_feedbacks(doc.feedback_entered)
+            IsNegative = PolarityObj.negative_feedbacks(doc.feedback)
             if IsNegative == True:
-                feedbacks_id.append(doc.id)
-        filteredDocuments = documents.filter('terms',id__in = feedbacks_id)
+                feedbacks_date.append(doc.feedback_date)
+        filteredDocuments = documents.filter('terms',feedback_date = feedbacks_date)
         return filteredDocuments
 
     def filterAccordingToPositiveFeedbacks(self,documents,request):
         PolarityObj = polarity()
-        feedbacks_id = []
+        feedbacks_date = []
         for doc in documents.scan():
-            IsPositive = PolarityObj.positive_feedbacks(doc.feedback_entered)
+            IsPositive = PolarityObj.positive_feedbacks(doc.feedback)
             if IsPositive == True:
-                feedbacks_id.append(doc.id)
-        filteredDocuments = documents.filter({"terms": {"id":feedbacks_id} })
+                feedbacks_date.append(doc.feedback_date)
+        filteredDocuments = documents.filter('terms',feedback_date=feedbacks_date)
         return filteredDocuments
 
     def create_filtered_result_dictionary(self,documents,filtered_result):
         result = documents.execute()
         for res in documents.scan():
-            filtered_result[res.id] = (res.id,res.feedbackdate,res.feedback_entered)
+            filtered_result[res.id] = (res.id,res.feedback_date,res.feedback)
         return filtered_result
 
 def main(request):

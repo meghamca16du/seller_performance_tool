@@ -104,7 +104,7 @@ class polarity:
         return round((neg/count)*100,2)
 
     def negative_feedbacks(self,feedback_entered):
-        negative_feedbacks = {}
+        #negative_feedbacks = {}
         clean_text=self.clean(feedback_entered)
         tagged_text=self.tagging(clean_text)
         polarity=self.calc_senti_score(tagged_text)
@@ -114,7 +114,7 @@ class polarity:
             return False
 
     def positive_feedbacks(self,feedback_entered):
-        positive_feedbacks = {}
+        #positive_feedbacks = {}
         clean_text=self.clean(feedback_entered)
         tagged_text=self.tagging(clean_text)
         polarity=self.calc_senti_score(tagged_text)
