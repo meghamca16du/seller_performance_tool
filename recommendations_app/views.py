@@ -52,6 +52,11 @@ class ProvideTrendRecommendations:
         self.seller_category_related_products = []
         self.final_score = {}
         self.recommendation_list = []
+        self.recommend_inventory = []
+        self.recommend_product = []
+        self.recommend_category = []
+        self.recommend_lowerprice = []
+        self.recommend_othermeasures = []
         self.new_final={}
 
     def template(self):
@@ -137,10 +142,11 @@ class ProvideTrendRecommendations:
         low_inventory_products = Products.objects.all().filter(
                                     sid=self.current_sellerid).filter(
                                     inventory__lt=10)
-        recommendation = "Inventory level is very low for : \n                  "
+        recommendation = "Inventory level is very low for : "+ "\n"
         for products in low_inventory_products:
             recommendation = recommendation + products.product_name + " \n "
-        recommendation  = recommendation + "   to cater Market Demand. Restock "    
+        recommendation  = recommendation + "  . Restock to cater Market Demand.  "  
+        self.recommend_inventory.append(recommendation)
         self.recommendation_list.append(recommendation)
 
     def initialize_heap(self):
@@ -154,7 +160,7 @@ class ProvideTrendRecommendations:
                 break
         heapObj=MinHeap(product_list)
         heapObj.buildHeap()
-        heapObj.printHeap()
+        #heapObj.printHeap()
         return heapObj
       
     def maintain_heap(self,heapObj):
@@ -163,7 +169,7 @@ class ProvideTrendRecommendations:
             if min_trending_product[1] < productid_score[1]:
                 heapObj.heap[0] = productid_score
                 heapObj.minHeapify(0)
-        heapObj.printHeap()
+        #heapObj.printHeap()
 
     def checkIfSellerProductIsTrending(self,heapObj):  
         for productid_score in heapObj.heap:
@@ -191,17 +197,17 @@ class ProvideTrendRecommendations:
                 seller_product_price = product.price
             if seller_product_price > trend_product_price:
                 recommendation = "As per analysis, your competitors are selling " + trending_product_name + " at a cheaper price than you and have better sales. You may reduce your price or add deals" +" for improved sales."
-                                          
+                self.recommend_lowerprice.append(recommendation)                          
             else:
                 recommendation = "As per analysis, your competitors are selling " + trending_product_name + "and having better sales. Take necessary actions to improve sales of your product."
-                                    
+                self.recommend_othermeasures.append(recommendation)                    
         else: 
             if trending_product_subcategory in self.seller_subcategory:
-                recommendation = trending_product_name + " is Trending. Add this product to your Product Range in order to"+"boost your sales and earn profit."
-                                    
+                recommendation = trending_product_name + " is Trending. Add this product to your Product Range in order to "+"boost your sales and earn profit."
+                self.recommend_product.append(recommendation)                    
             else:
-                recommendation = trending_product_subcategory_name + " is Trending. Add this category to your category Range in order to"+"boost your sales and earn profit."
-                                    
+                recommendation = trending_product_subcategory_name + " is Trending. Add this category to your category Range in order to "+"boost your sales and earn profit."
+                self.recommend_category.append(recommendation)                    
         self.recommendation_list.append(recommendation)
 
 def main(request):
@@ -209,4 +215,9 @@ def main(request):
     obj = ProvideTrendRecommendations(current_sellerid)
     obj.template()
     recommendations = obj.recommendation_list
-    return render(request,'recommendation.html',{'recommendations':recommendations})
+    recommend_inventory = obj.recommend_inventory
+    recommend_product = obj.recommend_product
+    recommend_category = obj.recommend_category
+    recommend_lowerprice = obj.recommend_lowerprice
+    recommend_othermeasures = obj.recommend_othermeasures
+    return render(request,'recommendation.html',{'recommendations':recommendations,'recommend_inventory':recommend_inventory,'recommend_product':recommend_product,'recommend_category':recommend_category,'recommend_lowerprice':recommend_lowerprice,'recommend_othermeasures':recommend_othermeasures})

@@ -15,7 +15,7 @@
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="performance.css" rel="stylesheet">
+    <link href="feedback.css" rel="stylesheet">
 
     <script src="{% static '/assets/js/vendor/popper.min.js' %}"></script> 
     <script src="{% static '/dist/js/bootstrap.min.js' %}"></script> 
@@ -27,11 +27,11 @@
         {% block headerbar %}
     
 
-    <div class="container-fluid">
+    <div  class="container-fluid">
       <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-          <div class="sidebar-sticky">
-            <ul class="nav flex-column">
+        <nav  class="col-md-2 d-none d-md-block bg-light sidebar">
+          <div  class="sidebar-sticky">
+            <ul  class="nav flex-column">
               <li class="nav-item">
                 <a class="nav-link active" href="#">
                   <span data-feather="layers"></span>
@@ -40,9 +40,9 @@
               </li>
               <form method="get"> {% csrf_token %}
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a style="min-width: 170px" class="nav-link" href="#">
                   Date
-                    From:<input type="date" name="from_date"> To: <input type="date" name="to_date"> 
+                    From:<input type="date" name="from_date"> </br>To: <input type="date" name="to_date"> 
                 </a>
               </li>
               <li class="nav-item">
@@ -62,7 +62,7 @@
               <li class="nav-item">
                 <a class="nav-link" href="#">
                   Product </br>
-                  <select name="product">
+                  <select style="max-width: 170px" name="product">
                       <option value="" selected disabled hidden>Choose here</option>
                       {% for key,pid in seller_products.items %}
                     <option value={{pid}}>{{pid}}</option>
@@ -99,14 +99,118 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                 <h1 class="h2">Feedbacks</h1>
             </div>
-            {% for key, value in filtered_result.items %}
+
+            <style>
+                .part2
+                {
+                  display : flex;
+                  flex-flow : row wrap;
+                }
+                
+                div.innersection {
+                  margin: 10px;
+                  background-color: white;
+                  box-shadow: 2px 3px 3px 2px rgba(3, 46, 92, 0.2);
+                  border-color: lightgrey;
+                  border-width: 1px;
+                  border-style: solid;
+                  transition-duration: 2s;
+                  -webkit-transition-duration: 2s;
+                }
+                
+                div.innersection:hover {
+                  box-shadow: 2px 3px 3px 2px rgba(3, 46, 92, 0.7);
+                  border-color: grey;
+                }
+                
+                #block1
+                {
+                  
+                  flex-basis : 60%;
+                }
+                
+                #block2
+                {
+                  
+                  flex-basis : 40%;
+                }
+                
+                #block3
+                {
+                  
+                  flex-basis : 33.33%;
+                }
+                
+                #block4
+                {
+                  
+                  flex-basis : 33.33%;
+                }
+                
+                #block5
+                {
+                  
+                  flex-basis : 33.33%;
+                }
+                
+                @media (max-width : 800px)
+                {
+                  #block1{
+                    flex-basis : 100%;
+                  }
+                  #block2, #block3, #block4, #block5{
+                    flex-basis : 50%;
+                  }
+                }
+                
+                @media (max-width : 600px)
+                {
+                  #block1,#block2,#block3,#block4,#block5
+                  {
+                    flex-basis : 100%;
+                  }
+                }
+                </style>
+{% for key, value in filtered_result.items %}
+            <MAIN id="part2">
+                
+                
+                <SECTION style="min-height : 80px;
+                                min-width : 100%; 
+                                padding-top: 20px;
+                                padding-right: 20px;
+                                padding-bottom: 10px;
+                                padding-left: 20px;
+                                display: inline-block;
+                                flex-basis : 33.33%;
+                                color:white" id="block1">
+                  <DIV style="  min-height : 80px;
+                                min-width : 50%;
+                                padding-top: 20px;
+                                padding-right: 20px;
+                                padding-bottom: 20px;
+                                padding-left: 20px;
+                                font-weight: 500;
+                                background-color: #4c83a5" class="innersection">
+                                {% for details in value %}
+                                {{details}} <br>
+                                {%endfor%}
+                  </DIV>
+                </SECTION>
+                
+                
+            </MAIN>
+            {%endfor%}
+
+
+         <!--   {% for key, value in filtered_result.items %}
             <div>
            {% for details in value %}
                 {{details}} </br>
            {%endfor%}
             {%endfor%}
           </div>
-
+        -->
           
         </main>
       </div>

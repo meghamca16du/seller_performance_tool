@@ -17,7 +17,7 @@
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="performance.css" rel="stylesheet">
+    <link href="recommendation.css" rel="stylesheet">
 
     <LINK rel="stylesheet" type="text/css" href="style.css">
 
@@ -76,24 +76,8 @@
 
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
               
-              <a class="d-flex align-items-center text-muted" href="#">
-                <span data-feather="plus-circle"></span>
-              </a>
+              
             </h6>
-            <ul class="nav flex-column mb-2">
-              <li class="nav-item">
-                
-              </li>
-              <li class="nav-item">
-                
-              </li>
-              <li class="nav-item">
-                
-              </li>
-              <li class="nav-item">
-                
-              </li>
-            </ul>
           </div>
         </nav>
 
@@ -130,7 +114,8 @@ div.innersection:hover {
 #block1
 {
 	
-	flex-basis : 60%;
+  flex-basis : 60%;
+  
 }
 
 #block2
@@ -177,31 +162,134 @@ div.innersection:hover {
 </style>
             
             <MAIN id="part2">
-                {% for recommend in recommendations %}
+                {% for recommend in recommend_inventory %}
                 <SECTION style="min-height : 80px;
-                                min-width : 50%; 
+                                min-width : 100%; 
                                 padding-top: 20px;
                                 padding-right: 20px;
                                 padding-bottom: 10px;
                                 padding-left: 20px;
                                 display: inline-block;
-                                flex-basis : 33.33%;" id="block1">
+                                flex-basis : 33.33%;
+                                color:white" id="block1">
                   <DIV style="  min-height : 80px;
                                 min-width : 50%;
                                 padding-top: 20px;
                                 padding-right: 20px;
                                 padding-bottom: 20px;
                                 padding-left: 20px;
-                                font-weight: 500;" class="innersection">
+                                font-weight: 500;
+                                background-color: rgb(233, 30, 99);" class="innersection">
                      {{recommend}}
                   </DIV>
                 </SECTION>
                 {%endfor%}
             </MAIN>
+
+            <MAIN id="part2">
+              {% for recommend in recommend_product %}
+              <SECTION style="min-height : 80px;
+                              min-width : 100%; 
+                              padding-top: 20px;
+                              padding-right: 20px;
+                              padding-bottom: 10px;
+                              padding-left: 20px;
+                              display: inline-block;
+                              flex-basis : 33.33%;
+                              color:white" id="block1">
+                <DIV style="  min-height : 80px;
+                              min-width : 50%;
+                              padding-top: 20px;
+                              padding-right: 20px;
+                              padding-bottom: 20px;
+                              padding-left: 20px;
+                              font-weight: 500;
+                              background-color: rgb(0, 150, 136);" class="innersection">
+                   {{recommend}}
+                </DIV>
+              </SECTION>
+              {%endfor%}
+          </MAIN>
+
+          <MAIN id="part2">
+            {% for recommend in recommend_category %}
+            <SECTION style="min-height : 80px;
+                            min-width : 100%; 
+                            padding-top: 20px;
+                            padding-right: 20px;
+                            padding-bottom: 10px;
+                            padding-left: 20px;
+                            display: inline-block;
+                            flex-basis : 33.33%;
+                            color:white" id="block1">
+              <DIV style="  min-height : 80px;
+                            min-width : 50%;
+                            padding-top: 20px;
+                            padding-right: 20px;
+                            padding-bottom: 20px;
+                            padding-left: 20px;
+                            font-weight: 500;
+                            background-color: rgb(199, 0, 57);" class="innersection">
+                 {{recommend}}
+              </DIV>
+            </SECTION>
+            {%endfor%}
+        </MAIN>
+
+        <MAIN id="part2">
+          {% for recommend in recommend_lowerprice %}
+          <SECTION style="min-height : 80px;
+                          min-width : 100%; 
+                          padding-top: 20px;
+                          padding-right: 20px;
+                          padding-bottom: 10px;
+                          padding-left: 20px;
+                          display: inline-block;
+                          flex-basis : 33.33%;
+                          color:white" id="block1">
+            <DIV style="  min-height : 80px;
+                          min-width : 50%;
+                          padding-top: 20px;
+                          padding-right: 20px;
+                          padding-bottom: 20px;
+                          padding-left: 20px;
+                          font-weight: 500;
+                          background-color: rgba(182, 36, 36, 0.911);" class="innersection">
+               {{recommend}}
+            </DIV>
+          </SECTION>
+          {%endfor%}
+      </MAIN>
+
+      <MAIN id="part2">
+        {% for recommend in recommend_othermeasures %}
+        <SECTION style="min-height : 80px;
+                        min-width : 100%; 
+                        padding-top: 20px;
+                        padding-right: 20px;
+                        padding-bottom: 10px;
+                        padding-left: 20px;
+                        display: inline-block;
+                        flex-basis : 33.33%;
+                        color:white" id="block1">
+          <DIV style="  min-height : 80px;
+                        min-width : 50%;
+                        padding-top: 20px;
+                        padding-right: 20px;
+                        padding-bottom: 20px;
+                        padding-left: 20px;
+                        font-weight: 500;
+                        background-color: rgb(33, 87, 122);" class="innersection">
+             {{recommend}}
+          </DIV>
+        </SECTION>
+        {%endfor%}
+    </MAIN>
   
         </main>
       </div>
     </div>
+
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
