@@ -179,7 +179,7 @@ div.innersection:hover {
                                 padding-bottom: 20px;
                                 padding-left: 20px;
                                 font-weight: 500;
-                                background-color: rgb(233, 30, 99);" class="innersection">
+                                background-color: rgb(15, 100, 137);" class="innersection">
                      {{recommend}}
                   </DIV>
                 </SECTION>
@@ -204,7 +204,7 @@ div.innersection:hover {
                               padding-bottom: 20px;
                               padding-left: 20px;
                               font-weight: 500;
-                              background-color: rgb(0, 150, 136);" class="innersection">
+                              background-color: rgb(94, 87, 149);" class="innersection">
                    {{recommend}}
                 </DIV>
               </SECTION>
@@ -229,7 +229,7 @@ div.innersection:hover {
                             padding-bottom: 20px;
                             padding-left: 20px;
                             font-weight: 500;
-                            background-color: rgb(199, 0, 57);" class="innersection">
+                            background-color: rgb(170, 132, 169);" class="innersection">
                  {{recommend}}
               </DIV>
             </SECTION>
@@ -279,7 +279,7 @@ div.innersection:hover {
                         padding-bottom: 20px;
                         padding-left: 20px;
                         font-weight: 500;
-                        background-color: rgb(33, 87, 122);" class="innersection">
+                        background-color: rgba(182, 36, 36, 0.911);" class="innersection">
              {{recommend}}
           </DIV>
         </SECTION>
@@ -290,6 +290,8 @@ div.innersection:hover {
       </div>
     </div>
 
+
+    
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -305,37 +307,7 @@ div.innersection:hover {
       feather.replace()
     </script>
 
-    <!-- Graphs -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
-    <script>
-      var ctx = document.getElementById("myChart");
-      var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-          datasets: [{
-            data: [15339, 21345, 18483, 24003, 23489, 24092, 12034],
-            lineTension: 0,
-            backgroundColor: 'transparent',
-            borderColor: '#007bff',
-            borderWidth: 4,
-            pointBackgroundColor: '#007bff'
-          }]
-        },
-        options: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: false
-              }
-            }]
-          },
-          legend: {
-            display: false,
-          }
-        }
-      });
-    </script>
+   
     {% endblock headerbar %}
   </body>
 </html>
