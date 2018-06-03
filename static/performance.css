@@ -98,12 +98,6 @@ main
 	flex-flow : row wrap;
 }
 
-section, div
-{
-	min-height : 150px;
-	min-width : 150px;
-}
-
 div.innersection {
   margin: 10px;
   background-color: white;

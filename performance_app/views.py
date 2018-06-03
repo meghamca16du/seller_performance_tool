@@ -513,7 +513,7 @@ def main(request):
     for name,percentage,recommendation in zip(trait_name,trait_value,recommendation_list):
         trait_percentage_dictionary[name]=percentage
         trait_recommendation_dictionary[name]=recommendation
-    return render(request,'performance2.html',{'trait_percentage_dictionary':trait_percentage_dictionary,'trait_recommendation_dictionary':trait_recommendation_dictionary})
+    return render(request,'performance.html',{'trait_percentage_dictionary':trait_percentage_dictionary,'trait_recommendation_dictionary':trait_recommendation_dictionary})
 
 def ReturnValueForDashboard(request):
     current_sellerid = request.user.username

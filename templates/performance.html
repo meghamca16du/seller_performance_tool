@@ -11,20 +11,34 @@
 
     <title>Performance</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Bootstrap core CSS 
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">  -->
 
     <!-- Custom styles for this template -->
-    <link href="performance.css" rel="stylesheet">
+    <link href="performance.css" rel="stylesheet">  
 
-    <script src="{% static '/assets/js/vendor/popper.min.js' %}"></script> 
-    <script src="{% static '/dist/js/bootstrap.min.js' %}"></script> 
-    <script src="{% static '/assets/js/vendor/holder.min.js' %}"></script>  
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
   </head>
 
   <body>
         {% block headerbar %}
+
+<style>
+      .button {
+          -webkit-transition-duration: 0.4s; /* Safari */
+          transition-duration: 0.4s;
+        }
+
+.button:hover {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+      </style>
     
 
     <div class="container-fluid">
@@ -35,133 +49,662 @@
               <li class="nav-item">
                 <a class="nav-link active" href="#">
                   <span data-feather="home"></span>
-                  All Values <span class="sr-only">(current)</span>
+                  Traits <span class="sr-only">(current)</span>
+                  
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file"></span>
-                  Late Shipment Rate
+                <a class="nav-link" href="#late_shipment">
+                  
+                  <button class="w3-bar-item w3-button tablink" style="width:100%;" onclick="openCity(event, 'late-shipment')">Late Shipment Rate</button>
+                  
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="shopping-cart"></span>
-                  On Time Delivery Rate
+                <a class="nav-link" href="#ontime_delivery">
+                  
+                  <button class="w3-bar-item w3-button tablink" style="width:100%;" onclick="openCity(event, 'on-time-delivery')">On Time Delivery Rate</button>
+                  
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="users"></span>
-                  Hit To Success Ratio
+                <a class="nav-link" href="#hit_to_success">
+                  
+                  <button class="w3-bar-item w3-button tablink" style="width:100%;" onclick="openCity(event, 'hit-to-success')">Hit to Success Ratio</button>
+                  
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="bar-chart-2"></span>
-                  Parameter
+                <a class="nav-link" href="#return">
+                  
+                  <button class="w3-bar-item w3-button tablink" style="width:100%;" onclick="openCity(event, 'return-rate')">Return Rate</button>
+                  
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="layers"></span>
-                  Parameter
+                <a class="nav-link" href="#positive_feedbacks">
+                  
+                  <button class="w3-bar-item w3-button tablink" style="width:100%;" onclick="openCity(event, 'positive')">Positive Feedbacks</button>
+                  
                 </a>
               </li>
-            </ul>
-
-            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-              
-              <a class="d-flex align-items-center text-muted" href="#">
-                <!--  <span data-feather="plus-circle"></span> -->
-              </a>
-            </h6>
-            <ul class="nav flex-column mb-2">
               <li class="nav-item">
-                
+                <a class="nav-link" href="#negative_feedbacks">
+                  <button class="w3-bar-item w3-button tablink" style="width:100%;" onclick="openCity(event, 'negative')">Negative Feedbacks</button>
+                  
+                </a>
               </li>
-              <li class="nav-item">
-                
-              </li>
-              <li class="nav-item">
-                
-              </li>
-              <li class="nav-item">
-                
-              </li>
-            </ul>
           </div>
         </nav>
+        
+
+
+        <script>
+          function openCity(evt, cityName) {
+            var i, x, tablinks;
+            x = document.getElementsByClassName("city");
+            for (i = 0; i < x.length; i++) {
+               x[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < x.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" w3-red", ""); 
+            }
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " w3-red";
+          }
+          </script>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
             <h1 class="h2">All values</h1>
-
-            <form method="get"> {% csrf_token %}
-              From:<input align="right" type="date" name="from_date"> 
-              To  : <input type="date" name="to_date"> 
-              <input type="submit" name="Go">
+            <form method=GET>
+              From:<input align="right" type="date" name="from_date"> To: <input type="date" name="to_date"> 
+              <input type="submit" name="Go" value="Apply" >
             </form>
           </div>
           
-          <ul>
-             {% for trait_component ,trait_value, recommendation in recommendation_trait_list %}
-             <div>
-                <li>  <h3> {{ trait_component }} </h3>  {{trait_value}} %</br> {{recommendation}} </li>
-              </div>
-            </br></br>
-            {%endfor%}
-          </ul> 
+          <style>
+            * {
+            box-sizing: border-box;
+          }
+          
+          .container2 {
+            height: 100px;
+            max-width: 500px;
+            background: #f2f2f2;
+            margin: 0 auto;
+          }
+          
+          .progress-bar {
+            width: 100%;
+            padding-left: 30px;
+            margin: 0 0 10px;
+            overflow: hidden;
+            padding-right: 30px; /* Separate bars from container */
+            background-color: rgb(242,242,242);
+          }
+          
+          .progress-title-holder {
+            padding-bottom: 7px;
+            position: relative;
+            margin: 5px 0;
+            font-family: Montserrat, sans-serif;
+            font-size: 15px;
+            line-height: 15px;
+            font-weight: 400;
+            color: #2e2e2e;
+          }
+          
+          .progress-title {
+            z-index: 100;
+          }
+          
+          .progress-number-wrapper {
+            width: 100%;
+            z-index: 10;
+          }
+          
+          .progress-number-mark {
+            margin-bottom: 4px;
+            border-radius: 3px;
+            background-color: rgb(22, 23, 29);
+            padding: 0 8px;
+            position: absolute;
+            bottom: 0;
+            -moz-transform: translateX(-50%);
+            -o-transform: translateX(-50%);
+            transform: translateX(-50%);
+            -ms-transform: translateX(-50%);
+            -webkit-transform: translateX(-50%);
+          }
+          
+          .progress-number-wrapper,
+          .progress-number-mark {
+            font-family: Open Sans, sans-serif;
+            font-size: 11px;
+            line-height: 24px;
+            height: 24px;
+            letter-spacing: 0px;
+            font-weight: 600;
+            font-style: normal;
+            text-transform: none;
+            color: #fff;
+          }
+          
+          .down-arrow {
+            border-left: 3px solid transparent;
+            border-right: 3px solid transparent;
+            border-top: 3px solid #16171d;
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            -moz-transform: translateX(-50%);
+            -o-transform: translateX(-50%);
+            transform: translateX(-50%);
+            -ms-transform: translateX(-50%);
+            -webkit-transform: translateX(-50%);
+          }
+          
+          .progress-content-outter {
+            height: 18px;
+            background-color: #fff;
+          }
+          
+          .progress-bar .progress-content {
+            height: 100%;
+            /* when gradient is not supported, use background-color */
+            background-color: rgba(67, 243, 183, 0.92);
+            background-image: repeating-linear-gradient(
+                135deg,
+                transparent,
+                transparent 20%,
+                rgba(0, 0, 0, 0.1) 33%,
+                rgba(0, 0, 0, 0.1) 66%,
+                transparent 66%
+              ),
+              -webkit-linear-gradient(top, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.2)),
+              -webkit-linear-gradient(left, var(--col1, #09c), var(--col2, #f44));
+            background-size: 35px 20px, 100% 100%, 100% 100%;
+            border-radius: 0 3px 3px 0;
+            width: 0%; /* Initial value */
+          }
+          
+          .progress-bar.color-2 .progress-content {
+            --col1: #09c;
+            --col2: #ff0;
+          }
+          
+          .progress-bar.color-3 .progress-content {
+            --col1: red;
+            --col2: #ff0;
+          }
+            
+            </style>
+<div style="height: 30%;
+max-width: 100%; padding-top: 40px;padding-bottom: 40px; back"class="container2">
+  <!-- late shipment bar -->
+  <div class="progress-bar" data-percentage="{{trait_percentage_dictionary.late_shipment_rate}}">
+    <h4 class="progress-title-holder">
+      <span class="progress-title">Photoshop</span>
+      <span class="progress-number-wrapper">
+        <span class="progress-number-mark">
+          <span class="percent"></span>
+          <span class="down-arrow"></span>
+        </span>
+      </span>
+    </h4>
+    <div class="progress-content-outter">
+      <div class="progress-content"></div>
+    </div>
+  </div> 
+  <!-- on time delivery bar -->
+  <div class="progress-bar color-2" data-percentage="{{trait_percentage_dictionary.on_time_delivery}}">
+    <h4 class="progress-title-holder clearfix">
+      <span class="progress-title">Illustrator</span>
+      <span class="progress-number-wrapper">
+        <span class="progress-number-mark">
+          <span class="percent"></span>
+          <span class="down-arrow"></span>
+        </span>
+      </span>
+    </h4>
+    <div class="progress-content-outter">
+      <div class="progress-content"></div>
+    </div>
+  </div>
+  <!-- hit to success bar -->
+  <div class="progress-bar color-3" data-percentage="{{trait_percentage_dictionary.hit_to_success_ratio}}">
+    <h4 class="progress-title-holder clearfix">
+      <span class="progress-title">InDesign</span>
+      <span class="progress-number-wrapper">
+        <span class="progress-number-mark">
+          <span class="percent"></span>
+          <span class="down-arrow"></span>
+        </span>
+      </span>
+    </h4>
+    <div class="progress-content-outter">
+      <div class="progress-content"></div>
+    </div>
+  </div> 
+  </div>
+  <div style="height: 30%;
+  max-width: 100%;padding-top: 40px;padding-bottom: 40px"class="container2">
+    <!-- late shipment bar -->
+    <div class="progress-bar" data-percentage="{{trait_percentage_dictionary.return_rate}}">
+      <h4 class="progress-title-holder">
+        <span class="progress-title">Photoshop</span>
+        <span class="progress-number-wrapper">
+          <span class="progress-number-mark">
+            <span class="percent"></span>
+            <span class="down-arrow"></span>
+          </span>
+        </span>
+      </h4>
+      <div class="progress-content-outter">
+        <div class="progress-content"></div>
+      </div>
+    </div> 
+    <!-- on time delivery bar -->
+    <div class="progress-bar color-2" data-percentage="{{trait_percentage_dictionary.positive_feedbacks}}">
+      <h4 class="progress-title-holder clearfix">
+        <span class="progress-title">Illustrator</span>
+        <span class="progress-number-wrapper">
+          <span class="progress-number-mark">
+            <span class="percent"></span>
+            <span class="down-arrow"></span>
+          </span>
+        </span>
+      </h4>
+      <div class="progress-content-outter">
+        <div class="progress-content"></div>
+      </div>
+    </div>
+    <!-- hit to success bar -->
+    <div class="progress-bar color-3" data-percentage="{{trait_percentage_dictionary.negative_feedbacks}}">
+      <h4 class="progress-title-holder clearfix">
+        <span class="progress-title">InDesign</span>
+        <span class="progress-number-wrapper">
+          <span class="progress-number-mark">
+            <span class="percent"></span>
+            <span class="down-arrow"></span>
+          </span>
+        </span>
+      </h4>
+      <div class="progress-content-outter">
+        <div class="progress-content"></div>
+      </div>
+    </div> 
+    </div>
 
+
+
+          <style>
+              .part2
+              {
+                display : flex;
+                flex-flow : row wrap;
+              }
+              
+              div.innersection {
+                margin: 10px;
+                background-color: white;
+                box-shadow: 2px 3px 3px 2px rgba(3, 46, 92, 0.2);
+                border-color: lightgrey;
+                border-width: 1px;
+                border-style: solid;
+                transition-duration: 2s;
+                -webkit-transition-duration: 2s;
+              }
+              
+              div.innersection:hover {
+                box-shadow: 2px 3px 3px 2px rgba(3, 46, 92, 0.7);
+                border-color: grey;
+              }
+              
+              #block1
+              {
+                
+                flex-basis : 60%;
+              }
+              
+              @media (max-width : 800px)
+              {
+                #block1{
+                  flex-basis : 100%;
+                }
+              }
+              
+              @media (max-width : 600px)
+              {
+                #block1
+                {
+                  flex-basis : 100%;
+                }
+              }
+              </style>
+
+
+ 
+          <p>
+              <div id="late-shipment" class="w3-container city" style="display:none">
+                  <MAIN id="part2">
+              
+              
+                      <SECTION style="min-height : 80px;
+                                      min-width : 100%; 
+                                      padding-top: 40px;
+                                      padding-right: 20px;
+                                      padding-bottom: 10px;
+                                      padding-left: 20px;
+                                      display: inline-block;
+                                      flex-basis : 33.33%;
+                                      " id="block1">
+                      <DIV style    ="  min-height : 80px;
+                                      min-width : 50%;
+                                      padding-top: 20px;
+                                      padding-right: 20px;
+                                      padding-bottom: 20px;
+                                      padding-left: 20px;
+                                      font-weight: 500;
+                                      " class="innersection">
+                                     
+                        
+                  <h3>Late Shipment</h3>
+                    <br>
+                    
+                  <div class="container2">
+                    <!-- First bar -->
+                    <div style="height: 100px;" class="progress-bar" data-percentage="{{trait_percentage_dictionary.late_shipment_rate}}">
+                      <h4  class="progress-title-holder">
+                        <span style="text-align: left" class="progress-title"></span>
+                        <span class="progress-number-wrapper">
+                          <span class="progress-number-mark">
+                            <span class="percent"></span>
+                            <span class="down-arrow"></span>
+                          </span>
+                        </span>
+                      </h4>
+                      <div class="progress-content-outter">
+                        <div class="progress-content"></div>
+                      </div>
+                    </div> 
+                    </div>
+                    <br>
+                    <br>
+                  <p>This is the number of seller-fulfilled orders with shipments done after the 
+                    expected shipment date divided by the total number of seller-fulfilled orders in the relevant 
+                    time period.
+                    Orders that are shipped late may lead to a negative impact on customer experience.</p>
+
+
+                    
+                    
+
+                    <div><h4>Recommendation</h4>
+                      <p>
+                        {{trait_recommendation_dictionary.late_shipment_rate}}
+                      </p>
+                    </div>
+                    <br>
+                    <br>
+                    
+                  </DIV>
+                </SECTION>
+              </div>
+            </p>
+
+          <p>
+            <div id="on-time-delivery" class="w3-container city" style="display:none">
+                <MAIN id="part2">
+              
+              
+                    <SECTION style="min-height : 80px;
+                                    min-width : 100%; 
+                                    padding-top: 40px;
+                                    padding-right: 20px;
+                                    padding-bottom: 10px;
+                                    padding-left: 20px;
+                                    display: inline-block;
+                                    flex-basis : 33.33%;
+                                    " id="block1">
+                      <DIV style="  min-height : 80px;
+                                    min-width : 50%;
+                                    padding-top: 20px;
+                                    padding-right: 20px;
+                                    padding-bottom: 20px;
+                                    padding-left: 20px;
+                                    font-weight: 500;
+                                    " class="innersection">
+              <h3>On Time Delivery</h3>
+
+              <p>This is the number of seller-fulfilled orders with shipments done after the expected
+              shipment date divided by the total number of seller-fulfilled orders in the relevant time period.</p>
+
+              <p>Orders that are shipped late may lead to a negative impact on customer experience.</p>
+              {{trait_percentage_dictionary.on_time_delivery}}
+              <div><h4>Recommendation</h4>
+                <p>
+                    {{trait_recommendation_dictionary.on_time_delivery}}
+                  </p>
+            </div>
+            <br>
+            <br>
+          </DIV>
+          </SECTION>
+          </div>
+          </p>
+
+
+          <p>
+            <div id="hit-to-success" class="w3-container city" style="display:none">
+                <MAIN id="part2">
+              
+              
+                    <SECTION style="min-height : 80px;
+                                    min-width : 100%; 
+                                    padding-top: 40px;
+                                    padding-right: 20px;
+                                    padding-bottom: 10px;
+                                    padding-left: 20px;
+                                    display: inline-block;
+                                    flex-basis : 33.33%;
+                                    " id="block1">
+                      <DIV style="  min-height : 80px;
+                                    min-width : 50%;
+                                    padding-top: 20px;
+                                    padding-right: 20px;
+                                    padding-bottom: 20px;
+                                    padding-left: 20px;
+                                    font-weight: 500;
+                                    " class="innersection">
+              <h3>Hit To Success Ratio</h3>
+
+              <p>It is defined as the number of sales of a product divided by the number of customers who 
+              visited the site to find out about the product  in the relevant time period.</p>
+              
+              <p>Greater the hit to success ratio, better the performance.</p>
+              {{trait_percentage_dictionary.hit_to_success_ratio}}
+              <div><h4>Recommendation</h4>
+                <p>
+                    {{trait_recommendation_dictionary.hit_to_success_ratio}}
+                  </p>
+            </div>
+            <br>
+            <br>
+          </DIV>
+          </SECTION>
+          </div>
+          </p>
+
+
+          <p>
+            <div id="return-rate" class="w3-container city" style="display:none">
+                <MAIN id="part2">
+              
+              
+                    <SECTION style="min-height : 80px;
+                                    min-width : 100%; 
+                                    padding-top: 40px;
+                                    padding-right: 20px;
+                                    padding-bottom: 10px;
+                                    padding-left: 20px;
+                                    display: inline-block;
+                                    flex-basis : 33.33%;
+                                    " id="block1">
+                      <DIV style="  min-height : 80px;
+                                    min-width : 50%;
+                                    padding-top: 20px;
+                                    padding-right: 20px;
+                                    padding-bottom: 20px;
+                                    padding-left: 20px;
+                                    font-weight: 500;
+                                    " class="innersection">
+              <h3>Return Rate <var id="return_rate"></var></h3>
+ 
+              <p>It is calculated as the number of returned orders or products as a percentage of the number 
+              that has been sold.</p>
+
+              <p>A high return rate is not a good score as it reflects consumer unhappiness.</p>
+              {{trait_percentage_dictionary.return_rate}}
+              <div><h4>Recommendation</h4>
+                <p>
+                    {{trait_recommendation_dictionary.return_rate}}
+                </p>
+            </div>
+            <br>
+            <br>
+          </DIV>
+          </SECTION>
+          </div>
+          </p>
+
+
+          <p>
+            <div id="positive" class="w3-container city" style="display:none">
+                <MAIN id="part2">
+              
+              
+                    <SECTION style="min-height : 80px;
+                                    min-width : 100%; 
+                                    padding-top: 40px;
+                                    padding-right: 20px;
+                                    padding-bottom: 10px;
+                                    padding-left: 20px;
+                                    display: inline-block;
+                                    flex-basis : 33.33%;
+                                    " id="block1">
+                      <DIV style="  min-height : 80px;
+                                    min-width : 50%;
+                                    padding-top: 20px;
+                                    padding-right: 20px;
+                                    padding-bottom: 20px;
+                                    padding-left: 20px;
+                                    font-weight: 500;
+                                    " class="innersection">
+                <h3>Positive Feedbacks <var id="positive_feedbacks"></var></h3>
+                <p>It the percentage of positive feedbacks, calculated as number of positive feedbacks
+                divided by total number of feedbacks in the relevant time period.</p>
+                {{trait_percentage_dictionary.positive_feedbacks}}
+              <div><h4>Recommendation</h4>
+                <p>
+                    {{trait_recommendation_dictionary.positive_feedbacks}}
+                </p>
+
+            </div>
+            <br>
+            <br>
+          </DIV>
+          </SECTION>
+          </div>
+          </p>
+
+
+          <p>
+            <div id="negative" class="w3-container city" style="display:none">
+                <MAIN id="part2">
+              
+              
+                    <SECTION style="min-height : 80px;
+                                    min-width : 100%; 
+                                    padding-top: 40px;
+                                    padding-right: 20px;
+                                    padding-bottom: 10px;
+                                    padding-left: 20px;
+                                    display: inline-block;
+                                    flex-basis : 33.33%;
+                                    " id="block1">
+                      <DIV style="  min-height : 80px;
+                                    min-width : 50%;
+                                    padding-top: 20px;
+                                    padding-right: 20px;
+                                    padding-bottom: 20px;
+                                    padding-left: 20px;
+                                    font-weight: 500;
+                                    " class="innersection">
+                <h3>Negative Feedbacks<var id="negative_feedbacks"></var></h3>
+
+                <p>It the percentage of negative feedbacks, calculated as number of negative feedbacks
+                divided by total number of feedbacks in the relevant time period.</p>
+
+                <p>Performance is negatively affected when you receive 1-star or 2-star feedback comments. </p>
+                {{trait_percentage_dictionary.negative_feedbacks}}
+                <div><h4>Recommendation</h4>
+                  <p>
+                      {{trait_recommendation_dictionary.negative_feedbacks}}
+                  </p>
+            </div>
+            <br>
+            <br>
+          </DIV>
+          </SECTION>
+          </div>
+          </p>
         </main>
       </div>
     </div>
 
+    
+    
+
+
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script>
+      jQuery(document).ready(function(){
+      
+      jQuery('.progress-bar').each(function() {
+      jQuery(this).find('.progress-content').animate({
+        width:jQuery(this).attr('data-percentage')
+      },2000);
+      
+      jQuery(this).find('.progress-number-mark').animate(
+        {left:jQuery(this).attr('data-percentage')},
+        {
+         duration: 2000,
+         step: function(now, fx) {
+           var data = Math.round(now);
+           jQuery(this).find('.percent').html(data + '%');
+         }
+      });  
+      });
+      });
+  </script>
+      
+    
     <script src="../../../../assets/js/vendor/popper.min.js"></script>
-    <script src="../../../../dist/js/bootstrap.min.js"></script>
+   
 
     <!-- Icons -->
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
     <script>
       feather.replace()
     </script>
-
-    <!-- Graphs -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
-    <script>
-      var ctx = document.getElementById("myChart");
-      var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-          datasets: [{
-            data: [15339, 21345, 18483, 24003, 23489, 24092, 12034],
-            lineTension: 0,
-            backgroundColor: 'transparent',
-            borderColor: '#007bff',
-            borderWidth: 4,
-            pointBackgroundColor: '#007bff'
-          }]
-        },
-        options: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: false
-              }
-            }]
-          },
-          legend: {
-            display: false,
-          }
-        }
-      });
-    </script>
+    
     {% endblock headerbar %}
   </body>
 </html>
