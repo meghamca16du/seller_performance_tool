@@ -12,7 +12,7 @@
     <title>Performance</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static '/bootstrap.min.css' %}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="feedback.css" rel="stylesheet">
@@ -29,26 +29,27 @@
 
     <div  class="container-fluid">
       <div class="row">
-        <nav  class="col-md-2 d-none d-md-block bg-light sidebar">
+        <nav  style=" border-right: 3px solid #111;width:7cm; background-color:#D5E3C5; "class="col-md-2 d-none d-md-block sidebar">
           <div  class="sidebar-sticky">
             <ul  class="nav flex-column">
               <li class="nav-item">
-                <a class="nav-link active" href="#">
+                <a style="font-weight: 700"class="nav-link active" href="#">
+                  <br>
                   <span data-feather="layers"></span>
                  Apply Filters <span class="sr-only">(current)</span>
                 </a>
               </li>
               <form method="get"> {% csrf_token %}
               <li class="nav-item">
-                <a style="min-width: 170px" class="nav-link" href="#">
+                <a style="font-weight: 700"style="min-width: 170px" class="nav-link" href="#">
                   Date
-                    From:<input type="date" name="from_date"> </br>To: <input type="date" name="to_date"> 
+                    From:<input  type="date" name="from_date"> </br>To: <input type="date" name="to_date"> 
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a style="font-weight: 700" class="nav-link" href="#">
                   Rating
-                  <select name="rating">
+                  <select  style="width:5.3cm" name="rating">
                     <option value="" selected disabled hidden>Choose here</option>
                     <option value="1" >1</option>
                     <option value="2" >2</option>
@@ -60,44 +61,49 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a style="font-weight: 700"class="nav-link" href="#">
                   Product </br>
-                  <select style="max-width: 170px" name="product">
+                  <select style="max-width: 200px" name="product">
                       <option value="" selected disabled hidden>Choose here</option>
                       {% for key,pid in seller_products.items %}
-                    <option value={{pid}}>{{pid}}</option>
+                    <option style="min-width:5.3cm;" value={{pid}}>{{pid}}</option>
                    {%endfor%}
                   </select>
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a style="font-weight: 700"class="nav-link" href="#">
                   Keyword
-                    <input type="text" name="keyword">
+                    <input style="width:5.3cm"type="text" name="keyword">
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <input type="checkbox" name = "Positive Feedbacks">
+                <a style="font-weight: 700"class="nav-link" href="#">
+                    <input style="width:3.5mm;height: 4mm;" type="checkbox" name = "Positive Feedbacks">
                   Positive Feedbacks
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <input type="checkbox" name = "Negative Feedbacks">
+                <a style="font-weight: 700"class="nav-link" href="#">
+                    <input style="width:3.5mm;height: 4mm;"type="checkbox" name = "Negative Feedbacks">
                   Negative Feedbacks
                   
                 </a>
               </li>
-              <input type="submit" name="Apply" value = "Apply Filter" >
+              <br>
+              <input style="font-weight: 700;font-size:0.5cm;width:6.5cm;height:1cm; background-color: rgb(124, 148, 97);"type="submit" name="Apply" value = "Enter To Apply" >
               </form>
             </ul>
           </div>
+          
         </nav>
+        
+
+        
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                <h1 class="h2">Feedbacks</h1>
+              <h1 style="font-weight:700;font-size: 0.9cm;"class="h2">FEEDBACKS</h1>
             </div>
 
             <style>
@@ -155,15 +161,16 @@
                                 padding-left: 20px;
                                 display: inline-block;
                                 flex-basis : 33.33%;
-                                color:white" id="block1">
+                                color:#111" id="block1">
                   <DIV style="  min-height : 80px;
                                 min-width : 50%;
                                 padding-top: 20px;
                                 padding-right: 20px;
                                 padding-bottom: 20px;
                                 padding-left: 20px;
-                                font-weight: 500;
-                                background-color: #4c83a5" class="innersection">
+                                font-weight: 690;
+                                font-size: 4.5mm;
+                                background-color: rgb(162, 187, 133)" class="innersection">
                                 {% for details in value %}
                                 {{details}} <br>
                                 {%endfor%}

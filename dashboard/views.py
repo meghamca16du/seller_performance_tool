@@ -39,7 +39,8 @@ def home(request):
     print('holaaaaa  ',request.user.username)
     val = ReturnValueForDashboard(request)
     print(val)
-    return render(request,'home.html',{})
+    performance={'percentage':val}
+    return render(request,'home.html',{'performance':performance})
 
 def profile(request):
     return render(request,'profile.html',{})

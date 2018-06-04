@@ -10,7 +10,7 @@
     <title> Dashboard </title>
 
     <!-- Bootstrap core CSS -->
-    <link href="{% static '/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static '/b.min.css' %}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="{% static '/pricing.css' %}" rel="stylesheet">
@@ -18,23 +18,24 @@
 
   <body>
 
-    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-      <h5 class="my-0 mr-md-auto font-weight-normal"> Logo</h5>
-      <nav class="my-2 my-md-0 mr-md-3">
-        <a class="p-2 text-dark" href="{% url 'profile' %}">My Profile</a>
-        <a class="p-2 text-dark" href="#">Notifications</a>
+    <div style="background-color: #111;width: 100%;color: white;" class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 border-bottom box-shadow">
+      
+      <h5 style="color:white;"class="my-0 mr-md-auto font-weight-normal"> Logon</h5>
+      <nav style="color:white;" class="my-2 my-md-0 mr-md-3">
+        <a style="color:white;" class="p-2 " href="{% url 'profile' %}">My Profile</a>
+        <a style="color:white;"class="p-2 " href="#">Notifications</a>
       </nav>
 
       <!-- adding drop down button -->
       <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+            <button style="background-color: whitesmoke;outline-color: #111;"class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
             <span class="caret"></span></button>
             <ul class="dropdown-menu">
               <li><a href="#">Settings</a></li>
               <li><a href="{% url 'login' %}">Logout</a></li>
             </ul>
       </div>
-      
+  
     </div>
     {% block headerbar %}
     {% endblock headerbar %}

@@ -147,31 +147,30 @@ class LateShipmentRate(Trait):
 
     def saveRecommendation(self, value, recommendation_list, IsDateEnteredByUser):
         if value <= 30:
-            recommendation_list.append("recommendation 1")
+            recommendation_list.append("Use company’s shipping services for shipment of products on time for better customer experience.")
             if (IsDateEnteredByUser == False):
                 TraitValueDetails.objects.filter(
                     sid=self.current_sellerid
                     ).update(
-                    recommendations_lateShipmentRate = "recommendation 1"
-                    )
-            
+                    recommendations_lateShipmentRate = "Use company’s shipping services for shipment of products on time for better customer experience "
+                    )            
         elif value > 30 and value <= 70:
-            recommendation_list.append("recommendation 2")
             if (IsDateEnteredByUser == False):
                 TraitValueDetails.objects.filter(
                     sid = self.current_sellerid
                     ).update(
-                    recommendations_lateShipmentRate = "recommendation 2"   
+                    recommendations_lateShipmentRate = "Review your order fulfillment processes to identify and resolve any deficiencies that can result in late shipments."   
                     )
+            recommendation_list.append("Review your order fulfillment processes to identify and resolve any deficiencies that can result in late shipments.")
             
         else:
-            recommendation_list.append("recommendation 3")
             if (IsDateEnteredByUser == False):
                 TraitValueDetails.objects.filter(
                     sid = self.current_sellerid
                     ).update(
                     recommendations_lateShipmentRate = "recommendation 3"   
                     )
+            recommendation_list.append("recommendation 3")
             
 
 class OnTimeDelivery(Trait):
@@ -212,30 +211,30 @@ class OnTimeDelivery(Trait):
 
     def saveRecommendation(self, value,recommendation_list, IsDateEnteredByUser ):
         if value <= 30:
-            recommendation_list.append("recommendation 1")
             if (IsDateEnteredByUser == False):
                 TraitValueDetails.objects.filter(
                     sid=self.current_sellerid
                     ).update(
-                    recommendations_onTimeDeliery = "recommendation 1"
+                    recommendations_onTimeDeliery = "Use company’s delivery services for shipment of products on time for better customer experience."
                     )
+            recommendation_list.append("Use company’s delivery services for shipment of products on time for better customer experience.")
             
         elif value > 30 and value <= 70:
             if (IsDateEnteredByUser == False):
                 TraitValueDetails.objects.filter(
                     sid = self.current_sellerid
                     ).update(
-                    recommendations_onTimeDeliery = "recommendation 2"   
+                    recommendations_onTimeDeliery = "Be proactive in resolving any delivery problems related to the delivery method you use."   
                     )
-            recommendation_list.append("recommendation 2")
+            recommendation_list.append("Be proactive in resolving any delivery problems related to the delivery method you use.")
         else:
             if (IsDateEnteredByUser == False):
                 TraitValueDetails.objects.filter(
                     sid = self.current_sellerid
                     ).update(
-                    recommendations_onTimeDeliery = "recommendation 3"   
+                    recommendations_onTimeDeliery = "You may also send order tracking information for better customer experience."   
                     )
-            recommendation_list.append("recommendation 3")
+            recommendation_list.append("You may also send order tracking information for better customer experience.")
 
 class HitToSuccessRatio(Trait): 
     '''
@@ -272,9 +271,9 @@ class HitToSuccessRatio(Trait):
                 TraitValueDetails.objects.filter(
                     sid=self.current_sellerid
                     ).update(
-                    recommendations_HitToSucessRatio = "recommendation 1"
+                    recommendations_HitToSucessRatio = "Provide accurate product descriptions and include images with your listings."
                     )
-            recommendation_list.append("recommendation 1")
+            recommendation_list.append("Provide accurate product descriptions and include images with your listings.")
         elif value > 30 and value <= 70:
             if (IsDateEnteredByUser == False):
                 TraitValueDetails.objects.filter(
@@ -330,17 +329,17 @@ class ReturnRate(Trait):
                 TraitValueDetails.objects.filter(
                     sid=self.current_sellerid
                     ).update(
-                    recommendations_returnRate = "recommendation 1"
+                    recommendations_returnRate = "Package all items carefully. Use a trustworthy courier to make sure that they arrive at their destination safely and in a timely manner."
                     )
-            recommendation_list.append("recommendation 1")
+            recommendation_list.append("Package all items carefully. Use a trustworthy courier to make sure that they arrive at their destination safely and in a timely manner.")
         elif value > 30 and value <= 70:
             if (IsDateEnteredByUser == False):
                 TraitValueDetails.objects.filter(
                     sid = self.current_sellerid
                     ).update(
-                    recommendations_returnRate = "recommendation 2"   
+                    recommendations_returnRate = "Make sure that all listings and images are completely accurate."   
                     )
-            recommendation_list.append("recommendation 2")
+            recommendation_list.append("Make sure that all listings and images are completely accurate.")
         else:
             if (IsDateEnteredByUser == False):
                 TraitValueDetails.objects.filter(
@@ -410,9 +409,9 @@ class NegativeFeedbacks(Trait):
                 TraitValueDetails.objects.filter(
                     sid =self.current_sellerid
                     ).update(
-                    recommendations_negative_feedbacks = "recommendation 2"   
+                    recommendations_negative_feedbacks ="Provide accurate product descriptions and include images with your listings."   
                     )
-            recommendation_list.append("recommendation 2")
+            recommendation_list.append("Provide accurate product descriptions and include images with your listings.")
         else:
             if IsDateEnteredByUser == False:
                 TraitValueDetails.objects.filter(
@@ -506,14 +505,13 @@ def main(request):
         obj.template_method(trait_name, trait_value, recommendation_list,traitWeightageList,IsDateEnteredByUser)
 
     obj.calc_overall_performance(trait_value,traitWeightageList,IsDateEnteredByUser)
-    #recommendation_trait_list = zip(trait_name, trait_value, recommendation_list)
 
     trait_percentage_dictionary = {}
     trait_recommendation_dictionary = {}
     for name,percentage,recommendation in zip(trait_name,trait_value,recommendation_list):
         trait_percentage_dictionary[name]=percentage
         trait_recommendation_dictionary[name]=recommendation
-    return render(request,'performance.html',{'trait_percentage_dictionary':trait_percentage_dictionary,'trait_recommendation_dictionary':trait_recommendation_dictionary})
+    return render(request,'try.html',{'trait_percentage_dictionary':trait_percentage_dictionary,'trait_recommendation_dictionary':trait_recommendation_dictionary})
 
 def ReturnValueForDashboard(request):
     current_sellerid = request.user.username
