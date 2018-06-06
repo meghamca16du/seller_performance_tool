@@ -45,6 +45,7 @@ body {
   .sidebar .nav-link.active {
     color: #007bff;
   }
+  .sidebar .nav-link.active a:hover{color:#006699;text-decoration:none}
   
   .sidebar .nav-link:hover .feather,
   .sidebar .nav-link.active .feather {

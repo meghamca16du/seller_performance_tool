@@ -37,6 +37,338 @@
 
         <div  class="container-fluid">
             <div class="row">
+              <nav  style=" border-right: 3px solid #111;width:7cm;background-color: rgb(255, 177, 167);"class="col-md-2 d-none d-md-block sidebar">
+                <div  class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a style="font-size: 7mm;font-weight: 700"class="nav-link active" href="#">
+                   <p></p>
+                  <span style="height: 0.6cm;width:0.8cm"data-feather="align-justify"></span>
+                  
+                  BASED ON <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              <br>
+              <br>
+
+
+
+
+
+              
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <button class="w3-bar-item w3-button tablink" style="font-weight:700;width:5.5cm;padding-left:0px;height:1.5cm ;font-weight:800px;border-radius: 3px;background-color: rgb(221, 106, 90)">INVENTORY</button>
+                  
+               <!--   <div style="inline-size: 10px; background-color: #111;max-width: 10px;max-height: 10px;">ppp</div> -->
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <button class="w3-bar-item w3-button tablink" style="font-weight:700;width:5.5cm;border-radius: 3px;height:1.5cm; background-color: rgb(216, 110, 96)">PRODUCT</button>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <button class="w3-bar-item w3-button tablink" style="font-weight:700;width:5.5cm;border-radius: 3px;height:1.5cm ;background-color: rgb(238, 117, 102)">CATEGORY</button>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <button class="w3-bar-item w3-button tablink" style="font-weight:700;width:5.5cm;border-radius: 3px;height:1.5cm ;background-color: rgb(124, 42, 31)">PRICE</button>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <button class="w3-bar-item w3-button tablink" style="font-weight:700;font-weight:800px;width:5.5cm;border-radius: 3px;height:1.5cm ;background-color: rgb(189, 73, 58) ">OTHERS</button>
+                </a>
+              </li>
+            </ul>
+
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              
+              
+            </h6>
+          </div>
+        </nav>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+            <h1 style="font-weight:700;font-size: 0.9cm;"class="h2">RECOMMENDATIONS</h1>
+          </div>
+
+          <div>
+
+<style>
+.part2
+{
+	display :inline;
+}
+
+div.innersection {
+  margin: 10px;
+  background-color: white;
+  box-shadow: 2px 3px 3px 2px rgba(3, 46, 92, 0.2);
+  border-color: lightgrey;
+  border-width: 1px;
+  border-style: solid;
+  transition-duration: 2s;
+  -webkit-transition-duration: 2s;
+}
+
+div.innersection:hover {
+  box-shadow: 2px 3px 3px 2px rgba(3, 46, 92, 0.7);
+  border-color: grey;
+}
+
+#block1
+{
+	
+  flex-basis : 60%;
+  
+}
+
+#block2
+{
+	
+	flex-basis : 40%;
+}
+
+#block3
+{
+	
+	flex-basis : 33.33%;
+}
+
+#block4
+{
+	
+	flex-basis : 33.33%;
+}
+
+#block5
+{
+	
+	flex-basis : 33.33%;
+}
+
+@media (max-width : 800px)
+{
+	#block1{
+		flex-basis : 100%;
+	}
+	#block2, #block3, #block4, #block5{
+		flex-basis : 50%;
+	}
+}
+
+@media (max-width : 600px)
+{
+	#block1,#block2,#block3,#block4,#block5
+	{
+		flex-basis : 100%;
+	}
+}
+</style>
+            <br>
+                {% for recommend in recommend_inventory %}
+                <SECTION style="height : 250px;
+                                width : 50%; 
+                                padding-top: 20px;
+                                padding-right: 20px;
+                                padding-bottom: 10px;
+                                padding-left: 20px;
+                                display: inline-block;
+                                flex-basis : 33.33%;
+                                color:#fff" >
+                  <DIV style="  min-height : 80px;
+                                min-width : 50%;
+                                padding-top: 20px;
+                                padding-right: 20px;
+                                padding-bottom: 20px;
+                                padding-left: 20px;
+                                font-weight: 640;
+                                font-size: 5mm;
+                                text-align: center;
+                                background-color: rgb(216, 110, 96)" class="innersection">
+                     {{recommend}}
+                  </DIV>
+                </SECTION>
+                {%endfor%}
+
+            
+              {% for recommend in recommend_product %}
+              <SECTION style="height : 250px;
+                               width : 50%; 
+                              padding-top: 20px;
+                              padding-right: 20px;
+                              padding-bottom: 10px;
+                              padding-left: 20px;
+                              display: inline-block;
+                              flex-basis : 33.33%;
+                              color:#fff;
+                              font-weight: 500;" id="block1">
+                <DIV style="  height : 250px;
+                              width : 50%;
+                              padding-top: 20px;
+                              padding-right: 20px;
+                              padding-bottom: 20px;
+                              padding-left: 20px;
+                              font-weight: 640;
+                                font-size: 5mm;
+                              text-align: center;
+                              background-color: rgb(184, 70, 55)" class="innersection">
+                   {{recommend}}
+                </DIV>
+              </SECTION>
+              {%endfor%}
+          
+
+          
+            {% for recommend in recommend_category %}
+            <SECTION style="min-height : 80px;
+                            min-width : 100%; 
+                            padding-top: 20px;
+                            padding-right: 20px;
+                            padding-bottom: 10px;
+                            padding-left: 20px;
+                            display: inline-block;
+                            flex-basis : 33.33%;
+                            color:#fff" id="block1">
+              <DIV style="  min-height : 80px;
+                            min-width : 50%;
+                            padding-top: 20px;
+                            padding-right: 20px;
+                            padding-bottom: 20px;
+                            padding-left: 20px;
+                            font-weight: 640;
+                                font-size: 5mm;
+                            text-align: center;
+                            background-color: rgb(238, 117, 102)" class="innersection">
+                 {{recommend}}
+              </DIV>
+            </SECTION>
+            {%endfor%}
+        
+
+        
+          {% for recommend in recommend_lowerprice %}
+          <SECTION style="min-height : 80px;
+                          min-width : 100%; 
+                          padding-top: 20px;
+                          padding-right: 20px;
+                          padding-bottom: 10px;
+                          padding-left: 20px;
+                          display: inline-block;
+                          flex-basis : 33.33%;
+                          color:white" id="block1">
+            <DIV style="  min-height : 80px;
+                          min-width : 50%;
+                          padding-top: 20px;
+                          padding-right: 20px;
+                          padding-bottom: 20px;
+                          padding-left: 20px;
+                          font-weight: 500;
+                          background-color: #D5E3C5" class="innersection">
+               {{recommend}}
+            </DIV>
+          </SECTION>
+          {%endfor%}
+      
+
+      <MAIN id="part2">
+        {% for recommend in recommend_othermeasures %}
+        <SECTION style="min-height : 80px;
+                        min-width : 100%; 
+                        padding-top: 20px;
+                        padding-right: 20px;
+                        padding-bottom: 10px;
+                        padding-left: 20px;
+                        display: inline-block;
+                        flex-basis : 33.33%;
+                        color:white" id="block1">
+          <DIV style="  min-height : 80px;
+                        min-width : 50%;
+                        padding-top: 20px;
+                        padding-right: 20px;
+                        padding-bottom: 20px;
+                        padding-left: 20px;
+                        font-weight: 500;
+                        background-color: rgb(200, 221, 176)" class="innersection">
+             {{recommend}}
+          </DIV>
+        </SECTION>
+        {%endfor%}
+    </MAIN>
+  
+        </main>
+      </div>
+    </div>
+
+
+    
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../../../assets/js/vendor/popper.min.js"></script>
+    <script src="../../../../dist/js/bootstrap.min.js"></script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+
+   
+    {% endblock headerbar %}
+  </body>
+</html>
+
+
+--------------------------------------------------------------------------------------
+
+{% extends 'base.html' %}
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>recommendation</title>
+
+    <LINK rel="stylesheet" type="text/css" href="style.css">
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static '/b.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="recommendation.css" rel="stylesheet">
+
+    <LINK rel="stylesheet" type="text/css" href="style.css">
+
+    <script src="{% static '/assets/js/vendor/popper.min.js' %}"></script> 
+    <script src="{% static '/dist/js/bootstrap.min.js' %}"></script> 
+    <script src="{% static '/assets/js/vendor/holder.min.js' %}"></script> 
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+  </head>
+
+  <body>
+        {% block headerbar %}
+    
+
+        <div  class="container-fluid">
+            <div class="row">
               <nav  style=" border-right: 3px solid #111;width:7cm;background-color: rgb(231, 236, 241);"class="col-md-2 d-none d-md-block sidebar">
                 <div  class="sidebar-sticky">
             <ul class="nav flex-column">
